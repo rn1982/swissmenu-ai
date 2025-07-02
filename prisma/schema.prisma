@@ -1,0 +1,103 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model UserPreferences {
+  id                 String   @id @default(cuid())
+  peopleCount        Int      @default(2)
+  mealsPerDay        Int      @default(3) 
+  budgetChf          Int?
+  dietaryRestrictions String[]
+  cuisinePreferences String[]
+  cookingSkillLevel  String   @default("intermediate")
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@map("user_preferences")
+}
+
+model Recipe {
+  id               String @id @default(cuid())
+  title            String
+  description      String?
+  instructions     Json
+  prepTimeMinutes  Int?
+  cookTimeMinutes  Int?
+  servings         Int    @default(4)
+  cuisineType      String?
+  difficultyLevel  String?
+  nutritionalInfo  Json?
+  createdAt        DateTime @default(now())
+
+  recipeIngredients RecipeIngredient[]
+  @@map("recipes")
+}
+
+model Ingredient {
+  id                String @id @default(cuid())
+  name              String
+  category          String?
+  unit              String?
+  migrosProductId   String?
+  createdAt         DateTime @default(now())
+
+  recipeIngredients RecipeIngredient[]
+  @@map("ingredients")
+}
+
+model RecipeIngredient {
+  id           String @id @default(cuid())
+  recipeId     String
+  ingredientId String
+  quantity     Float
+  unit         String?
+  notes        String?
+
+  recipe     Recipe     @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  ingredient Ingredient @relation(fields: [ingredientId], references: [id])
+
+  @@map("recipe_ingredients")
+}
+
+model WeeklyMenu {
+  id              String   @id @default(cuid())
+  weekStartDate   DateTime
+  menuData        Json
+  totalBudgetChf  Float?
+  createdAt       DateTime @default(now())
+
+  shoppingLists ShoppingList[]
+  @@map("weekly_menus")
+}
+
+model MigrosProduct {
+  id          String   @id
+  name        String
+  brand       String?
+  priceChf    Float?
+  unit        String?
+  category    String?
+  url         String?
+  imageUrl    String?
+  ariaLabel   String?
+  lastUpdated DateTime @default(now())
+
+  @@map("migros_products")
+}
+
+model ShoppingList {
+  id             String @id @default(cuid())
+  weeklyMenuId   String
+  items          Json
+  totalPriceChf  Float?
+  createdAt      DateTime @default(now())
+
+  weeklyMenu WeeklyMenu @relation(fields: [weeklyMenuId], references: [id], onDelete: Cascade)
+  @@map("shopping_lists")
+}
