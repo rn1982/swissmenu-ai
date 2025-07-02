@@ -1,246 +1,316 @@
-# Claude Integration Guide
-## SwissMenu AI - AI Assistant Integration & Usage
+# Claude Development Guide for SwissMenu AI
 
----
+## 🎯 Project Overview
+**SwissMenu AI** is an intelligent web application that generates personalized weekly meal plans and creates optimized shopping lists with direct Migros product links, eliminating the pain of meal planning and grocery shopping in Switzerland.
 
-## 🎯 Overview
+## 🚀 Quick Start Commands
 
-Claude serves as the primary AI assistant for the SwissMenu AI project, providing intelligent capabilities for menu generation, recipe creation, and natural language processing. This document outlines how Claude is integrated and utilized throughout the development and production phases.
-
-## 🔑 Key Responsibilities
-
-### 1. Menu Generation
-- Generate personalized weekly meal plans based on user preferences
-- Consider Swiss cultural context and local ingredients
-- Balance nutritional requirements and dietary restrictions
-- Optimize for budget constraints and cooking skill levels
-- Adapt recipes for different household sizes
-
-### 2. Recipe Processing
-- Create detailed, step-by-step cooking instructions
-- Convert recipes to structured data format
-- Extract ingredient lists with precise measurements
-- Validate recipe feasibility and complexity
-- Suggest ingredient substitutions when needed
-
-### 3. Product Matching
-- Match recipe ingredients to Migros products
-- Handle multilingual product descriptions (FR/DE/IT)
-- Consider product availability and seasonality
-- Optimize for price and quality balance
-- Suggest alternative products when needed
-
-### 4. Natural Language Processing
-- Process user dietary preferences and restrictions
-- Understand cooking skill levels and time constraints
-- Handle multilingual user inputs (French primary)
-- Provide natural language responses and explanations
-- Process user feedback and recipe modifications
-
----
-
-## 🛠️ Technical Integration
-
-### API Configuration
-```typescript
-// src/lib/claude.ts
-import { Configuration, OpenAIApi } from 'openai'
-
-const configuration = new Configuration({
-  apiKey: process.env.ANTHROPIC_API_KEY,
-})
-
-export const claude = new OpenAIApi(configuration)
+### Development Server
+```bash
+npm run dev    # Start development server at http://localhost:3000
+npm run build  # Build for production
+npm run start  # Start production server
+npm run lint   # Run ESLint
 ```
 
-### Prompt Engineering
-```typescript
-// src/lib/prompts/menu-generation.ts
-export const MENU_GENERATION_PROMPT = `
-You are a Swiss culinary expert creating a weekly meal plan.
-Consider the following parameters:
-
-User Preferences:
-- People: {peopleCount}
-- Budget: CHF {budgetChf} per week
-- Dietary: {dietaryRestrictions}
-- Cuisine: {cuisinePreferences}
-- Skill: {cookingSkill}
-
-Requirements:
-1. Create a 7-day meal plan
-2. Focus on Swiss seasonal ingredients
-3. Match Migros product availability
-4. Stay within budget constraints
-5. Respect dietary restrictions
-6. Consider cooking skill level
-
-Format response as structured JSON with:
-- Daily meals
-- Ingredient lists
-- Cooking instructions
-- Time estimates
-- Difficulty ratings
-`
+### Database Commands
+```bash
+npx prisma studio          # Open Prisma Studio
+npx prisma migrate dev      # Run migrations
+npx prisma generate        # Generate Prisma client
+npx prisma db push         # Push schema to database
+npx prisma db seed         # Seed database
 ```
 
----
+## 📁 Project Structure
 
-## 📋 Implementation Guidelines
-
-### 1. Menu Generation Flow
-```typescript
-async function generateWeeklyMenu(preferences: UserPreferences): Promise<WeeklyMenu> {
-  // 1. Prepare context
-  const context = buildMenuContext(preferences)
-  
-  // 2. Generate menu with Claude
-  const completion = await claude.createCompletion({
-    model: "claude-3-sonnet-20240229",
-    prompt: MENU_GENERATION_PROMPT,
-    temperature: 0.7,
-    max_tokens: 2000,
-    context: context
-  })
-  
-  // 3. Process and validate response
-  const menuData = parseMenuResponse(completion.data)
-  
-  // 4. Match with Migros products
-  const menuWithProducts = await matchMigrosProducts(menuData)
-  
-  return menuWithProducts
-}
+```
+swissmenu-ai/
+├── src/
+│   ├── app/                 # Next.js 14 App Router
+│   │   ├── api/            # API routes
+│   │   ├── auth/           # Authentication pages
+│   │   ├── dashboard/      # User dashboard
+│   │   ├── menu/           # Menu generation & display
+│   │   ├── preferences/    # User preferences setup
+│   │   └── shopping/       # Shopping lists
+│   ├── components/         # React components
+│   │   ├── ui/            # Base UI components
+│   │   ├── forms/         # Form components
+│   │   └── layout/        # Layout components
+│   ├── lib/               # Utility libraries
+│   │   ├── db.ts          # Database connection
+│   │   ├── anthropic.ts   # Claude API integration
+│   │   ├── openai.ts      # OpenAI API integration
+│   │   └── migros.ts      # Migros scraping utilities
+│   ├── types/             # TypeScript type definitions
+│   ├── hooks/             # Custom React hooks
+│   └── constants/         # App constants
+├── prisma/                # Database schema & migrations
+└── public/                # Static assets
 ```
 
-### 2. Response Processing
-- Validate JSON structure
-- Check nutritional balance
-- Verify budget constraints
-- Ensure recipe completeness
-- Validate product matches
+## 🔧 Development Workflow with Claude
 
-### 3. Error Handling
-- Handle API timeouts and errors
-- Implement retry mechanisms
-- Provide fallback options
-- Log issues for analysis
-- Maintain user experience
+### Phase 1: Foundation Setup ✅
+**Status**: Complete - Basic Next.js app with Tailwind CSS is running
+
+**Current State**:
+- ✅ Next.js 14 with TypeScript
+- ✅ Tailwind CSS configured
+- ✅ Basic routing structure
+- ✅ Package.json with all dependencies
+- ✅ Prisma schema defined
+- ✅ Development server running
+
+### Phase 2: Database & User Preferences Setup ✅
+**Status**: Complete - Neon database connected and user preferences system implemented
+
+**Current State**:
+- ✅ Neon PostgreSQL database connected and configured
+- ✅ Database migration completed (all tables created)
+- ✅ User preferences form with comprehensive options:
+  - Number of people (1-8)
+  - Meals per day (1-3)
+  - Weekly budget in CHF
+  - Dietary restrictions (8 options)
+  - Cuisine preferences (8 options)
+  - Cooking skill level (beginner/intermediate/advanced)
+- ✅ API endpoint `/api/preferences` with GET/POST methods
+- ✅ Complete user flow: Homepage → Preferences → Menu placeholder
+- ✅ French language interface with Swiss context (CHF currency)
+- ✅ Database connection tested and working
+
+**Implemented Files**:
+- `src/app/preferences/page.tsx` - Comprehensive preferences form
+- `src/app/api/preferences/route.ts` - API with validation
+- `src/app/menu/page.tsx` - Menu placeholder page
+- `.env.local` - Database connection strings configured
+
+### Phase 3: Migros Integration
+
+**Claude Tasks**:
+
+1. **Product Scraping Implementation**
+   ```typescript
+   // Ask Claude to create:
+   // - src/lib/migros.ts (scraping utilities)
+   // - src/app/api/products/sync/route.ts
+   // - Test with pasta category (confirmed working)
+   ```
+
+2. **Product Database Setup**
+   ```bash
+   # Claude can help with:
+   # - MigrosProduct model updates
+   # - Product sync scripts
+   # - Error handling for scraping
+   ```
+
+### Phase 4: LLM Menu Generation
+
+**Claude Integration Tasks**:
+
+1. **Menu Generation API**
+   ```typescript
+   // Claude can implement:
+   // - src/app/api/menu/generate/route.ts
+   // - Prompt engineering for Swiss context
+   // - Response validation and parsing
+   ```
+
+2. **Menu Display Components**
+   ```typescript
+   // Ask Claude to create:
+   // - src/app/menu/page.tsx
+   // - src/components/MenuDisplay.tsx
+   // - Menu editing capabilities
+   ```
+
+### Phase 5: Shopping List Generation
+
+**Claude Development Tasks**:
+
+1. **Shopping List Logic**
+   ```typescript
+   // Claude can build:
+   // - Ingredient extraction from recipes
+   // - Product matching algorithm
+   // - Price calculation and optimization
+   ```
+
+2. **Shopping Interface**
+   ```typescript
+   // Ask Claude for:
+   // - Mobile-optimized shopping list
+   // - Direct Migros product links
+   // - List sharing and export features
+   ```
+
+## 🤖 Working with Claude Code
+
+### Effective Prompts for Development
+
+**For New Features**:
+```
+"Help me implement [specific feature] for the SwissMenu AI project. 
+I need this to work with our existing Prisma schema and Next.js 14 setup.
+Consider Swiss user context and French language support."
+```
+
+**For Bug Fixes**:
+```
+"I'm getting this error: [error message]
+This is happening in [specific file/component].
+The expected behavior is: [description]
+Here's the relevant code: [code snippet]"
+```
+
+**For Code Review**:
+```
+"Review this implementation for the SwissMenu AI project:
+[code]
+Check for TypeScript errors, performance issues, and alignment with our Swiss/French user requirements."
+```
+
+### Claude Development Best Practices
+
+1. **Always Specify Context**
+   - Mention you're working on SwissMenu AI
+   - Include relevant file paths
+   - Reference existing code patterns
+
+2. **Ask for Complete Solutions**
+   - Request full file implementations
+   - Ask for related API routes
+   - Get corresponding TypeScript types
+
+3. **Consider Swiss Requirements**
+   - French language support
+   - CHF currency formatting
+   - Migros product integration
+   - Swiss dietary preferences
+
+## 📋 Development Checklist
+
+### Week 1: Foundation
+- [ ] Neon database setup and connection
+- [ ] User preferences form implementation
+- [ ] Basic UI components library
+- [ ] Authentication system (optional for MVP)
+
+### Week 2: Core Features
+- [ ] Migros product scraping system
+- [ ] Menu generation with LLM integration
+- [ ] Recipe storage and management
+- [ ] User preferences persistence
+
+### Week 3: Shopping Lists
+- [ ] Ingredient extraction from menus
+- [ ] Product matching algorithm
+- [ ] Shopping list generation
+- [ ] Migros product links integration
+
+### Week 4: Polish & Testing
+- [ ] Mobile responsive design
+- [ ] Error handling and edge cases
+- [ ] Performance optimization
+- [ ] User testing and feedback
+
+## 🔍 Debugging with Claude
+
+### Common Issues & Solutions
+
+**Database Connection Problems**:
+```bash
+# Ask Claude to help diagnose:
+# 1. Check .env.local configuration
+# 2. Verify Neon database status
+# 3. Test connection string format
+# 4. Check Prisma client generation
+```
+
+**API Route Issues**:
+```typescript
+// Claude can help with:
+// - Next.js 14 App Router patterns
+// - Request/response handling
+// - Error boundary implementation
+// - TypeScript type issues
+```
+
+**LLM Integration Problems**:
+```typescript
+// Get Claude's help for:
+// - Prompt engineering optimization
+// - Response parsing and validation
+// - Rate limiting and error handling
+// - Cost optimization strategies
+```
+
+## 🚀 Production Deployment
+
+### Vercel Deployment with Claude
+```bash
+# Ask Claude to help with:
+# 1. Vercel project setup
+# 2. Environment variables configuration
+# 3. Build optimization
+# 4. Performance monitoring setup
+```
+
+### Environment Variables Checklist
+```bash
+# Production .env (ask Claude to verify):
+DATABASE_URL=          # Neon production database
+DIRECT_URL=           # Neon direct connection
+OPENAI_API_KEY=       # OpenAI API key
+ANTHROPIC_API_KEY=    # Claude API key
+NEXTAUTH_SECRET=      # Random secret for sessions
+NEXTAUTH_URL=         # Production domain
+```
+
+## 📚 Resources & Documentation
+
+### Key Documentation Links
+- [Next.js 14 Docs](https://nextjs.org/docs)
+- [Prisma Documentation](https://www.prisma.io/docs)
+- [Tailwind CSS](https://tailwindcss.com/docs)
+- [OpenAI API](https://platform.openai.com/docs)
+- [Anthropic Claude API](https://docs.anthropic.com/claude/reference)
+
+### Swiss-Specific Resources
+- [Migros Website](https://www.migros.ch) - Product catalog
+- [Swiss Dietary Guidelines](https://www.sge-ssn.ch/) - Nutrition info
+- [Swiss Seasonal Produce](https://www.blw.admin.ch/) - Agriculture data
+
+## 💡 Pro Tips for Claude Collaboration
+
+1. **Be Specific About Swiss Context**
+   - Always mention Swiss users and French language
+   - Reference CHF currency and Migros integration
+   - Consider Swiss dietary preferences and seasonal ingredients
+
+2. **Ask for Progressive Enhancement**
+   - Start with basic functionality
+   - Ask for mobile improvements
+   - Request accessibility enhancements
+   - Get performance optimizations
+
+3. **Request Testing Scenarios**
+   - Ask Claude for edge case testing
+   - Get user flow validation
+   - Request error scenario handling
+   - Validate Swiss-specific requirements
+
+4. **Maintain Code Quality**
+   - Ask for TypeScript strict mode compliance
+   - Request ESLint rule adherence
+   - Get code review and optimization suggestions
+   - Ensure proper error handling
 
 ---
 
-## 🔄 Continuous Improvement
+**Remember**: You're building a Swiss-focused application with French language support. Always consider the local context, currency (CHF), and Migros integration when working with Claude on this project.
 
-### Feedback Loop
-1. Collect user feedback on generated menus
-2. Track recipe success rates
-3. Monitor product match accuracy
-4. Analyze budget adherence
-5. Measure user satisfaction
-
-### Prompt Optimization
-- Regular prompt refinement
-- A/B testing different approaches
-- Performance metrics tracking
-- User preference learning
-- Context optimization
-
----
-
-## 📊 Performance Metrics
-
-### Response Times
-- Menu generation: < 15 seconds
-- Recipe modifications: < 5 seconds
-- Product matching: < 3 seconds
-- Error recovery: < 2 seconds
-
-### Accuracy Targets
-- Recipe feasibility: > 95%
-- Product match accuracy: > 90%
-- Budget adherence: > 95%
-- Dietary compliance: 100%
-
----
-
-## 🔒 Security & Privacy
-
-### Data Handling
-- No PII in prompts
-- Secure API key management
-- Rate limiting implementation
-- Request/response logging
-- Error tracking
-
-### Compliance
-- GDPR compliance
-- Swiss data protection
-- Secure data transmission
-- Audit trail maintenance
-
----
-
-## 📝 Development Guidelines
-
-### Best Practices
-1. **Prompt Management**
-   - Keep prompts in separate files
-   - Version control prompts
-   - Document prompt changes
-   - Test prompt variations
-
-2. **Response Handling**
-   - Validate all responses
-   - Handle edge cases
-   - Implement timeouts
-   - Log response metrics
-
-3. **Integration Testing**
-   - Unit test prompt builders
-   - Test response parsing
-   - Validate error handling
-   - Monitor performance
-
-4. **Monitoring**
-   - Track API usage
-   - Monitor response times
-   - Log error rates
-   - Analyze user feedback
-
----
-
-## 🚀 Deployment Considerations
-
-### Production Setup
-- Environment variable management
-- API key rotation
-- Rate limit configuration
-- Error monitoring setup
-- Performance tracking
-
-### Scaling Strategy
-- Response caching
-- Request queuing
-- Load balancing
-- Fallback mechanisms
-- Capacity planning
-
----
-
-## 📚 Resources
-
-### Documentation
-- [Claude API Documentation](https://docs.anthropic.com/claude/reference)
-- [Prompt Engineering Guide](https://docs.anthropic.com/claude/docs/prompt-engineering)
-- [Best Practices](https://docs.anthropic.com/claude/docs/best-practices)
-
-### Support
-- Technical support channels
-- Error reporting process
-- Feature request workflow
-- Documentation updates
-- Training resources
-
----
-
-*This document serves as the definitive guide for Claude integration in the SwissMenu AI project. All development work involving Claude should adhere to these guidelines and best practices.* 
+Start with the database setup and user preferences, then progressively build the menu generation and shopping list features. Claude is here to help you every step of the way! 
