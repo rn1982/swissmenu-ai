@@ -72,29 +72,60 @@ export async function POST(request: NextRequest) {
 
 async function generateMenuWithClaude(preferences: UserPreferences) {
   const prompt = createMenuPrompt(preferences)
+  let lastError: Error | null = null
   
-  const response = await anthropic.messages.create({
-    model: 'claude-3-5-sonnet-20241022',
-    max_tokens: 4000,
-    messages: [
-      {
-        role: 'user',
-        content: prompt
-      }
-    ]
-  })
-
-  const content = response.content[0]
-  if (content.type === 'text') {
+  // Retry logic for API overload or temporary failures
+  for (let attempt = 1; attempt <= 3; attempt++) {
     try {
-      return JSON.parse(content.text)
-    } catch {
-      console.error('Failed to parse Claude response:', content.text)
-      throw new Error('Invalid menu format returned from AI')
+      console.log(`Menu generation attempt ${attempt}/3`)
+      
+      const response = await anthropic.messages.create({
+        model: 'claude-3-5-sonnet-20241022',
+        max_tokens: 4000,
+        messages: [
+          {
+            role: 'user',
+            content: prompt
+          }
+        ]
+      })
+
+      const content = response.content[0]
+      if (content.type === 'text') {
+        try {
+          const menuData = JSON.parse(content.text)
+          console.log('✅ Menu generation successful')
+          return menuData
+        } catch (parseError) {
+          console.error('Failed to parse Claude response:', content.text)
+          throw new Error('Invalid menu format returned from AI')
+        }
+      } else {
+        throw new Error('Unexpected response format from AI')
+      }
+    } catch (error) {
+      lastError = error as Error
+      console.error(`Attempt ${attempt} failed:`, error)
+      
+      // If it's an overload error, wait before retrying
+      if (error instanceof Error && error.message.includes('overloaded')) {
+        if (attempt < 3) {
+          const waitTime = attempt * 2000 // 2s, 4s, 6s
+          console.log(`API overloaded, waiting ${waitTime}ms before retry...`)
+          await new Promise(resolve => setTimeout(resolve, waitTime))
+          continue
+        }
+      }
+      
+      // For other errors, don't retry
+      if (attempt === 1 && !error.message.includes('overloaded')) {
+        throw error
+      }
     }
-  } else {
-    throw new Error('Unexpected response format from AI')
   }
+  
+  // If all retries failed, throw the last error
+  throw lastError || new Error('Menu generation failed after all retries')
 }
 
 function createMenuPrompt(preferences: UserPreferences): string {
