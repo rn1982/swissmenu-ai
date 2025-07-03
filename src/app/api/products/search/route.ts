@@ -15,7 +15,8 @@ export async function GET(request: NextRequest) {
     const offset = parseInt(searchParams.get('offset') || '0')
 
     // Build search conditions
-    const whereConditions: any = {}
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const whereConditions: Record<string, any> = {}
 
     // Text search across name and brand
     if (query.trim()) {
@@ -142,8 +143,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const { 
       ingredients = [], 
-      budget, 
-      preferences = {} 
+      budget
     } = body
 
     if (!Array.isArray(ingredients) || ingredients.length === 0) {
@@ -165,7 +165,7 @@ export async function POST(request: NextRequest) {
       const searchTerms = name.toLowerCase().split(' ')
       const products = await db.migrosProduct.findMany({
         where: {
-          OR: searchTerms.map(term => ({
+          OR: searchTerms.map((term: string) => ({
             name: {
               contains: term,
               mode: 'insensitive'

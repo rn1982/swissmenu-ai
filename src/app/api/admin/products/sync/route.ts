@@ -169,6 +169,7 @@ async function upsertProduct(product: MigrosProduct, force = false): Promise<voi
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function shouldUpdateProduct(existing: any, scraped: MigrosProduct): boolean {
   // Update if price has changed
   if (existing.priceChf !== scraped.priceChf) {

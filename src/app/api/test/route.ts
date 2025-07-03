@@ -8,7 +8,7 @@ export async function GET() {
       message: 'Database connected successfully!',
       timestamp: new Date().toISOString()
     })
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Database connection failed' },
       { status: 500 }

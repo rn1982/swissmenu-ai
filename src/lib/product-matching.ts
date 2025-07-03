@@ -85,7 +85,8 @@ export async function findProductMatches(
 
   try {
     // Build search conditions
-    const whereConditions: any = {}
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const whereConditions: Record<string, any> = {}
 
     // Price filter
     if (maxPriceChf) {
@@ -125,8 +126,8 @@ export async function findProductMatches(
     const scoredMatches = products
       .map(product => ({
         ...product,
-        matchScore: calculateMatchScore(ingredientName, product.name, product.brand),
-        confidence: getConfidenceLevel(calculateMatchScore(ingredientName, product.name, product.brand))
+        matchScore: calculateMatchScore(ingredientName, product.name, product.brand || undefined),
+        confidence: getConfidenceLevel(calculateMatchScore(ingredientName, product.name, product.brand || undefined))
       }))
       .filter(match => match.matchScore >= minScore)
 
@@ -142,7 +143,22 @@ export async function findProductMatches(
       return bFinalScore - aFinalScore
     })
 
-    return sortedMatches.slice(0, maxResults)
+    // Convert to ProductMatch format (null -> undefined)
+    const productMatches = sortedMatches.slice(0, maxResults).map(product => ({
+      id: product.id,
+      name: product.name,
+      brand: product.brand || undefined,
+      priceChf: product.priceChf || undefined,
+      unit: product.unit || undefined,
+      category: product.category || undefined,
+      url: product.url || undefined,
+      imageUrl: product.imageUrl || undefined,
+      ariaLabel: product.ariaLabel || undefined,
+      matchScore: product.matchScore,
+      confidence: product.confidence
+    }))
+
+    return productMatches
 
   } catch (error) {
     console.error('Error finding product matches:', error)

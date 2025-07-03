@@ -120,7 +120,8 @@ class MigrosScraper {
     return page
   }
 
-  private extractProductData($: cheerio.CheerioAPI, element: cheerio.Element): MigrosProduct | null {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private extractProductData($: cheerio.CheerioAPI, element: any): MigrosProduct | null {
     try {
       const $element = $(element)
       
@@ -216,7 +217,7 @@ class MigrosScraper {
         console.log('- [data-product-id]:', $('[data-product-id]').length)
 
         // Try multiple selector strategies for search results
-        let productElements = $(MIGROS_CONFIG.selectors.productItem)
+        let productElements = $(MIGROS_CONFIG.selectors.productCard)
         
         if (productElements.length === 0) {
           console.log('Trying alternative selectors for search results...')

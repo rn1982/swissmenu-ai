@@ -65,7 +65,15 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ 
       success: true, 
-      id: preferences.id,
+      preferences: {
+        id: preferences.id,
+        peopleCount: preferences.peopleCount,
+        mealsPerDay: preferences.mealsPerDay,
+        budgetChf: preferences.budgetChf,
+        dietaryRestrictions: preferences.dietaryRestrictions,
+        cuisinePreferences: preferences.cuisinePreferences,
+        cookingSkillLevel: preferences.cookingSkillLevel
+      },
       message: 'Preferences saved successfully' 
     })
 

@@ -60,11 +60,16 @@ export default function PreferencesPage() {
       })
 
       if (response.ok) {
+        const data = await response.json()
+        if (data.success && data.preferences?.id) {
+          // Save the preferences ID to localStorage for menu generation
+          localStorage.setItem('userPreferencesId', data.preferences.id)
+        }
         router.push('/menu')
       } else {
         alert('Erreur lors de la sauvegarde des préférences')
       }
-    } catch (error) {
+    } catch {
       alert('Erreur lors de la sauvegarde des préférences')
     } finally {
       setLoading(false)
