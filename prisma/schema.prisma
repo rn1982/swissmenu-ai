@@ -5,7 +5,6 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
 }
 
 model UserPreferences {
@@ -78,17 +77,40 @@ model WeeklyMenu {
 
 model MigrosProduct {
   id          String   @id
+  migrosId    String?  @unique
   name        String
   brand       String?
   priceChf    Float?
+  price       Float?   // Alias for priceChf
   unit        String?
   category    String?
   url         String?
   imageUrl    String?
   ariaLabel   String?
+  source      String?  @default("fallback")
+  lastScraped DateTime?
   lastUpdated DateTime @default(now())
 
   @@map("migros_products")
+}
+
+// Alias for compatibility
+model Product {
+  id          String   @id @default(cuid())
+  migrosId    String?  @unique
+  name        String
+  brand       String?
+  price       Float?
+  unit        String?
+  category    String?
+  url         String?
+  imageUrl    String?
+  source      String?  @default("fallback")
+  lastScraped DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("products")
 }
 
 model ShoppingList {
