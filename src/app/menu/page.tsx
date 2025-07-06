@@ -7,9 +7,13 @@ interface Meal {
   nom: string
   description: string
   ingredients: string[]
+  instructions?: string[]
   temps_preparation: number
+  temps_cuisson?: number
   difficulte: string
   cout_estime_chf: number
+  portions?: number
+  conseils?: string
 }
 
 interface DayMenu {
@@ -216,49 +220,110 @@ export default function MenuPage() {
                 </div>
               </div>
 
-              {/* Weekly Menu Grid */}
-              <div className="grid gap-6 mb-8">
-                {Object.entries(menu.menuData.weekMenu).map(([day, dayMenu]) => (
-                  <div key={day} className="border border-gray-200 rounded-lg p-6">
-                    <h2 className="text-2xl font-bold text-gray-800 mb-4">
-                      {getDayName(day)}
-                    </h2>
-                    <div className="grid md:grid-cols-3 gap-4">
-                      {Object.entries(dayMenu).map(([mealType, meal]) => (
-                        <div key={mealType} className="bg-gray-50 rounded-lg p-4">
-                          <h3 className="font-semibold text-lg text-blue-800 mb-2">
-                            {getMealName(mealType)}
-                          </h3>
-                          <h4 className="font-medium text-gray-900 mb-2">
-                            {meal.nom}
-                          </h4>
-                          <p className="text-gray-600 text-sm mb-3">
-                            {meal.description}
-                          </p>
-                          <div className="space-y-2 text-sm">
-                            <p>
-                              <span className="font-medium">Temps:</span> {meal.temps_preparation} min
+              {/* Weekly Menu Grid - Responsive layout */}
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 mb-8">
+                {/* Ensure Monday-Sunday order */}
+                {['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'].map((day) => {
+                  const dayMenu = menu.menuData.weekMenu[day as keyof typeof menu.menuData.weekMenu]
+                  if (!dayMenu) return null
+                  
+                  // Get current date and calculate which day is today
+                  const today = new Date()
+                  const weekStart = new Date(menu.weekStartDate)
+                  const dayIndex = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'].indexOf(day)
+                  const currentDayDate = new Date(weekStart)
+                  currentDayDate.setDate(weekStart.getDate() + dayIndex)
+                  const isToday = today.toDateString() === currentDayDate.toDateString()
+                  
+                  return (
+                    <div 
+                      key={day} 
+                      className={`border rounded-lg p-4 ${
+                        isToday ? 'border-blue-500 bg-blue-50/50' : 'border-gray-200'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between mb-3">
+                        <h2 className="text-xl font-bold text-gray-800">
+                          {getDayName(day)}
+                        </h2>
+                        {isToday && (
+                          <span className="text-xs bg-blue-500 text-white px-2 py-1 rounded">
+                            Aujourd'hui
+                          </span>
+                        )}
+                      </div>
+                      
+                      <div className="space-y-3">
+                        {Object.entries(dayMenu).map(([mealType, meal]) => (
+                          <div key={mealType} className="bg-white rounded-lg p-3 shadow-sm">
+                            <div className="flex items-center justify-between mb-1">
+                              <h3 className="font-semibold text-sm text-blue-800">
+                                {getMealName(mealType)}
+                              </h3>
+                              <span className="text-xs text-gray-500">
+                                {meal.temps_preparation} min
+                              </span>
+                            </div>
+                            
+                            <h4 className="font-medium text-gray-900 text-sm mb-1">
+                              {meal.nom}
+                            </h4>
+                            
+                            <p className="text-gray-600 text-xs mb-2 line-clamp-2">
+                              {meal.description}
                             </p>
-                            <p>
-                              <span className="font-medium">Difficulté:</span> {meal.difficulte}
-                            </p>
-                            <p>
-                              <span className="font-medium">Coût:</span> {meal.cout_estime_chf.toFixed(2)} CHF
-                            </p>
-                            <div>
-                              <span className="font-medium">Ingrédients:</span>
-                              <ul className="list-disc list-inside mt-1 text-gray-600">
+                            
+                            <div className="flex items-center justify-between text-xs">
+                              <span className="text-gray-500">
+                                {meal.difficulte}
+                              </span>
+                              <span className="font-semibold text-green-600">
+                                {meal.cout_estime_chf.toFixed(2)} CHF
+                              </span>
+                            </div>
+                            
+                            {/* Collapsible ingredients - hidden by default for space */}
+                            <details className="mt-2">
+                              <summary className="text-xs text-gray-600 cursor-pointer hover:text-gray-800">
+                                Voir les ingrédients ({meal.ingredients.length})
+                              </summary>
+                              <ul className="mt-1 text-xs text-gray-600 list-disc list-inside">
                                 {meal.ingredients.map((ingredient: string, index: number) => (
                                   <li key={index}>{ingredient}</li>
                                 ))}
                               </ul>
-                            </div>
+                            </details>
+                            
+                            {/* Cooking instructions if available */}
+                            {meal.instructions && meal.instructions.length > 0 && (
+                              <details className="mt-2">
+                                <summary className="text-xs text-blue-600 cursor-pointer hover:text-blue-800 font-medium">
+                                  📖 Voir la recette
+                                </summary>
+                                <div className="mt-2 space-y-1 text-xs text-gray-700">
+                                  {meal.temps_cuisson && (
+                                    <p className="font-medium">⏱️ Temps de cuisson: {meal.temps_cuisson} min</p>
+                                  )}
+                                  {meal.portions && (
+                                    <p className="font-medium">👥 Pour {meal.portions} personnes</p>
+                                  )}
+                                  <ol className="list-decimal list-inside space-y-1 mt-2">
+                                    {meal.instructions.map((step: string, index: number) => (
+                                      <li key={index} className="leading-relaxed">{step}</li>
+                                    ))}
+                                  </ol>
+                                  {meal.conseils && (
+                                    <p className="mt-2 italic text-gray-600">💡 {meal.conseils}</p>
+                                  )}
+                                </div>
+                              </details>
+                            )}
                           </div>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
 
               {/* Menu Summary */}

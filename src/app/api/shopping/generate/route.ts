@@ -1,5 +1,12 @@
 import { db } from '@/lib/db'
 import { NextRequest, NextResponse } from 'next/server'
+import { 
+  analyzeIngredient, 
+  findBestProductMatch, 
+  calculateSmartQuantity, 
+  generateOptimizedShoppingList,
+  type EnhancedProductMatch 
+} from '@/lib/enhanced-product-matching'
 
 interface Meal {
   nom: string
@@ -44,6 +51,10 @@ interface ShoppingItem {
   quantity: number
   totalPrice: number
   matchedIngredients: string[]
+  matchScore?: number
+  matchReason?: string
+  confidence?: 'high' | 'medium' | 'low'
+  source?: string
 }
 
 export async function POST(request: NextRequest) {
@@ -67,18 +78,42 @@ export async function POST(request: NextRequest) {
     const allIngredients = extractIngredientsFromMenu(menuData)
     console.log(`📋 Extracted ${allIngredients.length} unique ingredients`)
 
-    // Step 2: Match ingredients to products in our database
-    const matchedProducts = await matchIngredientsToProducts(allIngredients, peopleCount)
-    console.log(`🎯 Matched ${matchedProducts.length} products`)
+    // Step 2: Use enhanced matching algorithm
+    const optimizedList = await generateOptimizedShoppingList(allIngredients, {
+      peopleCount,
+      budget: menuData.resume.cout_total_estime_chf,
+      preferScrapingBee: true
+    })
+    
+    console.log(`🎯 Matched ${optimizedList.items.length} products`)
+    console.log(`💰 Total cost: CHF ${optimizedList.totalCost}`)
+    console.log(`📈 Savings: CHF ${optimizedList.savings}`)
 
-    // Step 3: Group products by category for organized shopping
-    const categorizedItems = categorizeShoppingItems(matchedProducts)
+    // Step 3: Format categories for response
+    const categorizedItems = Array.from(optimizedList.categories.entries()).map(([category, items]) => ({
+      name: category,
+      items: items.map(item => ({
+        id: item.product.id,
+        name: item.product.name,
+        brand: item.product.brand,
+        priceChf: item.product.priceChf,
+        unit: item.unit,
+        category: item.product.category,
+        url: item.product.url,
+        imageUrl: item.product.imageUrl,
+        quantity: item.quantity,
+        totalPrice: item.totalPrice,
+        matchedIngredients: [item.ingredient.original],
+        matchScore: item.product.matchScore,
+        matchReason: item.product.matchReason,
+        confidence: item.product.confidence,
+        source: item.product.source
+      })),
+      totalCost: Math.round(items.reduce((sum, item) => sum + item.totalPrice, 0) * 100) / 100,
+      itemCount: items.length
+    }))
 
-    // Step 4: Calculate totals
-    const totalCost = matchedProducts.reduce((sum, item) => sum + item.totalPrice, 0)
-    const totalItems = matchedProducts.length
-
-    // Step 5: Create shopping list
+    // Step 4: Create enhanced shopping list
     const shoppingList = {
       id: `shopping-${Date.now()}`,
       menuId: body.menuId || 'generated-menu',
@@ -86,21 +121,24 @@ export async function POST(request: NextRequest) {
       peopleCount,
       categories: categorizedItems,
       summary: {
-        totalItems,
-        totalCost: Math.round(totalCost * 100) / 100,
-        averageItemCost: Math.round((totalCost / Math.max(totalItems, 1)) * 100) / 100,
-        estimatedBudget: menuData.resume.cout_total_estime_chf || totalCost,
-        actualCost: totalCost,
-        savings: Math.max(0, (menuData.resume.cout_total_estime_chf || totalCost) - totalCost)
+        totalItems: optimizedList.items.length,
+        totalCost: optimizedList.totalCost,
+        averageItemCost: Math.round((optimizedList.totalCost / Math.max(optimizedList.items.length, 1)) * 100) / 100,
+        estimatedBudget: menuData.resume.cout_total_estime_chf || optimizedList.totalCost,
+        actualCost: optimizedList.totalCost,
+        savings: optimizedList.savings,
+        scrapingBeeProducts: optimizedList.items.filter(item => item.product.source === 'scrapingbee').length,
+        fallbackProducts: optimizedList.items.filter(item => item.product.source === 'fallback').length
       },
-      unmatched: allIngredients.filter(ingredient => 
-        !matchedProducts.some(product => 
-          product.matchedIngredients.includes(ingredient)
-        )
-      )
+      unmatched: optimizedList.unmatchedIngredients,
+      matchQuality: {
+        high: optimizedList.items.filter(item => item.product.confidence === 'high').length,
+        medium: optimizedList.items.filter(item => item.product.confidence === 'medium').length,
+        low: optimizedList.items.filter(item => item.product.confidence === 'low').length
+      }
     }
 
-    console.log(`✅ Generated shopping list: ${totalItems} items, CHF ${totalCost.toFixed(2)}`)
+    console.log(`✅ Generated shopping list: ${optimizedList.items.length} items, CHF ${optimizedList.totalCost.toFixed(2)}`)
 
     return NextResponse.json({
       success: true,
@@ -118,85 +156,84 @@ export async function POST(request: NextRequest) {
 }
 
 function extractIngredientsFromMenu(menuData: MenuData): string[] {
-  const ingredients = new Set<string>()
+  const ingredients: string[] = []
+  const processedIngredients = new Set<string>()
 
   // Extract from each day's meals
   Object.values(menuData.weekMenu).forEach(dayMenu => {
     Object.values(dayMenu).forEach(meal => {
       if (meal && meal.ingredients) {
         meal.ingredients.forEach(ingredient => {
-          // Clean and normalize ingredient names
-          const cleaned = ingredient.toLowerCase().trim()
-          if (cleaned.length > 2) {
-            ingredients.add(cleaned)
+          // Keep the full ingredient string with quantities and details
+          const normalized = ingredient.trim()
+          if (normalized.length > 2 && !processedIngredients.has(normalized.toLowerCase())) {
+            ingredients.push(normalized) // Keep original case and full text
+            processedIngredients.add(normalized.toLowerCase())
+            
+            // Log for debugging
+            console.log(`📝 Extracted ingredient: "${normalized}"`)
           }
         })
       }
     })
   })
 
-  // Also include main ingredients from resume
-  if (menuData.resume.ingredients_principaux) {
-    menuData.resume.ingredients_principaux.forEach(ingredient => {
-      const cleaned = ingredient.toLowerCase().trim()
-      if (cleaned.length > 2) {
-        ingredients.add(cleaned)
-      }
-    })
-  }
+  // Don't duplicate main ingredients from resume as they're already in meals
+  // The resume ingredients are just summaries
 
-  return Array.from(ingredients)
+  console.log(`📋 Total unique ingredients extracted: ${ingredients.length}`)
+  return ingredients
 }
 
 async function matchIngredientsToProducts(ingredients: string[], peopleCount: number): Promise<ShoppingItem[]> {
-  const matchedProducts: ShoppingItem[] = []
+  const productMap = new Map<string, ShoppingItem>()
 
   for (const ingredient of ingredients) {
     try {
-      // Search for products matching this ingredient
-      const products = await db.migrosProduct.findMany({
-        where: {
-          OR: [
-            {
-              name: {
-                contains: ingredient,
-                mode: 'insensitive'
-              }
-            },
-            {
-              category: {
-                contains: ingredient,
-                mode: 'insensitive'
-              }
-            }
-          ]
-        },
-        take: 3 // Get top 3 matches
+      // Analyze the ingredient
+      const analysis = analyzeIngredient(ingredient)
+      console.log(`🔍 Analyzing: "${ingredient}" → ${analysis.mainIngredient} (${analysis.category})`)
+      
+      // Find best matching products using enhanced matching
+      const matches = await findBestProductMatch(analysis, {
+        preferScrapingBee: true,
+        maxPriceChf: 50
       })
-
-      if (products.length > 0) {
-        // Take the best match (first result)
-        const product = products[0]
+      
+      if (matches.length > 0) {
+        const bestMatch = matches[0]
         
-        // Calculate quantity based on people count and typical usage
-        const quantity = calculateQuantity(ingredient, peopleCount)
-        
-        const shoppingItem: ShoppingItem = {
-          id: product.id,
-          name: product.name,
-          brand: product.brand || undefined,
-          priceChf: product.priceChf || 0,
-          unit: product.unit || '',
-          category: product.category || 'autres',
-          url: product.url || undefined,
-          imageUrl: product.imageUrl || undefined,
-          quantity,
-          totalPrice: Math.round((product.priceChf || 0) * quantity * 100) / 100,
-          matchedIngredients: [ingredient]
+        // Check if we already have this product
+        if (productMap.has(bestMatch.id)) {
+          // Add to matched ingredients
+          const existing = productMap.get(bestMatch.id)!
+          existing.matchedIngredients.push(ingredient)
+        } else {
+          // Calculate smart quantity
+          const { quantity, unit } = calculateSmartQuantity(analysis, peopleCount)
+          
+          const shoppingItem: ShoppingItem = {
+            id: bestMatch.id,
+            name: bestMatch.name,
+            brand: bestMatch.brand,
+            priceChf: bestMatch.priceChf,
+            unit: unit || bestMatch.unit || '',
+            category: bestMatch.category || analysis.category,
+            url: bestMatch.url,
+            imageUrl: bestMatch.imageUrl,
+            quantity,
+            totalPrice: Math.round(bestMatch.priceChf * quantity * 100) / 100,
+            matchedIngredients: [ingredient],
+            matchScore: bestMatch.matchScore,
+            matchReason: bestMatch.matchReason,
+            confidence: bestMatch.confidence,
+            source: bestMatch.source
+          }
+          
+          productMap.set(bestMatch.id, shoppingItem)
         }
-
-        matchedProducts.push(shoppingItem)
-        console.log(`✅ Matched "${ingredient}" → ${product.name} (${shoppingItem.quantity}x)`)
+        
+        console.log(`✅ Matched "${ingredient}" → ${bestMatch.name} (${bestMatch.confidence}, ${Math.round(bestMatch.matchScore * 100)}%)`)
       } else {
         console.log(`❌ No match found for "${ingredient}"`)
       }
@@ -205,30 +242,10 @@ async function matchIngredientsToProducts(ingredients: string[], peopleCount: nu
     }
   }
 
-  return matchedProducts
+  return Array.from(productMap.values())
 }
 
-function calculateQuantity(ingredient: string, peopleCount: number): number {
-  // Smart quantity calculation based on ingredient type and people count
-  const baseQuantity = Math.max(1, Math.ceil(peopleCount / 4)) // Scale from family of 4
-  
-  // Adjust based on ingredient type
-  if (ingredient.includes('pâtes') || ingredient.includes('riz')) {
-    return baseQuantity // 1 package per 4 people
-  } else if (ingredient.includes('viande') || ingredient.includes('poisson')) {
-    return baseQuantity // 1 package per 4 people
-  } else if (ingredient.includes('légumes')) {
-    return Math.max(1, Math.ceil(peopleCount / 3)) // More vegetables needed
-  } else if (ingredient.includes('épices') || ingredient.includes('herbes')) {
-    return 1 // One package of spices/herbs serves many
-  } else if (ingredient.includes('huile') || ingredient.includes('vinaigre')) {
-    return 1 // One bottle serves many meals
-  } else if (ingredient.includes('fromage') || ingredient.includes('lait')) {
-    return baseQuantity
-  } else {
-    return baseQuantity // Default
-  }
-}
+// Remove the old calculateQuantity function since we're using the enhanced one from the library
 
 function categorizeShoppingItems(items: ShoppingItem[]) {
   const categories = new Map<string, ShoppingItem[]>()
@@ -241,12 +258,20 @@ function categorizeShoppingItems(items: ShoppingItem[]) {
     categories.get(category)!.push(item)
   })
 
-  // Sort categories by importance and items by price
+  // Sort categories by importance and items by confidence then price
   const sortedCategories = Array.from(categories.entries())
     .sort(([a], [b]) => getCategoryPriority(a) - getCategoryPriority(b))
     .map(([category, items]) => ({
       name: category,
-      items: items.sort((a, b) => b.priceChf - a.priceChf), // Most expensive first
+      items: items.sort((a, b) => {
+        // Sort by confidence first
+        const confidenceOrder = { 'high': 3, 'medium': 2, 'low': 1 }
+        const aConf = confidenceOrder[a.confidence || 'low']
+        const bConf = confidenceOrder[b.confidence || 'low']
+        if (aConf !== bConf) return bConf - aConf
+        // Then by price
+        return b.priceChf - a.priceChf
+      }), // Best matches first
       totalCost: Math.round(items.reduce((sum, item) => sum + item.totalPrice, 0) * 100) / 100,
       itemCount: items.length
     }))

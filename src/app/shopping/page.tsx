@@ -16,6 +16,10 @@ interface ShoppingItem {
   totalPrice: number
   matchedIngredients: string[]
   checked?: boolean
+  matchScore?: number
+  matchReason?: string
+  confidence?: 'high' | 'medium' | 'low'
+  source?: string
 }
 
 interface ShoppingCategory {
@@ -164,6 +168,12 @@ export default function ShoppingPage() {
               <p className="text-gray-500 mt-2">
                 Recherche des produits Migros correspondants
               </p>
+              <div className="mt-4">
+                <div className="text-sm text-gray-500 mb-2">Analyse des ingrédients...</div>
+                <div className="w-64 bg-gray-200 rounded-full h-2 mx-auto">
+                  <div className="bg-green-600 h-2 rounded-full animate-pulse" style={{ width: '60%' }}></div>
+                </div>
+              </div>
             </div>
           )}
 
@@ -219,14 +229,24 @@ export default function ShoppingPage() {
                     </div>
                   </div>
 
-                  <div className="flex justify-center gap-4">
-                    <button
-                      onClick={generateShoppingList}
-                      disabled={isGenerating}
-                      className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 disabled:opacity-50"
-                    >
-                      Regénérer la liste
-                    </button>
+                  <div className="space-y-2">
+                    <div className="text-sm text-green-700">
+                      <span className="font-medium">Base de données:</span> {shoppingList.summary.totalItems} produits trouvés sur Migros.ch
+                    </div>
+                    {shoppingList.unmatched && shoppingList.unmatched.length > 0 && (
+                      <div className="text-sm text-yellow-700">
+                        <span className="font-medium">À vérifier:</span> {shoppingList.unmatched.length} ingrédients non trouvés
+                      </div>
+                    )}
+                    <div className="flex justify-center gap-4 mt-4">
+                      <button
+                        onClick={generateShoppingList}
+                        disabled={isGenerating}
+                        className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 disabled:opacity-50"
+                      >
+                        Regénérer la liste
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -285,6 +305,11 @@ export default function ShoppingPage() {
                                     Pour: {item.matchedIngredients.join(', ')}
                                   </p>
                                 )}
+                                {item.matchReason && (
+                                  <p className="text-xs text-gray-500 mt-1" title={item.matchReason}>
+                                    {item.matchScore && `(${Math.round(item.matchScore * 100)}% match)`}
+                                  </p>
+                                )}
                               </div>
                               
                               <div className="text-right ml-4">
@@ -294,6 +319,21 @@ export default function ShoppingPage() {
                                 <div className="text-sm text-gray-500">
                                   CHF {item.priceChf.toFixed(2)} / unité
                                 </div>
+                                {item.confidence && (
+                                  <div className="mt-1">
+                                    <span className={`inline-block px-2 py-1 text-xs rounded-full ${
+                                      item.confidence === 'high' 
+                                        ? 'bg-green-100 text-green-800' 
+                                        : item.confidence === 'medium'
+                                        ? 'bg-yellow-100 text-yellow-800'
+                                        : 'bg-red-100 text-red-800'
+                                    }`}>
+                                      {item.confidence === 'high' ? '✓ Exact' : 
+                                       item.confidence === 'medium' ? '≈ Proche' : 
+                                       '? Approximatif'}
+                                    </span>
+                                  </div>
+                                )}
                               </div>
                             </div>
                           </div>
