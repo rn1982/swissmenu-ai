@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -14,7 +14,8 @@
     "test:scrapingbee": "tsx src/scripts/test-scrapingbee.ts",
     "scrape:scrapingbee": "tsx src/scripts/scheduled-scraper-scrapingbee.ts",
     "scrape:categories": "tsx src/scripts/scrape-categories.ts",
-    "scrape:migros": "tsx src/scripts/scrape-migros-products.ts"
+    "scrape:migros": "tsx src/scripts/scrape-migros-products.ts",
+    "scrape:expand": "tsx src/scripts/expand-products-to-500.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.55.1",

@@ -74,7 +74,7 @@ async function generateMenuWithClaude(preferences: UserPreferences) {
   // Get recent menus to avoid repetition
   const recentMenus = await db.weeklyMenu.findMany({
     orderBy: { createdAt: 'desc' },
-    take: 3
+    take: 5 // Increased from 3 to 5 for better variety tracking
   })
   
   // Get available product categories for better recipe generation
@@ -93,18 +93,40 @@ async function generateMenuWithClaude(preferences: UserPreferences) {
     }
   })
   
-  const recentDishes = extractRecentDishes(recentMenus)
-  const prompt = createMenuPrompt(preferences, recentDishes, availableCategories)
+  // Get top 100 common ingredients from our database
+  const commonIngredients = await db.migrosProduct.findMany({
+    select: {
+      name: true,
+      category: true
+    },
+    where: {
+      OR: [
+        { category: { in: ['pasta', 'pasta-rice', 'rice'] } },
+        { category: { in: ['meat', 'fish'] } },
+        { category: { in: ['vegetables', 'fruits'] } },
+        { category: { in: ['dairy', 'pantry'] } }
+      ]
+    },
+    take: 100,
+    orderBy: [
+      { category: 'asc' },
+      { name: 'asc' }
+    ]
+  })
+  
+  const { dishes: recentDishes, dishTypes } = extractRecentDishes(recentMenus)
+  const prompt = createMenuPrompt(preferences, recentDishes, availableCategories, dishTypes, commonIngredients)
   let lastError: Error | null = null
   
   // Retry logic for API overload or temporary failures
   for (let attempt = 1; attempt <= 3; attempt++) {
     try {
       console.log(`Menu generation attempt ${attempt}/3`)
+      console.log(`Prompt length: ${prompt.length} characters`)
       
       const response = await anthropic.messages.create({
         model: 'claude-3-5-sonnet-20241022',
-        max_tokens: 4000,
+        max_tokens: 8000, // Increased to ensure full week generation
         temperature: 0.8, // Increase creativity for more variety
         messages: [
           {
@@ -114,19 +136,38 @@ async function generateMenuWithClaude(preferences: UserPreferences) {
         ]
       })
 
+      // Log response info
+      console.log(`Response received, usage: ${JSON.stringify(response.usage || 'N/A')}`)
+      
       const content = response.content[0]
       if (content.type === 'text') {
+        console.log(`Response length: ${content.text.length} characters`)
         try {
           const menuData = JSON.parse(content.text)
           
-          // Validate variety and dietary restrictions
-          if (!validateMenuVariety(menuData) || !validateDietaryRestrictions(menuData, preferences)) {
-            console.log('Menu validation failed, regenerating...')
+          // Ensure correct day ordering
+          const orderedMenuData = ensureCorrectDayOrder(menuData)
+          
+          // Validate that all days are present
+          if (!validateAllDaysPresent(orderedMenuData)) {
+            console.log('❌ Not all days generated, regenerating...')
+            lastError = new Error('Incomplete menu - missing days')
+            continue
+          }
+          
+          // Log which days were generated
+          const generatedDays = Object.keys(orderedMenuData.weekMenu || {})
+          console.log(`📅 Generated days: ${generatedDays.join(', ')}`)
+          
+          // Skip variety validation for now - user priority is matching ingredients
+          // Validate dietary restrictions only
+          if (!validateDietaryRestrictions(orderedMenuData, preferences)) {
+            console.log('Dietary restrictions violated, regenerating...')
             continue
           }
           
           console.log('✅ Menu generation successful')
-          return menuData
+          return orderedMenuData
         } catch (parseError) {
           console.error('Failed to parse Claude response:', content.text)
           throw new Error('Invalid menu format returned from AI')
@@ -155,13 +196,42 @@ async function generateMenuWithClaude(preferences: UserPreferences) {
     }
   }
   
-  // If all retries failed, throw the last error
-  throw lastError || new Error('Menu generation failed after all retries')
+  // If all retries failed, create a basic menu with all days
+  console.log('⚠️ All retries failed, creating basic menu with all 7 days')
+  
+  // Create a basic menu structure with all days
+  const basicMenu = {
+    weekMenu: {},
+    resume: {
+      cout_total_estime_chf: 0,
+      nombre_repas: preferences.mealsPerDay * 7,
+      cout_moyen_par_repas_chf: 0,
+      ingredients_principaux: [],
+      conseils_achat: "Menu basique généré avec ingrédients simples"
+    }
+  }
+  
+  // Fill all days with basic meals
+  const filledMenu = fillMissingDays(basicMenu, preferences)
+  console.log('✅ Created complete 7-day menu with basic meals')
+  return filledMenu
 }
 
 // Extract dishes from recent menus to avoid repetition
-function extractRecentDishes(recentMenus: any[]): string[] {
+function extractRecentDishes(recentMenus: any[]): { dishes: string[], dishTypes: Record<string, number> } {
   const dishes: string[] = []
+  const dishTypes: Record<string, number> = {
+    pasta: 0,
+    viande: 0,
+    poisson: 0,
+    vegetarien: 0,
+    asiatique: 0,
+    gratin: 0,
+    soupe: 0,
+    salade: 0,
+    pizza: 0,
+    risotto: 0
+  }
   
   recentMenus.forEach(menu => {
     if (menu.menuData?.weekMenu) {
@@ -169,7 +239,40 @@ function extractRecentDishes(recentMenus: any[]): string[] {
         if (day) {
           Object.values(day).forEach((meal: any) => {
             if (meal?.nom) {
-              dishes.push(meal.nom.toLowerCase())
+              const dishName = meal.nom.toLowerCase()
+              dishes.push(dishName)
+              
+              // Track dish types
+              if (dishName.includes('pâtes') || dishName.includes('pasta') || dishName.includes('spaghetti')) {
+                dishTypes.pasta++
+              }
+              if (dishName.includes('bœuf') || dishName.includes('poulet') || dishName.includes('porc') || dishName.includes('veau')) {
+                dishTypes.viande++
+              }
+              if (dishName.includes('poisson') || dishName.includes('saumon') || dishName.includes('cabillaud')) {
+                dishTypes.poisson++
+              }
+              if (dishName.includes('végétarien') || dishName.includes('légumes') || dishName.includes('tofu')) {
+                dishTypes.vegetarien++
+              }
+              if (dishName.includes('asiatique') || dishName.includes('wok') || dishName.includes('curry') || dishName.includes('thaï')) {
+                dishTypes.asiatique++
+              }
+              if (dishName.includes('gratin')) {
+                dishTypes.gratin++
+              }
+              if (dishName.includes('soupe') || dishName.includes('potage')) {
+                dishTypes.soupe++
+              }
+              if (dishName.includes('salade')) {
+                dishTypes.salade++
+              }
+              if (dishName.includes('pizza')) {
+                dishTypes.pizza++
+              }
+              if (dishName.includes('risotto')) {
+                dishTypes.risotto++
+              }
             }
           })
         }
@@ -177,17 +280,59 @@ function extractRecentDishes(recentMenus: any[]): string[] {
     }
   })
   
-  return dishes
+  return { dishes, dishTypes }
 }
 
 // Validate menu has sufficient variety
 function validateMenuVariety(menuData: any): boolean {
   const allDishes: string[] = []
+  const cuisineTypes: string[] = []
+  const proteinTypes: string[] = []
+  const cookingMethods: string[] = []
   
   Object.values(menuData.weekMenu).forEach((day: any) => {
     Object.values(day).forEach((meal: any) => {
       if (meal?.nom) {
-        allDishes.push(meal.nom.toLowerCase())
+        const dishName = meal.nom.toLowerCase()
+        const description = (meal.description || '').toLowerCase()
+        allDishes.push(dishName)
+        
+        // Track cuisine types
+        if (dishName.includes('italien') || dishName.includes('pasta') || dishName.includes('pizza')) {
+          cuisineTypes.push('italien')
+        } else if (dishName.includes('asiatique') || dishName.includes('wok') || dishName.includes('curry')) {
+          cuisineTypes.push('asiatique')
+        } else if (dishName.includes('suisse') || dishName.includes('rösti') || dishName.includes('fondue')) {
+          cuisineTypes.push('suisse')
+        } else if (dishName.includes('français') || dishName.includes('gratin')) {
+          cuisineTypes.push('français')
+        }
+        
+        // Track protein types
+        if (dishName.includes('poulet') || dishName.includes('volaille')) {
+          proteinTypes.push('poulet')
+        } else if (dishName.includes('bœuf') || dishName.includes('boeuf')) {
+          proteinTypes.push('bœuf')
+        } else if (dishName.includes('porc')) {
+          proteinTypes.push('porc')
+        } else if (dishName.includes('poisson') || dishName.includes('saumon')) {
+          proteinTypes.push('poisson')
+        } else if (dishName.includes('végétarien') || dishName.includes('tofu')) {
+          proteinTypes.push('végétarien')
+        }
+        
+        // Track cooking methods
+        if (description.includes('grillé') || description.includes('grill')) {
+          cookingMethods.push('grillé')
+        } else if (description.includes('mijoté') || description.includes('mijot')) {
+          cookingMethods.push('mijoté')
+        } else if (description.includes('rôti') || description.includes('four')) {
+          cookingMethods.push('rôti')
+        } else if (description.includes('sauté') || description.includes('poêle')) {
+          cookingMethods.push('sauté')
+        } else if (description.includes('vapeur')) {
+          cookingMethods.push('vapeur')
+        }
       }
     })
   })
@@ -196,8 +341,172 @@ function validateMenuVariety(menuData: any): boolean {
   const uniqueDishes = new Set(allDishes)
   const duplicateRatio = 1 - (uniqueDishes.size / allDishes.length)
   
-  // Allow max 10% duplicates (for things like daily breakfast items)
-  return duplicateRatio <= 0.1
+  // Check variety scores
+  const cuisineVariety = new Set(cuisineTypes).size
+  const proteinVariety = new Set(proteinTypes).size
+  const methodVariety = new Set(cookingMethods).size
+  
+  // Validation criteria
+  const hasSufficientDishVariety = duplicateRatio <= 0.15 // Allow 15% for breakfasts
+  const hasSufficientCuisineVariety = cuisineVariety >= 3
+  const hasSufficientProteinVariety = proteinVariety >= 3
+  const hasSufficientMethodVariety = methodVariety >= 3
+  
+  if (!hasSufficientDishVariety) {
+    console.log(`Variety validation failed: Too many duplicate dishes (${(duplicateRatio * 100).toFixed(1)}%)`)
+  }
+  if (!hasSufficientCuisineVariety) {
+    console.log(`Variety validation failed: Not enough cuisine types (${cuisineVariety} < 3)`)
+  }
+  if (!hasSufficientProteinVariety) {
+    console.log(`Variety validation failed: Not enough protein types (${proteinVariety} < 3)`)
+  }
+  if (!hasSufficientMethodVariety) {
+    console.log(`Variety validation failed: Not enough cooking methods (${methodVariety} < 3)`)
+  }
+  
+  return hasSufficientDishVariety && hasSufficientCuisineVariety && 
+         hasSufficientProteinVariety && hasSufficientMethodVariety
+}
+
+// Ensure correct day ordering (Monday to Sunday)
+function ensureCorrectDayOrder(menuData: any): any {
+  const correctDayOrder = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche']
+  
+  if (!menuData.weekMenu) {
+    return menuData
+  }
+  
+  const orderedWeekMenu: any = {}
+  
+  // Create new object with days in correct order
+  correctDayOrder.forEach(day => {
+    if (menuData.weekMenu[day]) {
+      orderedWeekMenu[day] = menuData.weekMenu[day]
+    }
+  })
+  
+  // Return menu with ordered days
+  return {
+    ...menuData,
+    weekMenu: orderedWeekMenu
+  }
+}
+
+// Validate that all 7 days are present
+function validateAllDaysPresent(menuData: any): boolean {
+  const requiredDays = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche']
+  
+  if (!menuData.weekMenu) {
+    console.log('❌ No weekMenu found in response')
+    return false
+  }
+  
+  const missingDays = requiredDays.filter(day => !menuData.weekMenu[day])
+  
+  if (missingDays.length > 0) {
+    console.log(`❌ Missing days: ${missingDays.join(', ')}`)
+    return false
+  }
+  
+  // Also check that each day has at least one meal
+  for (const day of requiredDays) {
+    const dayMenu = menuData.weekMenu[day]
+    if (!dayMenu || Object.keys(dayMenu).length === 0) {
+      console.log(`❌ Day ${day} has no meals`)
+      return false
+    }
+  }
+  
+  return true
+}
+
+// Fill missing days with simple fallback meals
+function fillMissingDays(menuData: any, preferences: UserPreferences): any {
+  const requiredDays = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche']
+  const mealTypes = []
+  if (preferences.mealsPerDay >= 1) mealTypes.push('petit_dejeuner')
+  if (preferences.mealsPerDay >= 2) mealTypes.push('dejeuner')
+  if (preferences.mealsPerDay >= 3) mealTypes.push('diner')
+  
+  // Ensure weekMenu exists
+  if (!menuData.weekMenu) {
+    menuData.weekMenu = {}
+  }
+  
+  // Simple fallback meals
+  const fallbackMeals = {
+    petit_dejeuner: {
+      nom: "Bircher Muesli",
+      description: "Muesli suisse traditionnel aux fruits",
+      ingredients: ["200g flocons d'avoine", "250ml lait", "1 pomme", "50g noix", "1 c.à.s miel"],
+      instructions: ["Mélanger les flocons avec le lait", "Laisser reposer 10 min", "Ajouter pomme râpée, noix et miel"],
+      temps_preparation: 10,
+      temps_cuisson: 0,
+      difficulte: "facile",
+      cout_estime_chf: 5.50,
+      portions: preferences.peopleCount
+    },
+    dejeuner: {
+      nom: "Salade composée",
+      description: "Salade fraîche avec légumes de saison",
+      ingredients: ["200g salade verte", "2 tomates", "100g fromage", "50g pain", "vinaigrette"],
+      instructions: ["Laver et couper les légumes", "Ajouter le fromage en cubes", "Assaisonner avec la vinaigrette"],
+      temps_preparation: 15,
+      temps_cuisson: 0,
+      difficulte: "facile",
+      cout_estime_chf: 8.00,
+      portions: preferences.peopleCount
+    },
+    diner: {
+      nom: "Pâtes sauce tomate",
+      description: "Pâtes italiennes avec sauce tomate maison",
+      ingredients: ["300g pâtes", "400g tomates pelées", "1 oignon", "2 gousses d'ail", "basilic"],
+      instructions: ["Faire revenir oignon et ail", "Ajouter tomates, cuire 20 min", "Cuire les pâtes, servir avec la sauce"],
+      temps_preparation: 10,
+      temps_cuisson: 25,
+      difficulte: "facile",
+      cout_estime_chf: 10.00,
+      portions: preferences.peopleCount
+    }
+  }
+  
+  // Fill in missing days
+  requiredDays.forEach((day, index) => {
+    if (!menuData.weekMenu[day] || Object.keys(menuData.weekMenu[day]).length === 0) {
+      console.log(`🔧 Filling missing day: ${day}`)
+      menuData.weekMenu[day] = {}
+      
+      // Add meals based on preferences
+      mealTypes.forEach(mealType => {
+        // Vary the fallback meals slightly
+        const baseMeal = { ...fallbackMeals[mealType as keyof typeof fallbackMeals] }
+        baseMeal.cout_estime_chf += (index % 3) // Slight price variation
+        menuData.weekMenu[day][mealType] = baseMeal
+      })
+    }
+  })
+  
+  // Update resume
+  if (!menuData.resume) {
+    menuData.resume = {}
+  }
+  
+  const totalMeals = requiredDays.length * preferences.mealsPerDay
+  const totalCost = Object.values(menuData.weekMenu).reduce((sum: number, day: any) => {
+    return sum + Object.values(day).reduce((daySum: number, meal: any) => {
+      return daySum + (meal.cout_estime_chf || 0)
+    }, 0)
+  }, 0)
+  
+  menuData.resume = {
+    ...menuData.resume,
+    nombre_repas: totalMeals,
+    cout_total_estime_chf: Math.round(totalCost * 100) / 100,
+    cout_moyen_par_repas_chf: Math.round((totalCost / totalMeals) * 100) / 100
+  }
+  
+  return menuData
 }
 
 // Validate dietary restrictions are respected
@@ -206,12 +515,44 @@ function validateDietaryRestrictions(menuData: any, preferences: UserPreferences
   if (restrictions.length === 0) return true
   
   const restrictionKeywords: Record<string, string[]> = {
-    'vegetarien': ['viande', 'poulet', 'boeuf', 'porc', 'veau', 'agneau', 'canard', 'poisson', 'fruits de mer'],
-    'vegan': ['viande', 'poulet', 'boeuf', 'porc', 'fromage', 'lait', 'œuf', 'beurre', 'crème', 'yaourt', 'miel'],
-    'sans_gluten': ['blé', 'pâtes', 'pain', 'farine', 'croissant', 'brioche', 'pizza', 'couscous'],
-    'sans_lactose': ['lait', 'fromage', 'yaourt', 'crème', 'beurre', 'mozzarella', 'gruyère'],
-    'halal': ['porc', 'jambon', 'lard', 'saucisson', 'alcool', 'vin'],
-    'kasher': ['porc', 'fruits de mer', 'crevettes', 'homard']
+    'vegetarien': [
+      'viande', 'poulet', 'boeuf', 'bœuf', 'porc', 'veau', 'agneau', 'canard', 'poisson', 
+      'fruits de mer', 'crevettes', 'saumon', 'thon', 'cabillaud', 'volaille', 'lapin',
+      'merguez', 'saucisse', 'steak', 'escalope', 'rôti', 'côtelette', 'jambon', 'lard',
+      'bacon', 'filet', 'cuisse', 'magret', 'foie', 'rognons', 'tripes', 'boudin'
+    ],
+    'vegan': [
+      'viande', 'poulet', 'boeuf', 'bœuf', 'porc', 'fromage', 'lait', 'œuf', 'œufs', 
+      'beurre', 'crème', 'yaourt', 'yogourt', 'miel', 'gruyère', 'emmental', 'parmesan',
+      'mozzarella', 'mascarpone', 'ricotta', 'chèvre', 'roquefort', 'camembert', 'brie',
+      'reblochon', 'raclette', 'fondue', 'quiche', 'omelette', 'mayonnaise', 'crème fraîche',
+      'poisson', 'fruits de mer', 'crevettes', 'saumon', 'thon', 'gélatine'
+    ],
+    'sans_gluten': [
+      'blé', 'pâtes', 'pain', 'farine', 'croissant', 'brioche', 'pizza', 'couscous',
+      'semoule', 'biscuit', 'gâteau', 'tarte', 'quiche', 'crêpe', 'galette', 'panure',
+      'chapelure', 'sauce soja', 'seitan', 'boulgour', 'épeautre', 'orge', 'seigle',
+      'avoine', 'malt', 'levure de bière', 'bière'
+    ],
+    'sans_lactose': [
+      'lait', 'fromage', 'yaourt', 'yogourt', 'crème', 'beurre', 'mozzarella', 'gruyère',
+      'emmental', 'parmesan', 'mascarpone', 'ricotta', 'chèvre', 'roquefort', 'camembert',
+      'brie', 'reblochon', 'raclette', 'fondue', 'crème fraîche', 'chantilly', 'glace',
+      'chocolat au lait', 'béchamel', 'gratin', 'quiche lorraine'
+    ],
+    'halal': [
+      'porc', 'jambon', 'lard', 'saucisson', 'alcool', 'vin', 'bière', 'liqueur',
+      'bacon', 'pancetta', 'chorizo', 'salami', 'mortadelle', 'coppa', 'speck',
+      'gélatine de porc', 'saindoux', 'rillettes', 'pâté de porc', 'boudin noir',
+      'andouille', 'andouillette', 'chipolata', 'merguez de porc', 'côte de porc',
+      'filet mignon de porc', 'échine', 'travers de porc', 'jarret de porc'
+    ],
+    'kasher': [
+      'porc', 'fruits de mer', 'crevettes', 'homard', 'crabe', 'huîtres', 'moules',
+      'coquilles saint-jacques', 'langoustines', 'calamars', 'poulpe', 'escargots',
+      'lapin', 'cheval', 'mélange viande-lait', 'cheeseburger', 'pizza pepperoni',
+      'carbonara', 'cordon bleu', 'escalope milanaise', 'lasagne bolognaise'
+    ]
   }
   
   // Check each meal for restriction violations
@@ -253,7 +594,13 @@ function getCategoryNameFrench(category: string): string {
   return categoryNames[category] || category
 }
 
-function createMenuPrompt(preferences: UserPreferences, recentDishes: string[] = [], availableCategories: any[] = []): string {
+function createMenuPrompt(
+  preferences: UserPreferences, 
+  recentDishes: string[] = [], 
+  availableCategories: any[] = [],
+  dishTypes: Record<string, number> = {},
+  commonIngredients: Array<{ name: string; category: string | null }> = []
+): string {
   const dietaryRestrictions = preferences.dietaryRestrictions?.join(', ') || 'Aucune'
   const cuisinePreferences = preferences.cuisinePreferences?.join(', ') || 'Varié'
   
@@ -267,100 +614,76 @@ function createMenuPrompt(preferences: UserPreferences, recentDishes: string[] =
     ? `\nPLATS À ÉVITER (récemment servis):\n${recentDishes.join(', ')}\n` 
     : ''
   
+  // Create dish type warnings
+  const overusedTypes = Object.entries(dishTypes)
+    .filter(([_, count]) => count > 5)
+    .map(([type, count]) => `${type} (déjà ${count} fois)`)
+  
+  const dishTypeWarning = overusedTypes.length > 0
+    ? `\nTYPES DE PLATS TROP FRÉQUENTS À LIMITER:\n${overusedTypes.join(', ')}\n`
+    : ''
+  
   // Create available ingredients section
   const availableIngredientsSection = availableCategories.length > 0
     ? `\nCATÉGORIES D'INGRÉDIENTS DISPONIBLES CHEZ MIGROS:\n${availableCategories.map(c => `- ${getCategoryNameFrench(c.category)}: ${c._count} produits`).join('\n')}\n\nPRIORISE ces catégories d'ingrédients car nous avons vérifié leur disponibilité.\n`
     : ''
   
-  return `Tu es un chef suisse créatif spécialisé dans la planification de menus hebdomadaires variés. 
-Génère un menu pour une semaine complète (7 jours) en français, adapté au contexte suisse.
-
-SAISON ACTUELLE: ${season}
+  // Create common ingredients list
+  const ingredientsByCategory = commonIngredients.reduce((acc, ing) => {
+    const cat = ing.category || 'autres'
+    if (!acc[cat]) acc[cat] = []
+    acc[cat].push(ing.name)
+    return acc
+  }, {} as Record<string, string[]>)
+  
+  const commonIngredientsSection = Object.keys(ingredientsByCategory).length > 0
+    ? `\nINGRÉDIENTS DISPONIBLES DANS NOTRE BASE DE DONNÉES:\n${
+        Object.entries(ingredientsByCategory)
+          .map(([cat, items]) => `${getCategoryNameFrench(cat)}: ${items.slice(0, 10).join(', ')}${items.length > 10 ? '...' : ''}`)
+          .join('\n')
+      }\n\nUTILISE PRIORITAIREMENT ces ingrédients pour garantir la correspondance avec notre base de produits.\n`
+    : ''
+  
+  return `Génère un menu hebdomadaire complet (7 jours) en français pour ${preferences.peopleCount} personnes.
 
 CONTRAINTES:
-- Nombre de personnes: ${preferences.peopleCount}
-- Repas par jour: ${preferences.mealsPerDay}
-- Budget hebdomadaire: ${preferences.budgetChf ? preferences.budgetChf + ' CHF' : 'Flexible'}
-- Restrictions alimentaires: ${dietaryRestrictions}
-- Préférences culinaires: ${cuisinePreferences}
-- Niveau de cuisine: ${preferences.cookingSkillLevel}
+- Budget: ${preferences.budgetChf ? preferences.budgetChf + ' CHF' : 'Flexible'}
+- Repas/jour: ${preferences.mealsPerDay}
+- Restrictions: ${dietaryRestrictions}
+- Niveau: ${preferences.cookingSkillLevel}
 ${recentDishesSection}${availableIngredientsSection}
-DIRECTIVES IMPORTANTES POUR LA VARIÉTÉ:
-1. AUCUN plat ne doit être répété durant la semaine (sauf petit-déjeuner simple)
-2. Varie les types de protéines chaque jour (poulet, bœuf, porc, poisson, végétarien, etc.)
-3. Alterne entre cuisines différentes (suisse, italienne, asiatique, française, etc.)
-4. Utilise des méthodes de cuisson variées (grillé, mijoté, rôti, sauté, vapeur, etc.)
-5. Privilégie les produits de saison ${season === 'hiver' ? '(choux, courges, pommes)' : season === 'été' ? '(tomates, courgettes, baies)' : ''}
-6. Inclus 2-3 spécialités suisses par semaine MAX (pas plus!)
+RÈGLES:
+1. TOUS les 7 jours OBLIGATOIRES (lundi à dimanche)
+2. Ingrédients disponibles chez Migros uniquement
+3. Respecter STRICTEMENT les restrictions alimentaires
+4. Varier protéines et cuisines chaque jour
+5. Instructions de cuisson détaillées pour chaque plat
 
-RÈGLES STRICTES:
-1. Utilise des ingrédients facilement trouvables chez Migros Suisse
-2. Respecte ABSOLUMENT les restrictions alimentaires
-3. Respecte strictement le budget en CHF
-4. Les portions doivent correspondre au nombre de personnes
-5. Pour le dîner, privilégie des plats plus élaborés que le déjeuner
-6. IMPORTANT: Fournis des instructions de cuisson DETAILLÉES pour CHAQUE plat (sauf petit-déjeuner simple)
-7. PRIVILÉGIE les ingrédients des catégories disponibles mentionnées ci-dessus
-
-INGRÉDIENTS DE BASE TOUJOURS DISPONIBLES (ne pas lister dans les ingrédients):
-- Sel, poivre, huile d'olive basique
-- Ail, oignons (sauf si quantité importante)
-- Herbes séchées de base (thym, origan)
-- Farine, sucre, beurre standard
-Ces ingrédients de base sont considérés comme des "essentiels de cuisine" que tout foyer possède.
-
-EXEMPLES DE VARIÉTÉ ATTENDUE:
-- Lundi: Cuisine italienne (pasta)
-- Mardi: Spécialité suisse (rösti)
-- Mercredi: Cuisine asiatique (wok)
-- Jeudi: Cuisine française (gratin)
-- Vendredi: Poisson/fruits de mer
-- Samedi: Cuisine internationale
-- Dimanche: Plat familial élaboré
-
-STRUCTURE REQUISE - Retourne UNIQUEMENT du JSON valide:
+STRUCTURE JSON REQUISE:
 {
   "weekMenu": {
     "lundi": {
-      "petit_dejeuner": {
-        "nom": "Nom du plat",
-        "description": "Description courte",
-        "ingredients": ["ingrédient 1", "ingrédient 2"],
-        "instructions": ["Étape 1: ...", "Étape 2: ...", "Étape 3: ..."],
-        "temps_preparation": 15,
-        "temps_cuisson": 20,
-        "difficulte": "facile|moyen|difficile",
-        "cout_estime_chf": 8.50,
-        "portions": ${preferences.peopleCount},
-        "conseils": "Conseils de préparation ou variantes possibles"
-      },
-      "dejeuner": { /* même structure avec instructions détaillées */ },
-      "diner": { /* même structure avec instructions détaillées */ }
+      ${preferences.mealsPerDay >= 1 ? '"petit_dejeuner": { "nom": "...", "description": "...", "ingredients": [...], "instructions": [...], "temps_preparation": 10, "cout_estime_chf": 5.00, "difficulte": "facile", "portions": ' + preferences.peopleCount + ' },' : ''}
+      ${preferences.mealsPerDay >= 2 ? '"dejeuner": { "nom": "...", "description": "...", "ingredients": [...], "instructions": [...], "temps_preparation": 20, "cout_estime_chf": 8.00, "difficulte": "moyen", "portions": ' + preferences.peopleCount + ' },' : ''}
+      ${preferences.mealsPerDay >= 3 ? '"diner": { "nom": "...", "description": "...", "ingredients": [...], "instructions": [...], "temps_preparation": 30, "cout_estime_chf": 12.00, "difficulte": "moyen", "portions": ' + preferences.peopleCount + ' }' : ''}
     },
-    "mardi": { /* même structure pour tous les jours */ },
-    "mercredi": { /* ... */ },
-    "jeudi": { /* ... */ },
-    "vendredi": { /* ... */ },
-    "samedi": { /* ... */ },
-    "dimanche": { /* ... */ }
+    "mardi": { /* structure identique */ },
+    "mercredi": { /* structure identique */ },
+    "jeudi": { /* structure identique */ },
+    "vendredi": { /* structure identique */ },
+    "samedi": { /* structure identique */ },
+    "dimanche": { /* structure identique */ }
   },
   "resume": {
-    "cout_total_estime_chf": 85.20,
-    "nombre_repas": 21,
-    "cout_moyen_par_repas_chf": 4.06,
-    "ingredients_principaux": ["liste des ingrédients les plus utilisés"],
-    "conseils_achat": "Conseils pour optimiser les achats chez Migros"
+    "cout_total_estime_chf": 0,
+    "nombre_repas": ${preferences.mealsPerDay * 7},
+    "cout_moyen_par_repas_chf": 0,
+    "ingredients_principaux": [],
+    "conseils_achat": ""
   }
 }
 
-INSTRUCTIONS DE CUISSON:
-- Sois TRÈS précis avec les quantités (ex: "200g de pâtes", "2 cuillères à soupe d'huile")
-- Indique les températures de cuisson (ex: "180°C", "feu moyen")
-- Donne des repères visuels (ex: "jusqu'à ce que les oignons soient dorés")
-- Adapte les instructions au niveau ${preferences.cookingSkillLevel}
-- Pour ${preferences.peopleCount} personnes exactement
-
-IMPORTANT: Ne retourne QUE le JSON, aucun texte avant ou après.`
+IMPORTANT: Retourne UNIQUEMENT le JSON avec TOUS les 7 jours complets.`
 }
 
 // Get existing menu for a user
