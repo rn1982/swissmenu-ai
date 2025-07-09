@@ -1,0 +1,126 @@
+{
+  "summary": {
+    "totalTested": 10,
+    "requiresJavaScript": 10,
+    "hasProductContent": 10,
+    "pageTypes": {
+      "product": 10
+    },
+    "timestamp": "2025-07-08T20:58:02.289Z"
+  },
+  "diagnostics": [
+    {
+      "productId": "101401200000",
+      "productName": "Alnatura · Noix de cajou · grillées et salées",
+      "category": "nuts",
+      "url": "https://www.migros.ch/fr/product/101401200000",
+      "status": 200,
+      "requiresJavaScript": true,
+      "hasProductContent": true,
+      "pageType": "product",
+      "diagnosis": "Product page requires JavaScript to load content"
+    },
+    {
+      "productId": "101401600000",
+      "productName": "Party · noix de cajou · Salées",
+      "category": "nuts",
+      "url": "https://www.migros.ch/fr/product/101401600000",
+      "status": 200,
+      "requiresJavaScript": true,
+      "hasProductContent": true,
+      "pageType": "product",
+      "diagnosis": "Product page requires JavaScript to load content"
+    },
+    {
+      "productId": "101401700000",
+      "productName": "Sun Queen Apéro · Noix de cajou · grillées et salées",
+      "category": "nuts",
+      "url": "https://www.migros.ch/fr/product/101401700000",
+      "status": 200,
+      "requiresJavaScript": true,
+      "hasProductContent": true,
+      "pageType": "product",
+      "diagnosis": "Product page requires JavaScript to load content"
+    },
+    {
+      "productId": "101419000000",
+      "productName": "Migros Bio · noix de cajou · salée",
+      "category": "nuts",
+      "url": "https://www.migros.ch/fr/product/101419000000",
+      "status": 200,
+      "requiresJavaScript": true,
+      "hasProductContent": true,
+      "pageType": "product",
+      "diagnosis": "Product page requires JavaScript to load content"
+    },
+    {
+      "productId": "101911700000",
+      "productName": "M-Budget · Wave chips · Paprika",
+      "category": "herbs",
+      "url": "https://www.migros.ch/fr/product/101911700000",
+      "status": 200,
+      "requiresJavaScript": true,
+      "hasProductContent": true,
+      "pageType": "product",
+      "diagnosis": "Product page requires JavaScript to load content"
+    },
+    {
+      "productId": "101932800000",
+      "productName": "Brewbee Tschipps à base de malt d’orge, paprika",
+      "category": "herbs",
+      "url": "https://www.migros.ch/fr/product/101932800000",
+      "status": 200,
+      "requiresJavaScript": true,
+      "hasProductContent": true,
+      "pageType": "product",
+      "diagnosis": "Product page requires JavaScript to load content"
+    },
+    {
+      "productId": "101950300000",
+      "productName": "Zweifel Original · Chips · Paprika - Family Pack",
+      "category": "herbs",
+      "url": "https://www.migros.ch/fr/product/101950300000",
+      "status": 200,
+      "requiresJavaScript": true,
+      "hasProductContent": true,
+      "pageType": "product",
+      "diagnosis": "Product page requires JavaScript to load content"
+    },
+    {
+      "productId": "103302600000",
+      "productName": "M-Budget · Huile d'olive · vierge",
+      "category": "pantry",
+      "url": "https://www.migros.ch/fr/product/103302600000",
+      "status": 200,
+      "requiresJavaScript": true,
+      "hasProductContent": true,
+      "pageType": "product",
+      "diagnosis": "Product page requires JavaScript to load content"
+    },
+    {
+      "productId": "103331100000",
+      "productName": "Monini Classico · Huile d'olive extra vierge",
+      "category": "pantry",
+      "url": "https://www.migros.ch/fr/product/103331100000",
+      "status": 200,
+      "requiresJavaScript": true,
+      "hasProductContent": true,
+      "pageType": "product",
+      "diagnosis": "Product page requires JavaScript to load content"
+    },
+    {
+      "productId": "103331500000",
+      "productName": "Monini Classico · Huile d'olive extra vierge",
+      "category": "pantry",
+      "url": "https://www.migros.ch/fr/product/103331500000",
+      "status": 200,
+      "requiresJavaScript": true,
+      "hasProductContent": true,
+      "pageType": "product",
+      "diagnosis": "Product page requires JavaScript to load content"
+    }
+  ],
+  "recommendations": [
+    "Product pages require JavaScript rendering. Ensure your scraping solution uses JavaScript rendering for accurate results."
+  ]
+}

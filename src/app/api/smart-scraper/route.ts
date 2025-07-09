@@ -62,7 +62,7 @@ export async function GET() {
       await page.waitForFunction(() => {
         const cards = document.querySelectorAll('.product-card')
         // Check if at least one card has meaningful content
-        for (let card of cards) {
+        for (const card of cards) {
           if (card.textContent && card.textContent.trim().length > 10) {
             return true
           }
@@ -95,7 +95,7 @@ export async function GET() {
         // Try to find name - look for prominent text elements
         const nameElements = card.querySelectorAll('h1, h2, h3, h4, [class*="name"], [class*="title"], strong, b')
         let name = ''
-        for (let el of nameElements) {
+        for (const el of nameElements) {
           const text = el.textContent?.trim()
           if (text && text.length > 3) {
             name = text
@@ -107,7 +107,7 @@ export async function GET() {
         const priceElements = card.querySelectorAll('*')
         let price = ''
         let priceNum = null
-        for (let el of priceElements) {
+        for (const el of priceElements) {
           const text = el.textContent?.trim() || ''
           // Look for CHF or price patterns like "2.50" or "12.-"
           const priceMatch = text.match(/(CHF\s*)?(\d+)[.,](\d{2}|\-)/i)
@@ -130,7 +130,7 @@ export async function GET() {
 
         // Extract any data attributes
         const dataAttribs = {}
-        for (let attr of card.attributes) {
+        for (const attr of card.attributes) {
           if (attr.name.startsWith('data-')) {
             dataAttribs[attr.name] = attr.value
           }

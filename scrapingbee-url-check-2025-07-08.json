@@ -1,0 +1,75 @@
+{
+  "summary": {
+    "totalChecked": 5,
+    "totalValid": 5,
+    "totalInvalid": 0,
+    "totalErrors": 0,
+    "checkedAt": "2025-07-08T20:54:36.124Z",
+    "method": "ScrapingBee"
+  },
+  "statusBreakdown": [
+    {
+      "status": "200",
+      "count": 5,
+      "percentage": "100.0"
+    }
+  ],
+  "invalidUrls": [],
+  "allResults": [
+    {
+      "id": "104215400000",
+      "name": "Graines de Sésame",
+      "category": "nuts",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/104215400000",
+      "status": 200,
+      "isValid": true,
+      "pageTitle": "Migros",
+      "checkedAt": "2025-07-08T20:54:32.535Z"
+    },
+    {
+      "id": "104222200000",
+      "name": "Migros Bio · Graines de tournesol · Décortiquées",
+      "category": "nuts",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/104222200000",
+      "status": 200,
+      "isValid": true,
+      "pageTitle": "Migros",
+      "checkedAt": "2025-07-08T20:54:33.036Z"
+    },
+    {
+      "id": "104226100000",
+      "name": "Alnatura · Graines de tournesol",
+      "category": "nuts",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/104226100000",
+      "status": 200,
+      "isValid": true,
+      "pageTitle": "Migros",
+      "checkedAt": "2025-07-08T20:54:33.958Z"
+    },
+    {
+      "id": "104284900000",
+      "name": "De la région Graines de tournesol",
+      "category": "nuts",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/104284900000",
+      "status": 200,
+      "isValid": true,
+      "pageTitle": "Migros",
+      "checkedAt": "2025-07-08T20:54:34.446Z"
+    },
+    {
+      "id": "220220030210",
+      "name": "IP-SUISSE · Viande hachée de boeuf",
+      "category": "meat",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/220220030210",
+      "status": 200,
+      "isValid": true,
+      "pageTitle": "Migros",
+      "checkedAt": "2025-07-08T20:54:36.122Z"
+    }
+  ]
+}

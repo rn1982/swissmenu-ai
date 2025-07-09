@@ -20,13 +20,7 @@ interface ShoppingItem {
   matchReason?: string
   confidence?: 'high' | 'medium' | 'low'
   source?: string
-}
-
-interface ShoppingCategory {
-  name: string
-  items: ShoppingItem[]
-  totalCost: number
-  itemCount: number
+  searchUrl?: string
 }
 
 interface ShoppingList {
@@ -34,7 +28,7 @@ interface ShoppingList {
   menuId: string
   createdAt: string
   peopleCount: number
-  categories: ShoppingCategory[]
+  items: ShoppingItem[] // Changed from categories to flat list
   summary: {
     totalItems: number
     totalCost: number
@@ -57,7 +51,18 @@ export default function ShoppingPage() {
     const savedList = localStorage.getItem('currentShoppingList')
     if (savedList) {
       try {
-        setShoppingList(JSON.parse(savedList))
+        const parsed = JSON.parse(savedList)
+        
+        // Convert old format (categories) to new format (items)
+        if (parsed.categories && !parsed.items) {
+          const allItems: ShoppingItem[] = []
+          parsed.categories.forEach((category: any) => {
+            allItems.push(...category.items)
+          })
+          parsed.items = allItems
+        }
+        
+        setShoppingList(parsed)
       } catch (e) {
         console.error('Failed to parse saved shopping list:', e)
       }
@@ -251,26 +256,13 @@ export default function ShoppingPage() {
                 </div>
               </div>
 
-              {/* Shopping Categories */}
-              <div className="space-y-6">
-                {shoppingList.categories.map((category, categoryIndex) => (
-                  <div key={categoryIndex} className="border border-gray-200 rounded-lg p-6">
-                    <div className="flex justify-between items-center mb-4">
-                      <h3 className="text-xl font-bold text-gray-800">
-                        {category.name}
-                      </h3>
-                      <div className="text-right">
-                        <div className="text-lg font-semibold text-gray-700">
-                          CHF {category.totalCost.toFixed(2)}
-                        </div>
-                        <div className="text-sm text-gray-500">
-                          {category.itemCount} article{category.itemCount > 1 ? 's' : ''}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="grid gap-3">
-                      {category.items.map((item, itemIndex) => (
+              {/* Shopping Items - Flat List */}
+              <div className="border border-gray-200 rounded-lg p-6">
+                <h3 className="text-xl font-bold text-gray-800 mb-4">
+                  Articles de la liste
+                </h3>
+                <div className="grid gap-3">
+                  {(shoppingList.items || []).map((item, itemIndex) => (
                         <div 
                           key={itemIndex} 
                           className={`flex items-center p-4 border rounded-lg transition-all ${
@@ -338,21 +330,17 @@ export default function ShoppingPage() {
                             </div>
                           </div>
 
-                          {item.url && (
-                            <a
-                              href={item.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="ml-4 bg-orange-600 text-white px-3 py-2 rounded text-sm hover:bg-orange-700 transition-colors"
-                            >
-                              Voir chez Migros
-                            </a>
-                          )}
+                          <a
+                            href={item.searchUrl || `https://www.migros.ch/fr/search?query=${encodeURIComponent(item.name)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="ml-4 bg-orange-600 hover:bg-orange-700 text-white px-3 py-2 rounded text-sm transition-colors"
+                          >
+                            Voir chez Migros
+                          </a>
                         </div>
-                      ))}
-                    </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
 
               {/* Unmatched Ingredients */}

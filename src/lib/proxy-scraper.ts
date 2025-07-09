@@ -5,6 +5,7 @@ import axios from 'axios'
 import * as cheerio from 'cheerio'
 import { promises as fs } from 'fs'
 import * as path from 'path'
+import { validateUrl, isMigrosProductUrl } from './url-validator'
 
 interface ProxyConfig {
   service: 'scrapingbee' | 'brightdata' | 'smartproxy'
@@ -209,6 +210,26 @@ class ProxyScraper {
   async scrapeProduct(productUrl: string): Promise<ScrapedProduct | null> {
     try {
       console.log(`\n🔍 Scraping product: ${productUrl}`)
+      
+      // Validate URL format first
+      if (!isMigrosProductUrl(productUrl)) {
+        console.log('❌ Invalid Migros product URL format')
+        return null
+      }
+      
+      // Validate URL is accessible
+      console.log('🔗 Validating URL accessibility...')
+      const validation = await validateUrl(productUrl)
+      
+      if (!validation.isValid) {
+        console.log(`❌ URL validation failed: ${validation.statusCode || validation.error}`)
+        return null
+      }
+      
+      if (validation.redirectUrl && validation.redirectUrl !== productUrl) {
+        console.log(`↪️ URL redirected to: ${validation.redirectUrl}`)
+        productUrl = validation.redirectUrl
+      }
       
       const html = await this.scrapeUrl(productUrl)
       const product = this.parseProductFromHtml(html, productUrl)

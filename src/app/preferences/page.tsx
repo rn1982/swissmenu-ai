@@ -3,28 +3,6 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
-const DIETARY_RESTRICTIONS = [
-  'Végétarien',
-  'Végétalien', 
-  'Sans gluten',
-  'Sans lactose',
-  'Halal',
-  'Casher',
-  'Sans noix',
-  'Faible en sodium'
-]
-
-const CUISINE_PREFERENCES = [
-  'Suisse traditionnelle',
-  'Méditerranéenne',
-  'Italienne',
-  'Française',
-  'Asiatique',
-  'Indienne',
-  'Mexicaine',
-  'Moyen-orientale'
-]
-
 export default function PreferencesPage() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
@@ -36,15 +14,6 @@ export default function PreferencesPage() {
     cuisinePreferences: [] as string[],
     cookingSkillLevel: 'intermediate'
   })
-
-  const handleCheckboxChange = (value: string, field: 'dietaryRestrictions' | 'cuisinePreferences') => {
-    setPreferences(prev => ({
-      ...prev,
-      [field]: prev[field].includes(value)
-        ? prev[field].filter(item => item !== value)
-        : [...prev[field], value]
-    }))
-  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -136,46 +105,6 @@ export default function PreferencesPage() {
                 placeholder="150"
               />
               <p className="text-sm text-gray-500 mt-1">Budget recommandé: CHF 100-200 par semaine</p>
-            </div>
-
-            {/* Restrictions alimentaires */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-4">
-                Restrictions alimentaires
-              </label>
-              <div className="grid grid-cols-2 gap-3">
-                {DIETARY_RESTRICTIONS.map(restriction => (
-                  <label key={restriction} className="flex items-center">
-                    <input
-                      type="checkbox"
-                      checked={preferences.dietaryRestrictions.includes(restriction)}
-                      onChange={() => handleCheckboxChange(restriction, 'dietaryRestrictions')}
-                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                    />
-                    <span className="ml-2 text-sm text-gray-700">{restriction}</span>
-                  </label>
-                ))}
-              </div>
-            </div>
-
-            {/* Préférences culinaires */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-4">
-                Préférences culinaires
-              </label>
-              <div className="grid grid-cols-2 gap-3">
-                {CUISINE_PREFERENCES.map(cuisine => (
-                  <label key={cuisine} className="flex items-center">
-                    <input
-                      type="checkbox"
-                      checked={preferences.cuisinePreferences.includes(cuisine)}
-                      onChange={() => handleCheckboxChange(cuisine, 'cuisinePreferences')}
-                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                    />
-                    <span className="ml-2 text-sm text-gray-700">{cuisine}</span>
-                  </label>
-                ))}
-              </div>
             </div>
 
             {/* Niveau de cuisine */}

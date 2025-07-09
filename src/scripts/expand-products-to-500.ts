@@ -108,7 +108,7 @@ interface ScrapingProgress {
   errors: string[]
 }
 
-let progress: ScrapingProgress = {
+const progress: ScrapingProgress = {
   startTime: new Date(),
   categoriesCompleted: [],
   totalProducts: 0,

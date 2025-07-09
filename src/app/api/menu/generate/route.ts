@@ -121,13 +121,15 @@ async function generateMenuWithClaude(preferences: UserPreferences) {
   // Retry logic for API overload or temporary failures
   for (let attempt = 1; attempt <= 3; attempt++) {
     try {
-      console.log(`Menu generation attempt ${attempt}/3`)
-      console.log(`Prompt length: ${prompt.length} characters`)
+      console.log(`🔄 Menu generation attempt ${attempt}/3`)
+      console.log(`📝 Prompt length: ${prompt.length} characters`)
+      console.log(`👥 People: ${preferences.peopleCount}, 🍽️ Meals/day: ${preferences.mealsPerDay}`)
+      console.log(`💰 Budget: CHF ${preferences.budgetChf}, 🚫 Restrictions: ${preferences.dietaryRestrictions?.join(', ') || 'None'}`)
       
       const response = await anthropic.messages.create({
         model: 'claude-3-5-sonnet-20241022',
-        max_tokens: 8000, // Increased to ensure full week generation
-        temperature: 0.8, // Increase creativity for more variety
+        max_tokens: 4000, // Reduced to avoid server overload
+        temperature: 0.7, // Slightly reduced temperature
         messages: [
           {
             role: 'user',
@@ -175,22 +177,26 @@ async function generateMenuWithClaude(preferences: UserPreferences) {
       } else {
         throw new Error('Unexpected response format from AI')
       }
-    } catch (error) {
+    } catch (error: any) {
       lastError = error as Error
       console.error(`Attempt ${attempt} failed:`, error)
       
-      // If it's an overload error, wait before retrying
-      if (error instanceof Error && error.message.includes('overloaded')) {
-        if (attempt < 3) {
-          const waitTime = attempt * 2000 // 2s, 4s, 6s
-          console.log(`API overloaded, waiting ${waitTime}ms before retry...`)
-          await new Promise(resolve => setTimeout(resolve, waitTime))
-          continue
-        }
+      // Check for specific Anthropic API errors
+      const errorMessage = error?.message || ''
+      const isServerError = error?.status >= 500 || errorMessage.includes('Internal server error')
+      const isOverloaded = errorMessage.includes('overloaded') || error?.status === 529
+      const isRateLimit = error?.status === 429
+      
+      // Wait before retrying for server errors, overload, or rate limits
+      if ((isServerError || isOverloaded || isRateLimit) && attempt < 3) {
+        const waitTime = Math.min(attempt * 3000, 10000) // 3s, 6s, 9s (max 10s)
+        console.log(`API error detected (${error?.status || 'unknown'}), waiting ${waitTime}ms before retry...`)
+        await new Promise(resolve => setTimeout(resolve, waitTime))
+        continue
       }
       
-      // For other errors, don't retry
-      if (attempt === 1 && !error.message.includes('overloaded')) {
+      // For non-retryable errors on first attempt, throw immediately
+      if (attempt === 1 && !isServerError && !isOverloaded && !isRateLimit) {
         throw error
       }
     }
@@ -424,7 +430,7 @@ function validateAllDaysPresent(menuData: any): boolean {
 // Fill missing days with simple fallback meals
 function fillMissingDays(menuData: any, preferences: UserPreferences): any {
   const requiredDays = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche']
-  const mealTypes = []
+  const mealTypes: string[] = []
   if (preferences.mealsPerDay >= 1) mealTypes.push('petit_dejeuner')
   if (preferences.mealsPerDay >= 2) mealTypes.push('dejeuner')
   if (preferences.mealsPerDay >= 3) mealTypes.push('diner')
@@ -680,10 +686,37 @@ STRUCTURE JSON REQUISE:
     "cout_moyen_par_repas_chf": 0,
     "ingredients_principaux": [],
     "conseils_achat": ""
-  }
+  },
+  "ingredients_summary": [
+    {
+      "name": "pâtes",
+      "quantity": "500g",
+      "category": "pasta",
+      "recipes": ["Pâtes sauce tomate"]
+    },
+    {
+      "name": "tomates pelées",
+      "quantity": "800g",
+      "category": "pantry",
+      "recipes": ["Pâtes sauce tomate", "Chili con carne"]
+    },
+    {
+      "name": "viande hachée",
+      "quantity": "500g",
+      "category": "meat",
+      "recipes": ["Chili con carne"]
+    }
+  ]
 }
 
-IMPORTANT: Retourne UNIQUEMENT le JSON avec TOUS les 7 jours complets.`
+IMPORTANT: 
+1. Retourne UNIQUEMENT le JSON avec TOUS les 7 jours complets.
+2. Le champ "ingredients_summary" doit contenir TOUS les ingrédients principaux (viandes, légumes, pâtes, produits laitiers, etc.) avec:
+   - "name": nom simple et clair de l'ingrédient (ex: "poulet", "spaghetti", "gruyère râpé")
+   - "quantity": quantité totale nécessaire pour la semaine
+   - "category": catégorie (meat, vegetables, pasta, dairy, pantry, etc.)
+   - "recipes": liste des recettes qui utilisent cet ingrédient
+3. N'inclus PAS les épices, herbes, sel, poivre dans ingredients_summary.`
 }
 
 // Get existing menu for a user

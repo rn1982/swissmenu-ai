@@ -270,7 +270,7 @@ async function main() {
   })
   
   let totalScraped = 0
-  let totalBatches = Math.ceil(ESSENTIAL_INGREDIENTS.length / CONCURRENT_SEARCHES)
+  const totalBatches = Math.ceil(ESSENTIAL_INGREDIENTS.length / CONCURRENT_SEARCHES)
   
   try {
     // Sort by priority

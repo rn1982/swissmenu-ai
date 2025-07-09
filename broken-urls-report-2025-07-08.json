@@ -1,0 +1,3442 @@
+{
+  "summary": {
+    "totalChecked": 373,
+    "totalBroken": 0,
+    "percentageBroken": "0.0",
+    "checkedAt": "2025-07-08T20:52:51.840Z"
+  },
+  "categoryStats": [
+    {
+      "category": "bakery",
+      "total": 16,
+      "broken": 0,
+      "percentage": 0
+    },
+    {
+      "category": "dairy",
+      "total": 29,
+      "broken": 0,
+      "percentage": 0
+    },
+    {
+      "category": "fish",
+      "total": 14,
+      "broken": 0,
+      "percentage": 0
+    },
+    {
+      "category": "fruits",
+      "total": 30,
+      "broken": 0,
+      "percentage": 0
+    },
+    {
+      "category": "herbs",
+      "total": 27,
+      "broken": 0,
+      "percentage": 0
+    },
+    {
+      "category": "meat",
+      "total": 35,
+      "broken": 0,
+      "percentage": 0
+    },
+    {
+      "category": "nuts",
+      "total": 18,
+      "broken": 0,
+      "percentage": 0
+    },
+    {
+      "category": "pantry",
+      "total": 69,
+      "broken": 0,
+      "percentage": 0
+    },
+    {
+      "category": "pasta",
+      "total": 45,
+      "broken": 0,
+      "percentage": 0
+    },
+    {
+      "category": "pasta-rice",
+      "total": 8,
+      "broken": 0,
+      "percentage": 0
+    },
+    {
+      "category": "rice",
+      "total": 17,
+      "broken": 0,
+      "percentage": 0
+    },
+    {
+      "category": "vegetables",
+      "total": 65,
+      "broken": 0,
+      "percentage": 0
+    }
+  ],
+  "brokenUrls": [],
+  "allResults": [
+    {
+      "id": "115017600000",
+      "name": "Anna's Best · Pâte feuilletée · abaissée et rectangulaire 42x26cm",
+      "category": "bakery",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/115017600000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.482Z"
+    },
+    {
+      "id": "115023400000",
+      "name": "Anna's Best · Pâte brisée à l'épeautre · ronde 33cm",
+      "category": "bakery",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/115023400000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.484Z"
+    },
+    {
+      "id": "115071100000",
+      "name": "Anna's Best · Pâte brisée sucrée · abaissée et ronde 33cm",
+      "category": "bakery",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/115071100000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.485Z"
+    },
+    {
+      "id": "115028000000",
+      "name": "M-Budget · Pâte brisée · en bloc",
+      "category": "bakery",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/115028000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.487Z"
+    },
+    {
+      "id": "115021600000",
+      "name": "Anna's Best · Pâte à pizza · boule",
+      "category": "bakery",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/115021600000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.490Z"
+    },
+    {
+      "id": "115053100000",
+      "name": "Anna's Best · Pâte à pizza · abaissée et rectangulaire 40x25cm",
+      "category": "bakery",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/115053100000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.532Z"
+    },
+    {
+      "id": "115015000000",
+      "name": "M-Budget · Pâte feuilletée · abaissée et rectangulaire",
+      "category": "bakery",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/115015000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.534Z"
+    },
+    {
+      "id": "111961200000",
+      "name": "Farmland · Baguette à l'ail · précuite",
+      "category": "bakery",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/111961200000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.535Z"
+    },
+    {
+      "id": "115060000000",
+      "name": "M-Budget · Pâte à pizza XL · abaissée et rectangulaire",
+      "category": "bakery",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/115060000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.539Z"
+    },
+    {
+      "id": "160106500000",
+      "name": "M-Classic Happy Hour · Baguette · farci de beurre à l'ail et aux herbes",
+      "category": "bakery",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/160106500000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.541Z"
+    },
+    {
+      "id": "111482100000",
+      "name": "Pain complet Le Rustique",
+      "category": "bakery",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/111482100000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.576Z"
+    },
+    {
+      "id": "111062000000",
+      "name": "M-Budget IP-SUISSE · Pain complet",
+      "category": "bakery",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/111062000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.577Z"
+    },
+    {
+      "id": "115013100000",
+      "name": "Migros Bio · Pâte feuilletée · abaissée et rectangulaire",
+      "category": "bakery",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/115013100000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.585Z"
+    },
+    {
+      "id": "115016400000",
+      "name": "Anna's Best · Pâte feuilletée · abaissée et ronde 33cm",
+      "category": "bakery",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/115016400000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.590Z"
+    },
+    {
+      "id": "111458700200",
+      "name": "Pain complet séré",
+      "category": "bakery",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/111458700200",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.595Z"
+    },
+    {
+      "id": "204542400000",
+      "name": "Bifidus · Yogourt Drink · Fraise",
+      "category": "dairy",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/204542400000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.624Z"
+    },
+    {
+      "id": "115024400000",
+      "name": "Anna's Best IP-SUISSE · Pâte brisée au beurre · abaissée et ronde 33cm",
+      "category": "bakery",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/115024400000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.625Z"
+    },
+    {
+      "id": "204586900000",
+      "name": "Emmi Yogi · Yogourt Drink · Mocca",
+      "category": "dairy",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/204586900000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.634Z"
+    },
+    {
+      "id": "204540500000",
+      "name": "Bifidus · Yogourt drink · Mangue",
+      "category": "dairy",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/204540500000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.635Z"
+    },
+    {
+      "id": "204243000000",
+      "name": "M-Budget · Beurre de cuisine",
+      "category": "dairy",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/204243000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.649Z"
+    },
+    {
+      "id": "milk-1l",
+      "name": "Lait entier",
+      "category": "dairy",
+      "brand": "M-Classic",
+      "url": "https://www.migros.ch/fr/product/400001000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.676Z"
+    },
+    {
+      "id": "210134100000",
+      "name": "Le Gruyère AOP · Fromage suisse à pâte dure, gras, au lait cru · râpé",
+      "category": "dairy",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/210134100000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.679Z"
+    },
+    {
+      "id": "212602600000",
+      "name": "M-Budget · Fromage frais · aux herbes",
+      "category": "dairy",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/212602600000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.686Z"
+    },
+    {
+      "id": "yogurt-500g",
+      "name": "Yogourt nature",
+      "category": "dairy",
+      "brand": "M-Classic",
+      "url": "https://www.migros.ch/fr/product/400002000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.689Z"
+    },
+    {
+      "id": "cheese-gruyere-200g",
+      "name": "Gruyère AOP",
+      "category": "dairy",
+      "brand": "Migros",
+      "url": "https://www.migros.ch/fr/product/400003000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.694Z"
+    },
+    {
+      "id": "eggs-12pcs",
+      "name": "Œufs (12 pièces)",
+      "category": "dairy",
+      "brand": "M-Classic",
+      "url": "https://www.migros.ch/fr/product/400005000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.729Z"
+    },
+    {
+      "id": "butter-250g",
+      "name": "Beurre",
+      "category": "dairy",
+      "brand": "M-Classic",
+      "url": "https://www.migros.ch/fr/product/400004000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.731Z"
+    },
+    {
+      "id": "200609700000",
+      "name": "Alfredo Classico · Mozzarella · Barre",
+      "category": "dairy",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/200609700000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.736Z"
+    },
+    {
+      "id": "204141200000",
+      "name": "Aha! · Demi-crème · sans lactose",
+      "category": "dairy",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/204141200000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.738Z"
+    },
+    {
+      "id": "212665200000",
+      "name": "M-Budget · Mozzarella · Boule",
+      "category": "dairy",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/212665200000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.743Z"
+    },
+    {
+      "id": "200608600000",
+      "name": "Migros Bio · Mozzarella",
+      "category": "dairy",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/200608600000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.780Z"
+    },
+    {
+      "id": "200609600000",
+      "name": "M-Budget · Mozzarella · Barre",
+      "category": "dairy",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/200609600000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.787Z"
+    },
+    {
+      "id": "204586800000",
+      "name": "Emmi Yogi · Yogourt Drink · Framboise",
+      "category": "dairy",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/204586800000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.789Z"
+    },
+    {
+      "id": "200609000000",
+      "name": "Alfredo Classico · Mozzarella · Boule",
+      "category": "dairy",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/200609000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.790Z"
+    },
+    {
+      "id": "204116400000",
+      "name": "Valflora · Demi-crème pour sauces · 25% de gras",
+      "category": "dairy",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/204116400000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.792Z"
+    },
+    {
+      "id": "204541300000",
+      "name": "Bifidus · Yogourt drink · Fraise",
+      "category": "dairy",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/204541300000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.833Z"
+    },
+    {
+      "id": "204205400000",
+      "name": "Floralp · Beurre de choix",
+      "category": "dairy",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/204205400000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.836Z"
+    },
+    {
+      "id": "204280000000",
+      "name": "M-Classic Soft · Beurre · tartinable à froid",
+      "category": "dairy",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/204280000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.837Z"
+    },
+    {
+      "id": "204115000000",
+      "name": "Valflora IP-SUISSE · Demi-crème · UHT, 25% de gras",
+      "category": "dairy",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/204115000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.841Z"
+    },
+    {
+      "id": "204115500000",
+      "name": "Valflora IP-SUISSE · Demi-crème · UHT, 25% de gras",
+      "category": "dairy",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/204115500000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.845Z"
+    },
+    {
+      "id": "210707000000",
+      "name": "Gruyère · Fromage fondu · 10 tranches",
+      "category": "dairy",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/210707000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.883Z"
+    },
+    {
+      "id": "204115100000",
+      "name": "Valflora IP-SUISSE · Demi-crème · UHT, 25% de gras",
+      "category": "dairy",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/204115100000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.886Z"
+    },
+    {
+      "id": "212602900000",
+      "name": "M-Budget · Fromage frais · Nature",
+      "category": "dairy",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/212602900000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.889Z"
+    },
+    {
+      "id": "204241700000",
+      "name": "Le Beurre",
+      "category": "dairy",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/204241700000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.890Z"
+    },
+    {
+      "id": "204241600000",
+      "name": "M-Classic · Beurre de cuisine",
+      "category": "dairy",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/204241600000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.899Z"
+    },
+    {
+      "id": "250200325000",
+      "name": "ASC filet de saumon avec peau",
+      "category": "fish",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/250200325000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.935Z"
+    },
+    {
+      "id": "251364700000",
+      "name": "Migros Bio · Filet de dos de saumon fumé",
+      "category": "fish",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/251364700000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.936Z"
+    },
+    {
+      "id": "252360100000",
+      "name": "Pelican · Filet de perche · avec peau / MSC",
+      "category": "fish",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/252360100000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.941Z"
+    },
+    {
+      "id": "250200361000",
+      "name": "MSC filet de saumon",
+      "category": "fish",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/250200361000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.946Z"
+    },
+    {
+      "id": "155111100000",
+      "name": "M-Classic · Thon blanc · MSC - à l'huile de soja",
+      "category": "fish",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/155111100000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.962Z"
+    },
+    {
+      "id": "155122600000",
+      "name": "Sélection · Filets de thon blanc · à l'huile d'olive",
+      "category": "fish",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/155122600000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.982Z"
+    },
+    {
+      "id": "250204820000",
+      "name": "Filet de perche",
+      "category": "fish",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/250204820000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.988Z"
+    },
+    {
+      "id": "250204920000",
+      "name": "Filet de perche",
+      "category": "fish",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/250204920000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:46.997Z"
+    },
+    {
+      "id": "165032600000",
+      "name": "Pelican MSC · Merlu blanc du cap sans tête · 3 pièces",
+      "category": "fish",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/165032600000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.004Z"
+    },
+    {
+      "id": "251364100000",
+      "name": "M-Classic ASC · Coeur de filet de saumon · fumé",
+      "category": "fish",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/251364100000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.007Z"
+    },
+    {
+      "id": "252000300000",
+      "name": "Pelican · Filets de cabillaud",
+      "category": "fish",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/252000300000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.033Z"
+    },
+    {
+      "id": "250710802400",
+      "name": "M-Classic ASC · Crevettes · cuites",
+      "category": "fish",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/250710802400",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.035Z"
+    },
+    {
+      "id": "250104931000",
+      "name": "Cabillaud",
+      "category": "fish",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/250104931000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.040Z"
+    },
+    {
+      "id": "264501202300",
+      "name": "M-Budget · Avocats",
+      "category": "fruits",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/264501202300",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.052Z"
+    },
+    {
+      "id": "251339420000",
+      "name": "Filet de perche frit",
+      "category": "fish",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/251339420000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.065Z"
+    },
+    {
+      "id": "263330108400",
+      "name": "Migros Fresca · Oranges · blondes",
+      "category": "fruits",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/263330108400",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.079Z"
+    },
+    {
+      "id": "264681002300",
+      "name": "Migros Bio · Limes",
+      "category": "fruits",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/264681002300",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.081Z"
+    },
+    {
+      "id": "264614608200",
+      "name": "Migros Fresca · Limes",
+      "category": "fruits",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/264614608200",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.085Z"
+    },
+    {
+      "id": "264614313200",
+      "name": "Limes",
+      "category": "fruits",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/264614313200",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.104Z"
+    },
+    {
+      "id": "263501108600",
+      "name": "M-Budget · Citron",
+      "category": "fruits",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/263501108600",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.123Z"
+    },
+    {
+      "id": "264614708200",
+      "name": "Migros Fresca · Limes",
+      "category": "fruits",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/264614708200",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.129Z"
+    },
+    {
+      "id": "263500513200",
+      "name": "Migros Fresca · Citron",
+      "category": "fruits",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/263500513200",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.131Z"
+    },
+    {
+      "id": "263500713200",
+      "name": "Demeter · Citron",
+      "category": "fruits",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/263500713200",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.133Z"
+    },
+    {
+      "id": "263580408600",
+      "name": "Migros Bio · Citron",
+      "category": "fruits",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/263580408600",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.154Z"
+    },
+    {
+      "id": "261680402300",
+      "name": "Migros Bio · Pêches plates",
+      "category": "fruits",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/261680402300",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.182Z"
+    },
+    {
+      "id": "261604502500",
+      "name": "Pêches plates",
+      "category": "fruits",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/261604502500",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.193Z"
+    },
+    {
+      "id": "264680913200",
+      "name": "Bio Fairtrade · Mangue",
+      "category": "fruits",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/264680913200",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.198Z"
+    },
+    {
+      "id": "261680302300",
+      "name": "Migros Bio · Pêches · Jaunes",
+      "category": "fruits",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/261680302300",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.211Z"
+    },
+    {
+      "id": "261602502400",
+      "name": "Migros Fresca · Pêches · jaunes",
+      "category": "fruits",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/261602502400",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.229Z"
+    },
+    {
+      "id": "264618409200",
+      "name": "Migros Fresca · Mangue",
+      "category": "fruits",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/264618409200",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.232Z"
+    },
+    {
+      "id": "261580102300",
+      "name": "Migros Bio · Abricots",
+      "category": "fruits",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/261580102300",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.241Z"
+    },
+    {
+      "id": "105205000000",
+      "name": "Sun Queen · Abricots · Séchés",
+      "category": "fruits",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/105205000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.257Z"
+    },
+    {
+      "id": "264617813200",
+      "name": "Sélection · Mangue",
+      "category": "fruits",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/264617813200",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.263Z"
+    },
+    {
+      "id": "261500502500",
+      "name": "Migros Fresca · Abricots",
+      "category": "fruits",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/261500502500",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.276Z"
+    },
+    {
+      "id": "260260304100",
+      "name": "Pommes · Pink Lady",
+      "category": "fruits",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/260260304100",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.285Z"
+    },
+    {
+      "id": "260283504100",
+      "name": "Migros Bio · Pommes · de saison",
+      "category": "fruits",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/260283504100",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.287Z"
+    },
+    {
+      "id": "260206104100",
+      "name": "Migros Fresca · Pommes · Braeburn",
+      "category": "fruits",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/260206104100",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.305Z"
+    },
+    {
+      "id": "260215704100",
+      "name": "Migros Fresca · Pommes · Gala",
+      "category": "fruits",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/260215704100",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.308Z"
+    },
+    {
+      "id": "264580113200",
+      "name": "Migros Bio · Avocat · mûr",
+      "category": "fruits",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/264580113200",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.328Z"
+    },
+    {
+      "id": "264680113200",
+      "name": "Migros Bio · Mangue",
+      "category": "fruits",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/264680113200",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.336Z"
+    },
+    {
+      "id": "264500613200",
+      "name": "Avocat · Tropical",
+      "category": "fruits",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/264500613200",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.338Z"
+    },
+    {
+      "id": "263300902300",
+      "name": "M-Budget · Oranges · blondes",
+      "category": "fruits",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/263300902300",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.358Z"
+    },
+    {
+      "id": "130759300000",
+      "name": "Andros · Oranges pressées · pressés",
+      "category": "fruits",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/130759300000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.360Z"
+    },
+    {
+      "id": "158567100000",
+      "name": "Pancho Villa Guacamole Mix · Mélange de condiments pour dip à l'avocat · Mild",
+      "category": "fruits",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/158567100000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.376Z"
+    },
+    {
+      "id": "113642700200",
+      "name": "Canneles",
+      "category": "herbs",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/113642700200",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.391Z"
+    },
+    {
+      "id": "212805000000",
+      "name": "Fromage frais tomate basilic",
+      "category": "herbs",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/212805000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.392Z"
+    },
+    {
+      "id": "106208800000",
+      "name": "Migros Bio · Noix de muscade entières",
+      "category": "herbs",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/106208800000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.403Z"
+    },
+    {
+      "id": "106301300000",
+      "name": "M-Classic · Noix de muscade · Moulue",
+      "category": "herbs",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/106301300000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.405Z"
+    },
+    {
+      "id": "708161700000",
+      "name": "Râpe à muscade",
+      "category": "herbs",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/708161700000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.420Z"
+    },
+    {
+      "id": "113642760200",
+      "name": "Canneles",
+      "category": "herbs",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/113642760200",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.439Z"
+    },
+    {
+      "id": "106309800000",
+      "name": "M-Classic · Cannelle de Ceylon · Moulue",
+      "category": "herbs",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/106309800000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.444Z"
+    },
+    {
+      "id": "106213000000",
+      "name": "Migros Bio Fairtrade · Cannelle de Ceylan · moulue",
+      "category": "herbs",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/106213000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.449Z"
+    },
+    {
+      "id": "282271900000",
+      "name": "Curcuma 12cm",
+      "category": "herbs",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/282271900000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.453Z"
+    },
+    {
+      "id": "106208100000",
+      "name": "Oriental Cook · Préparation d'épices · Zatar",
+      "category": "herbs",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/106208100000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.461Z"
+    },
+    {
+      "id": "106238000000",
+      "name": "Spice Selection · Mélange d'épices · Pizza et pâtes",
+      "category": "herbs",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/106238000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.485Z"
+    },
+    {
+      "id": "106108200000",
+      "name": "Asia Cook · cumin moulu",
+      "category": "herbs",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/106108200000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.494Z"
+    },
+    {
+      "id": "106208900000",
+      "name": "Bio Fairtrade · Curcuma",
+      "category": "herbs",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/106208900000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.497Z"
+    },
+    {
+      "id": "106235500000",
+      "name": "Alnatura · Curcuma",
+      "category": "herbs",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/106235500000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.503Z"
+    },
+    {
+      "id": "264685102300",
+      "name": "Migros Bio · Curcuma",
+      "category": "herbs",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/264685102300",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.509Z"
+    },
+    {
+      "id": "106306100000",
+      "name": "M-Classic · Mélange d'épices · pour pizza",
+      "category": "herbs",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/106306100000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.524Z"
+    },
+    {
+      "id": "277318102200",
+      "name": "Origan",
+      "category": "herbs",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/277318102200",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.548Z"
+    },
+    {
+      "id": "106303500000",
+      "name": "M-Classic · Origan",
+      "category": "herbs",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/106303500000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.551Z"
+    },
+    {
+      "id": "106201400000",
+      "name": "Just Spices · Mélange d'épices · pour poulet",
+      "category": "herbs",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/106201400000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.555Z"
+    },
+    {
+      "id": "106205300000",
+      "name": "Alnatura · Origan",
+      "category": "herbs",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/106205300000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.565Z"
+    },
+    {
+      "id": "277380602200",
+      "name": "Migros Bio origan",
+      "category": "herbs",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/277380602200",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.567Z"
+    },
+    {
+      "id": "106225300000",
+      "name": "Herbes de Provence · Déshydratés",
+      "category": "herbs",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/106225300000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.606Z"
+    },
+    {
+      "id": "110112400000",
+      "name": "Blévita Sandwich · Biscuits à l'épeautre fourrés d'une crème au fromage frais · Ciboulette et persil",
+      "category": "herbs",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/110112400000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.610Z"
+    },
+    {
+      "id": "212800100000",
+      "name": "Cantadou · Fromage frais pasteurisé · Ail et Herbes de Provence",
+      "category": "herbs",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/212800100000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.612Z"
+    },
+    {
+      "id": "101932800000",
+      "name": "Brewbee Tschipps à base de malt d’orge, paprika",
+      "category": "herbs",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/101932800000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.623Z"
+    },
+    {
+      "id": "101911700000",
+      "name": "M-Budget · Wave chips · Paprika",
+      "category": "herbs",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/101911700000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.627Z"
+    },
+    {
+      "id": "220220030210",
+      "name": "IP-SUISSE · Viande hachée de boeuf",
+      "category": "meat",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/220220030210",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.664Z"
+    },
+    {
+      "id": "101950300000",
+      "name": "Zweifel Original · Chips · Paprika - Family Pack",
+      "category": "herbs",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/101950300000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.666Z"
+    },
+    {
+      "id": "beef-mince-500g",
+      "name": "Viande hachée de bœuf",
+      "category": "meat",
+      "brand": "Migros",
+      "url": "https://www.migros.ch/fr/product/200001000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.687Z"
+    },
+    {
+      "id": "beef-steak-300g",
+      "name": "Entrecôte de bœuf",
+      "category": "meat",
+      "brand": "Migros",
+      "url": "https://www.migros.ch/fr/product/200004000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.689Z"
+    },
+    {
+      "id": "220655085000",
+      "name": "M-Budget · Côtelettes de porc cou",
+      "category": "meat",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/220655085000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.693Z"
+    },
+    {
+      "id": "220255110001",
+      "name": "Boeuf-Steak 2x",
+      "category": "meat",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/220255110001",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.718Z"
+    },
+    {
+      "id": "chicken-breast-500g",
+      "name": "Blanc de poulet",
+      "category": "meat",
+      "brand": "Migros",
+      "url": "https://www.migros.ch/fr/product/200002000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.724Z"
+    },
+    {
+      "id": "220624020010",
+      "name": "IP-SUISSE · Emincé de porc",
+      "category": "meat",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/220624020010",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.741Z"
+    },
+    {
+      "id": "220228000031",
+      "name": "Boeuf-bouilli maigre",
+      "category": "meat",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/220228000031",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.745Z"
+    },
+    {
+      "id": "220224200001",
+      "name": "Boeuf ragout",
+      "category": "meat",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/220224200001",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.753Z"
+    },
+    {
+      "id": "230500251502",
+      "name": "M-Budget · Saucisses de Vienne · Hot Dog",
+      "category": "meat",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/230500251502",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.779Z"
+    },
+    {
+      "id": "230105200000",
+      "name": "M-Budget · Saucisse à rôtir",
+      "category": "meat",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/230105200000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.795Z"
+    },
+    {
+      "id": "230500251000",
+      "name": "M-Classic · Saucisses de Vienne",
+      "category": "meat",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/230500251000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.798Z"
+    },
+    {
+      "id": "230100105302",
+      "name": "M-Budget · Saucisse à rôtir",
+      "category": "meat",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/230100105302",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.806Z"
+    },
+    {
+      "id": "220221000110",
+      "name": "IP-SUISSE · Viande hachée · mélangée",
+      "category": "meat",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/220221000110",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.821Z"
+    },
+    {
+      "id": "220221085000",
+      "name": "M-Budget · Viande hachée · mélangée",
+      "category": "meat",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/220221085000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.839Z"
+    },
+    {
+      "id": "220454010810",
+      "name": "IP-SUISSE · Cotelette de veau",
+      "category": "meat",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/220454010810",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.848Z"
+    },
+    {
+      "id": "220450020010",
+      "name": "IP-SUISSE · Escalope de veau",
+      "category": "meat",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/220450020010",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.855Z"
+    },
+    {
+      "id": "220424000000",
+      "name": "Emincé de veau",
+      "category": "meat",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/220424000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.863Z"
+    },
+    {
+      "id": "220255100001",
+      "name": "Boeuf-Steak",
+      "category": "meat",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/220255100001",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.873Z"
+    },
+    {
+      "id": "220224100001",
+      "name": "Boeuf emince",
+      "category": "meat",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/220224100001",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.883Z"
+    },
+    {
+      "id": "241001013000",
+      "name": "Optigal IP-SUISSE · Poulet entier",
+      "category": "meat",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/241001013000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.903Z"
+    },
+    {
+      "id": "243150600000",
+      "name": "M-Budget · Emincé de poulet",
+      "category": "meat",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/243150600000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.905Z"
+    },
+    {
+      "id": "241060000000",
+      "name": "Migros Bio · Poulet · entier",
+      "category": "meat",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/241060000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.921Z"
+    },
+    {
+      "id": "241100402000",
+      "name": "Optigal · Escalopes de poulet",
+      "category": "meat",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/241100402000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.923Z"
+    },
+    {
+      "id": "241002500000",
+      "name": "Optigal IP-SUISSE · Poulet entier · Paprika - en sachet cuisson",
+      "category": "meat",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/241002500000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.930Z"
+    },
+    {
+      "id": "220220040000",
+      "name": "M-Classic · Viande hachée de boeuf",
+      "category": "meat",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/220220040000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.957Z"
+    },
+    {
+      "id": "220624085000",
+      "name": "M-Budget · Emincé de porc",
+      "category": "meat",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/220624085000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.958Z"
+    },
+    {
+      "id": "220654010010",
+      "name": "IP-SUISSE · Côtelettes de porc",
+      "category": "meat",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/220654010010",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.969Z"
+    },
+    {
+      "id": "243998700000",
+      "name": "M-Classic cordonbleu de poulet",
+      "category": "meat",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/243998700000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.975Z"
+    },
+    {
+      "id": "243996970000",
+      "name": "M-Classic miccata de poulet",
+      "category": "meat",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/243996970000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:47.979Z"
+    },
+    {
+      "id": "220636310800",
+      "name": "M-Classic · Porc fricassée marinée",
+      "category": "meat",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/220636310800",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.005Z"
+    },
+    {
+      "id": "pork-chops-500g",
+      "name": "Côtelettes de porc",
+      "category": "meat",
+      "brand": "Migros",
+      "url": "https://www.migros.ch/fr/product/200003000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.008Z"
+    },
+    {
+      "id": "chicken-thighs-500g",
+      "name": "Cuisses de poulet",
+      "category": "meat",
+      "brand": "Migros",
+      "url": "https://www.migros.ch/fr/product/200005000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.018Z"
+    },
+    {
+      "id": "220450100810",
+      "name": "IP-SUISSE · Tranches de veau · Piccata",
+      "category": "meat",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/220450100810",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.041Z"
+    },
+    {
+      "id": "220220030020",
+      "name": "Migros Bio · Viande hachée de boeuf",
+      "category": "meat",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/220220030020",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.048Z"
+    },
+    {
+      "id": "104215400000",
+      "name": "Graines de Sésame",
+      "category": "nuts",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/104215400000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.058Z"
+    },
+    {
+      "id": "105311200000",
+      "name": "M-Classic · Noisettes · Moulues",
+      "category": "nuts",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/105311200000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.069Z"
+    },
+    {
+      "id": "105387200000",
+      "name": "Sun Queen · Noisettes · non salées",
+      "category": "nuts",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/105387200000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.070Z"
+    },
+    {
+      "id": "158590700000",
+      "name": "Saitaku Simply Japanese · Graines de sésame noires grillées",
+      "category": "nuts",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/158590700000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.099Z"
+    },
+    {
+      "id": "105317600000",
+      "name": "M-Budget · Amandes · non salées",
+      "category": "nuts",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/105317600000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.107Z"
+    },
+    {
+      "id": "105385800000",
+      "name": "Sun Queen · Amandes · non salées",
+      "category": "nuts",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/105385800000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.108Z"
+    },
+    {
+      "id": "105350400000",
+      "name": "Sun Queen · Amandes · grillées",
+      "category": "nuts",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/105350400000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.117Z"
+    },
+    {
+      "id": "105361300000",
+      "name": "Migros Bio · Amandes · non salées",
+      "category": "nuts",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/105361300000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.121Z"
+    },
+    {
+      "id": "101401600000",
+      "name": "Party · noix de cajou · Salées",
+      "category": "nuts",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/101401600000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.149Z"
+    },
+    {
+      "id": "101401200000",
+      "name": "Alnatura · Noix de cajou · grillées et salées",
+      "category": "nuts",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/101401200000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.155Z"
+    },
+    {
+      "id": "101419000000",
+      "name": "Migros Bio · noix de cajou · salée",
+      "category": "nuts",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/101419000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.157Z"
+    },
+    {
+      "id": "158585200000",
+      "name": "Saitaku Simply Japanese · Graines de sésame grillées · Sesame Seeds",
+      "category": "nuts",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/158585200000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.163Z"
+    },
+    {
+      "id": "104222200000",
+      "name": "Migros Bio · Graines de tournesol · Décortiquées",
+      "category": "nuts",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/104222200000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.170Z"
+    },
+    {
+      "id": "104226100000",
+      "name": "Alnatura · Graines de tournesol",
+      "category": "nuts",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/104226100000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.193Z"
+    },
+    {
+      "id": "101401700000",
+      "name": "Sun Queen Apéro · Noix de cajou · grillées et salées",
+      "category": "nuts",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/101401700000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.208Z"
+    },
+    {
+      "id": "158539200000",
+      "name": "Göral · graines de tournesol · salés",
+      "category": "nuts",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/158539200000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.211Z"
+    },
+    {
+      "id": "104284900000",
+      "name": "De la région Graines de tournesol",
+      "category": "nuts",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/104284900000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.216Z"
+    },
+    {
+      "id": "105350300000",
+      "name": "Sun Queen · Noisettes · grillées",
+      "category": "nuts",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/105350300000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.220Z"
+    },
+    {
+      "id": "156001400000",
+      "name": "Condy · Cornichons · Extra-fins",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/156001400000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.248Z"
+    },
+    {
+      "id": "103342500000",
+      "name": "Alnatura · Huile d'olive vierge extra · Bio",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/103342500000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.260Z"
+    },
+    {
+      "id": "103334200000",
+      "name": "Alexis · Huile d'olive extra vierge · Grecque",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/103334200000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.264Z"
+    },
+    {
+      "id": "103331100000",
+      "name": "Monini Classico · Huile d'olive extra vierge",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/103331100000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.269Z"
+    },
+    {
+      "id": "103331500000",
+      "name": "Monini Classico · Huile d'olive extra vierge",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/103331500000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.271Z"
+    },
+    {
+      "id": "103302600000",
+      "name": "M-Budget · Huile d'olive · vierge",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/103302600000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.294Z"
+    },
+    {
+      "id": "103526200000",
+      "name": "Monini · Vinaigre balsamique",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/103526200000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.310Z"
+    },
+    {
+      "id": "103525400000",
+      "name": "Alnatura · Vinaigre balsamique de Modène Bio · au goût sucré et acidulé, 6% d'acidité",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/103525400000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.315Z"
+    },
+    {
+      "id": "103525300000",
+      "name": "Vinaigre balsamique de Modène",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/103525300000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.326Z"
+    },
+    {
+      "id": "103337100000",
+      "name": "Don Pablo · Huile d'olive · Extra vierge",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/103337100000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.332Z"
+    },
+    {
+      "id": "103334300000",
+      "name": "Migros Bio · Huile olive · Grecque",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/103334300000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.342Z"
+    },
+    {
+      "id": "103342900000",
+      "name": "Sapigni · Huile olive italienne · 100% italienne",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/103342900000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.358Z"
+    },
+    {
+      "id": "106451400000",
+      "name": "Tradition · Moutarde · gros grains",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/106451400000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.374Z"
+    },
+    {
+      "id": "106489000000",
+      "name": "Reine de Dijon · Moutarde · extra forte",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/106489000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.376Z"
+    },
+    {
+      "id": "103533200000",
+      "name": "Fattorie Giacobazzi · Vinaigre balsamique de Modène · Questo aceto è ottenuto esclusivamente da uve di Modena",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/103533200000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.378Z"
+    },
+    {
+      "id": "106409000000",
+      "name": "M-Classic · Moutarde · Douce",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/106409000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.394Z"
+    },
+    {
+      "id": "158517500000",
+      "name": "Kikkoman · Sauce soja · 43% de sel en moins",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/158517500000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.407Z"
+    },
+    {
+      "id": "106508400000",
+      "name": "Bon Chef · sauce bolognaise au soja · pour pâtes",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/106508400000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.422Z"
+    },
+    {
+      "id": "106124300000",
+      "name": "M-Budget · Bouillon de légumes",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/106124300000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.424Z"
+    },
+    {
+      "id": "106430100000",
+      "name": "Thomy · Moutarde · Dijon",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/106430100000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.435Z"
+    },
+    {
+      "id": "106126900000",
+      "name": "M-Budget · Bouillon de légumes · 12 cubes, 1 cube = 5dl bouillon",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/106126900000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.440Z"
+    },
+    {
+      "id": "158699319310",
+      "name": "Lacroix · Fond de veau",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/158699319310",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.460Z"
+    },
+    {
+      "id": "106128800000",
+      "name": "Migros Bio · Bouillon de légumes · Sans graisse",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/106128800000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.469Z"
+    },
+    {
+      "id": "227294015000",
+      "name": "Fond blanc de veau",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/227294015000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.471Z"
+    },
+    {
+      "id": "153226300000",
+      "name": "M-Classic · Concentré de tomates · avec légumes",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/153226300000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.479Z"
+    },
+    {
+      "id": "153270400000",
+      "name": "Alnatura · Concentré de tomate en tube",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/153270400000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.484Z"
+    },
+    {
+      "id": "153211000000",
+      "name": "M-Classic · Concentré de tomates · Concentré triple",
+      "category": "pantry",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/153211000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.514Z"
+    },
+    {
+      "id": "103504400000",
+      "name": "Chirat Kressi · Vinaigre de vin aromatisé doux · aux Herbes",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/103504400000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.522Z"
+    },
+    {
+      "id": "106610700000",
+      "name": "M-Budget · Mayonnaise",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/106610700000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.524Z"
+    },
+    {
+      "id": "103527000000",
+      "name": "Ponti · Vinaigre de vin blanc · Aroma Antico",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/103527000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.530Z"
+    },
+    {
+      "id": "103531500000",
+      "name": "Migros Bio · Vinaigre de vin rouge · à la framboise",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/103531500000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.531Z"
+    },
+    {
+      "id": "106605000000",
+      "name": "Thomy · Mayonnaise à la française",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/106605000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.561Z"
+    },
+    {
+      "id": "106611000000",
+      "name": "M-Classic · Mayonnaise · Classic",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/106611000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.571Z"
+    },
+    {
+      "id": "103530900000",
+      "name": "M-Classic · Vinaigre de vin blanc",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/103530900000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.572Z"
+    },
+    {
+      "id": "106605200000",
+      "name": "Thomy Thomynaise · Mayonnaise à calories réduites · Light",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/106605200000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.576Z"
+    },
+    {
+      "id": "151400500000",
+      "name": "M-Classic Fairtrade · Miel de nectar · crémeux",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/151400500000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.579Z"
+    },
+    {
+      "id": "153224200000",
+      "name": "Salsa all' Italiana · Sauce tomate · Napoli",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/153224200000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.619Z"
+    },
+    {
+      "id": "151489300000",
+      "name": "M-Budget · Miel de nectar · Squeeze",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/151489300000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.621Z"
+    },
+    {
+      "id": "153210200000",
+      "name": "Migros Bio · Sauce tomate",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/153210200000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.622Z"
+    },
+    {
+      "id": "153211500000",
+      "name": "M-Budget · Sauce tomate · avec basilic",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/153211500000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.626Z"
+    },
+    {
+      "id": "153225300000",
+      "name": "M-Budget · Sauce Tomate",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/153225300000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.633Z"
+    },
+    {
+      "id": "151433000000",
+      "name": "Miel suisse",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/151433000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.676Z"
+    },
+    {
+      "id": "151489500000",
+      "name": "M-Classic · Miel",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/151489500000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.678Z"
+    },
+    {
+      "id": "106274000000",
+      "name": "Migros Bio aha! · Panure de riz",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/106274000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.679Z"
+    },
+    {
+      "id": "158589400000",
+      "name": "Saitaku Simply Japanese · Panko Chapelure",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/158589400000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.683Z"
+    },
+    {
+      "id": "106275500000",
+      "name": "M-Budget · Panure",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/106275500000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.686Z"
+    },
+    {
+      "id": "156000100000",
+      "name": "Condy · Cornichons · Fins",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/156000100000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.721Z"
+    },
+    {
+      "id": "106688200000",
+      "name": "Heinz · Ketchup · 50% moins de sucres",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/106688200000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.731Z"
+    },
+    {
+      "id": "156002900000",
+      "name": "Condy · Cornichons",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/156002900000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.733Z"
+    },
+    {
+      "id": "106692100000",
+      "name": "Heinz · Ketchup",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/106692100000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.735Z"
+    },
+    {
+      "id": "106618400000",
+      "name": "M-Classic · Ketchup · classic",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/106618400000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.737Z"
+    },
+    {
+      "id": "106667300000",
+      "name": "Heinz · Ketchup · Bio",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/106667300000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.778Z"
+    },
+    {
+      "id": "155931100000",
+      "name": "M-Classic · Anchois aux câpres · roulés",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/155931100000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.781Z"
+    },
+    {
+      "id": "156084400000",
+      "name": "Polli Olives vertes dénoyautées",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/156084400000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.786Z"
+    },
+    {
+      "id": "156024700000",
+      "name": "M-Classic · Olives vertes · farcies aux amandes",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/156024700000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.788Z"
+    },
+    {
+      "id": "156013000000",
+      "name": "M-Budget · cornichons",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/156013000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.789Z"
+    },
+    {
+      "id": "156020100000",
+      "name": "M-Classic · Olives vertes grecques",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/156020100000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.828Z"
+    },
+    {
+      "id": "220651518200",
+      "name": "M-Classic cordonbleu du porc capres",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/220651518200",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.830Z"
+    },
+    {
+      "id": "156035400000",
+      "name": "Condy · Câpres au vinaigre",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/156035400000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.837Z"
+    },
+    {
+      "id": "156021900000",
+      "name": "M-Classic · Olives vertes espagnoles · Farcies aux piments",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/156021900000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.850Z"
+    },
+    {
+      "id": "156035900000",
+      "name": "Alnatura · Câpres",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/156035900000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.867Z"
+    },
+    {
+      "id": "156092000000",
+      "name": "M-Classic · Olives noires espagnoles · Dénoyautées",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/156092000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.877Z"
+    },
+    {
+      "id": "156027500000",
+      "name": "M-Classic · Olives noires · avec noyaux",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/156027500000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.879Z"
+    },
+    {
+      "id": "156020000000",
+      "name": "M-Classic · Olives noires grecques",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/156020000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.886Z"
+    },
+    {
+      "id": "109702400000",
+      "name": "Patissier · Amidon de maïs",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/109702400000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.895Z"
+    },
+    {
+      "id": "158564600000",
+      "name": "Pancho Villa · Tortilla sans gluten au amidon de tapioca et farine de maïs et quinoa",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/158564600000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.919Z"
+    },
+    {
+      "id": "106550000000",
+      "name": "Knorr Maizena express · Liant pour sauces",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/106550000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.931Z"
+    },
+    {
+      "id": "111433900000",
+      "name": "Pain d'amidonnie IP-SUISSE",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/111433900000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.934Z"
+    },
+    {
+      "id": "748555000000",
+      "name": "Tasse Barista Fisher-Price",
+      "category": "pasta",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/748555000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.937Z"
+    },
+    {
+      "id": "109701000000",
+      "name": "Patissier · Feuilles de gélatine",
+      "category": "pantry",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/109701000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.940Z"
+    },
+    {
+      "id": "104141600000",
+      "name": "M-Classic · fusilli · al bronzo",
+      "category": "pasta",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/104141600000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.977Z"
+    },
+    {
+      "id": "104131300000",
+      "name": "Migros Bio · fusilli · blé complet",
+      "category": "pasta",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/104131300000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.987Z"
+    },
+    {
+      "id": "104163500000",
+      "name": "You · fusilli · riz complet",
+      "category": "pasta",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/104163500000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.989Z"
+    },
+    {
+      "id": "130507900000",
+      "name": "M-Budget · Lasagne · Bolognaise",
+      "category": "pasta",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/130507900000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:48.991Z"
+    },
+    {
+      "id": "barilla-whole-wheat",
+      "name": "Barilla Spaghetti Integrale",
+      "category": "pasta",
+      "brand": "Barilla",
+      "url": "https://www.migros.ch/fr/product/mo/11795",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.033Z"
+    },
+    {
+      "id": "buitoni-tortellini",
+      "name": "Buitoni Tortellini ricotta épinards",
+      "category": "pasta",
+      "brand": "Buitoni",
+      "url": "https://www.migros.ch/fr/product/104106000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.042Z"
+    },
+    {
+      "id": "104128300000",
+      "name": "La Molisana · fusilli",
+      "category": "pasta",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/104128300000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.044Z"
+    },
+    {
+      "id": "m-classic-rigatoni",
+      "name": "M-Classic Rigatoni",
+      "category": "pasta",
+      "brand": "M-Classic",
+      "url": "https://www.migros.ch/fr/product/104055400000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.046Z"
+    },
+    {
+      "id": "barilla-linguine",
+      "name": "Barilla Linguine",
+      "category": "pasta",
+      "brand": "Barilla",
+      "url": "https://www.migros.ch/fr/product/mo/11794",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.092Z"
+    },
+    {
+      "id": "divella-penne",
+      "name": "Divella Penne Rigate",
+      "category": "pasta",
+      "brand": "Divella",
+      "url": "https://www.migros.ch/fr/product/104120000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.099Z"
+    },
+    {
+      "id": "m-classic-tagliatelle",
+      "name": "M-Classic Tagliatelle",
+      "category": "pasta",
+      "brand": "M-Classic",
+      "url": "https://www.migros.ch/fr/product/104055300000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.110Z"
+    },
+    {
+      "id": "barilla-farfalle",
+      "name": "Barilla Farfalle",
+      "category": "pasta",
+      "brand": "Barilla",
+      "url": "https://www.migros.ch/fr/product/mo/11793",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.117Z"
+    },
+    {
+      "id": "104102100000",
+      "name": "M-Budget · Fusilli",
+      "category": "pasta",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/104102100000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.149Z"
+    },
+    {
+      "id": "104168300000",
+      "name": "Aha! · penne · sans gluten",
+      "category": "pasta",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/104168300000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.153Z"
+    },
+    {
+      "id": "104131000000",
+      "name": "Migros Bio · penne · blé complet",
+      "category": "pasta",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/104131000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.167Z"
+    },
+    {
+      "id": "104164000000",
+      "name": "You · penne · à l'avoine",
+      "category": "pasta",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/104164000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.190Z"
+    },
+    {
+      "id": "104101600000",
+      "name": "M-Budget · penne",
+      "category": "pasta",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/104101600000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.191Z"
+    },
+    {
+      "id": "104105400000",
+      "name": "You · spaghetti · lentilles jaunes",
+      "category": "pasta",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/104105400000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.212Z"
+    },
+    {
+      "id": "11790",
+      "name": "Barilla · penne rigate n. 73",
+      "category": "pasta",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/mo/11790",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.213Z"
+    },
+    {
+      "id": "104041100000",
+      "name": "M-Classic · spaghetti 1.8mm · avec oeufs",
+      "category": "pasta",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/104041100000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.240Z"
+    },
+    {
+      "id": "104102000000",
+      "name": "M-Budget · spaghetti",
+      "category": "pasta",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/104102000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.245Z"
+    },
+    {
+      "id": "107112900000",
+      "name": "Bio Fairtrade Café en grains Barista Espresso",
+      "category": "pasta",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/107112900000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.262Z"
+    },
+    {
+      "id": "107143000000",
+      "name": "Kaffee Rast Café en grains Barista Crème",
+      "category": "pasta",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/107143000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.291Z"
+    },
+    {
+      "id": "204026400000",
+      "name": "V-Love bio Avoine Barista drink",
+      "category": "pasta",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/204026400000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.294Z"
+    },
+    {
+      "id": "buitoni-lasagne",
+      "name": "Buitoni Lasagne",
+      "category": "pasta",
+      "brand": "Buitoni",
+      "url": "https://www.migros.ch/fr/product/104105000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.321Z"
+    },
+    {
+      "id": "barilla-penne-73",
+      "name": "Barilla Penne Rigate N°73",
+      "category": "pasta",
+      "brand": "Barilla",
+      "url": "https://www.migros.ch/fr/product/mo/11790",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.334Z"
+    },
+    {
+      "id": "m-classic-spaghetti",
+      "name": "M-Classic Spaghetti",
+      "category": "pasta",
+      "brand": "M-Classic",
+      "url": "https://www.migros.ch/fr/product/104055100000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.337Z"
+    },
+    {
+      "id": "104063100000",
+      "name": "M-Classic · penne · avec oeufs",
+      "category": "pasta",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/104063100000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.363Z"
+    },
+    {
+      "id": "104075600000",
+      "name": "M-Classic · pâtes ABC · avec oeufs",
+      "category": "pasta",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/104075600000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.385Z"
+    },
+    {
+      "id": "barilla-fusilli-98",
+      "name": "Barilla Fusilli N°98",
+      "category": "pasta",
+      "brand": "Barilla",
+      "url": "https://www.migros.ch/fr/product/mo/11792",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.387Z"
+    },
+    {
+      "id": "m-classic-cornettes",
+      "name": "M-Classic Cornettes avec oeufs",
+      "category": "pasta",
+      "brand": "M-Classic",
+      "url": "https://www.migros.ch/fr/product/104055200000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.415Z"
+    },
+    {
+      "id": "garofalo-spaghetti",
+      "name": "Garofalo Spaghetti",
+      "category": "pasta",
+      "brand": "Garofalo",
+      "url": "https://www.migros.ch/fr/product/104125000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.436Z"
+    },
+    {
+      "id": "104044900000",
+      "name": "Migros Bio · Tagliatelle",
+      "category": "pasta",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/104044900000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.438Z"
+    },
+    {
+      "id": "104044500000",
+      "name": "Migros Bio · spaghetti · avec oeufs",
+      "category": "pasta",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/104044500000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.461Z"
+    },
+    {
+      "id": "barilla-spaghetti-5",
+      "name": "Barilla Spaghetti N°5",
+      "category": "pasta",
+      "brand": "Barilla",
+      "url": "https://www.migros.ch/fr/product/mo/11785",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.463Z"
+    },
+    {
+      "id": "104065400000",
+      "name": "Tradition IP-SUISSE · tagliatelle · avec oeufs",
+      "category": "pasta",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/104065400000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.488Z"
+    },
+    {
+      "id": "104165800000",
+      "name": "Tradition IP-SUISSE · tagliatelle · ail des ours",
+      "category": "pasta",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/104165800000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.508Z"
+    },
+    {
+      "id": "107143100000",
+      "name": "Kaffee Rast Café en grains Barista Espresso",
+      "category": "pasta",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/107143100000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.510Z"
+    },
+    {
+      "id": "agnesi-spaghetti",
+      "name": "Agnesi Spaghetti",
+      "category": "pasta",
+      "brand": "Agnesi",
+      "url": "https://www.migros.ch/fr/product/104130000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.511Z"
+    },
+    {
+      "id": "138105200000",
+      "name": "Roberto · Lasagne · 100% boeuf suisse",
+      "category": "pasta",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/138105200000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.560Z"
+    },
+    {
+      "id": "130500100000",
+      "name": "Anna's Best · Lasagne · alla bolognese",
+      "category": "pasta",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/130500100000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.563Z"
+    },
+    {
+      "id": "138120300000",
+      "name": "Roberto · Lasagne · 100% boeuf suisse",
+      "category": "pasta",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/138120300000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.564Z"
+    },
+    {
+      "id": "104125000000",
+      "name": "Garofalo · spaghetti",
+      "category": "pasta-rice",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/104125000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.609Z"
+    },
+    {
+      "id": "104074500000",
+      "name": "M-Classic · macaronis de l'alpage · avec oeufs",
+      "category": "pasta-rice",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/104074500000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.621Z"
+    },
+    {
+      "id": "104066600000",
+      "name": "Agnesi · lasagne · épinards  avec oeufs",
+      "category": "pasta-rice",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/104066600000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.624Z"
+    },
+    {
+      "id": "104125200000",
+      "name": "Garofalo · rigatoni",
+      "category": "pasta-rice",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/104125200000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.659Z"
+    },
+    {
+      "id": "104055200000",
+      "name": "M-Classic · cornettes · grandes avec oeufs",
+      "category": "pasta-rice",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/104055200000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.670Z"
+    },
+    {
+      "id": "104126400000",
+      "name": "Garofalo · orecchiette",
+      "category": "pasta-rice",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/104126400000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.676Z"
+    },
+    {
+      "id": "104066400000",
+      "name": "Agnesi · lasagne · avec oeufs",
+      "category": "pasta-rice",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/104066400000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.706Z"
+    },
+    {
+      "id": "104446600000",
+      "name": "Da Emilio · polenta · al funghi porcini",
+      "category": "rice",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/104446600000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.723Z"
+    },
+    {
+      "id": "104468500000",
+      "name": "Polenta Taragna",
+      "category": "rice",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/104468500000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.750Z"
+    },
+    {
+      "id": "165062200000",
+      "name": "Costa ASC · Tagliatelle · au saumon",
+      "category": "pasta",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/165062200000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.753Z"
+    },
+    {
+      "id": "104470900000",
+      "name": "Migros Bio · Couscous Complet",
+      "category": "rice",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/104470900000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.770Z"
+    },
+    {
+      "id": "130500300000",
+      "name": "M-Classic · Lasagne · alla bolognese - au boeuf",
+      "category": "pasta",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/130500300000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.784Z"
+    },
+    {
+      "id": "104462900000",
+      "name": "Alnatura · Semoule de couscous",
+      "category": "rice",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/104462900000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.789Z"
+    },
+    {
+      "id": "104466000000",
+      "name": "Alnatura · Quinoa multicolore",
+      "category": "rice",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/104466000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.817Z"
+    },
+    {
+      "id": "104462800000",
+      "name": "Alnatura · Boulgour",
+      "category": "rice",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/104462800000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.825Z"
+    },
+    {
+      "id": "236395911000",
+      "name": "Bulgur avec verdures",
+      "category": "rice",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/236395911000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.837Z"
+    },
+    {
+      "id": "157278100000",
+      "name": "You Bio · Boulgour et légumes express bowl",
+      "category": "rice",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/157278100000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.860Z"
+    },
+    {
+      "id": "162554200000",
+      "name": "You · Boulgour & Quinoa · avec légumes",
+      "category": "rice",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/162554200000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.872Z"
+    },
+    {
+      "id": "104401700000",
+      "name": "Migros Bio · Quinoa blanc",
+      "category": "rice",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/104401700000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.898Z"
+    },
+    {
+      "id": "104470000000",
+      "name": "Migros Bio · Quinoa Tricolore · Blanc, rouge, noir",
+      "category": "rice",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/104470000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.904Z"
+    },
+    {
+      "id": "104464800000",
+      "name": "Alnatura · Quinoa",
+      "category": "rice",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/104464800000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.919Z"
+    },
+    {
+      "id": "104132400000",
+      "name": "Da Emilio · orecchiette",
+      "category": "pasta-rice",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/104132400000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.970Z"
+    },
+    {
+      "id": "130561100000",
+      "name": "Polenta Nostrana",
+      "category": "rice",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/130561100000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:49.974Z"
+    },
+    {
+      "id": "104475000000",
+      "name": "Couscous Extra",
+      "category": "rice",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/104475000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:50.019Z"
+    },
+    {
+      "id": "131112500000",
+      "name": "M-Budget · Salade Iceberg",
+      "category": "vegetables",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/131112500000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:50.031Z"
+    },
+    {
+      "id": "104464200000",
+      "name": "Alnatura · Polenta",
+      "category": "rice",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/104464200000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:50.056Z"
+    },
+    {
+      "id": "153228700000",
+      "name": "Longobardi · Tomates pelées en morceaux",
+      "category": "vegetables",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/153228700000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:50.104Z"
+    },
+    {
+      "id": "153228000000",
+      "name": "Longobardi · Tomates pelées en  morceaux au jus",
+      "category": "vegetables",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/153228000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:50.148Z"
+    },
+    {
+      "id": "104412600000",
+      "name": "Mister Rice Bio · Riz Basmati complet à grain long parfumé",
+      "category": "rice",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/104412600000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:50.198Z"
+    },
+    {
+      "id": "104413300000",
+      "name": "Mister Rice Bio · Riz Basmati complet à grain long parfumé",
+      "category": "rice",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/104413300000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:50.205Z"
+    },
+    {
+      "id": "153232100000",
+      "name": "M-Budget · tomates",
+      "category": "vegetables",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/153232100000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:50.247Z"
+    },
+    {
+      "id": "153100600000",
+      "name": "Alnatura · Petits pois · extra fins",
+      "category": "vegetables",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/153100600000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:50.293Z"
+    },
+    {
+      "id": "131002000000",
+      "name": "Anna's Best · Salade Iceberg",
+      "category": "vegetables",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/131002000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:50.317Z"
+    },
+    {
+      "id": "271102609200",
+      "name": "M-Budget · Salade Iceberg",
+      "category": "vegetables",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/271102609200",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:50.331Z"
+    },
+    {
+      "id": "153930000000",
+      "name": "M-Classic · Grains de maïs",
+      "category": "vegetables",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/153930000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:50.348Z"
+    },
+    {
+      "id": "271701901000",
+      "name": "Poivrons verts",
+      "category": "vegetables",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/271701901000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:50.371Z"
+    },
+    {
+      "id": "275680301000",
+      "name": "Migros Bio poireaux verts",
+      "category": "vegetables",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/275680301000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:50.375Z"
+    },
+    {
+      "id": "274780501000",
+      "name": "Migros Bio céleri branche",
+      "category": "vegetables",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/274780501000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:50.402Z"
+    },
+    {
+      "id": "274780502100",
+      "name": "Migros Bio · Céleri-branche",
+      "category": "vegetables",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/274780502100",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:50.414Z"
+    },
+    {
+      "id": "275600501000",
+      "name": "Poireau · vert",
+      "category": "vegetables",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/275600501000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:50.455Z"
+    },
+    {
+      "id": "153252300000",
+      "name": "Migros Bio · Tomates concassées",
+      "category": "vegetables",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/153252300000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:50.459Z"
+    },
+    {
+      "id": "275604304100",
+      "name": "Poireaux blanchi coupe",
+      "category": "vegetables",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/275604304100",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:50.475Z"
+    },
+    {
+      "id": "153156500000",
+      "name": "M-Classic · Petits pois et carottes · fins",
+      "category": "vegetables",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/153156500000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:50.510Z"
+    },
+    {
+      "id": "274704101000",
+      "name": "Céleri-branche",
+      "category": "vegetables",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/274704101000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:50.514Z"
+    },
+    {
+      "id": "113749340210",
+      "name": "Tarte aux épinards 1/4",
+      "category": "vegetables",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/113749340210",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:50.561Z"
+    },
+    {
+      "id": "153032100000",
+      "name": "M-Classic · Haricots verts fins",
+      "category": "vegetables",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/153032100000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:50.572Z"
+    },
+    {
+      "id": "153031000000",
+      "name": "M-Classic · Haricots verts · Fins",
+      "category": "vegetables",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/153031000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:50.608Z"
+    },
+    {
+      "id": "153012500000",
+      "name": "M-Budget · Haricots verts coupés",
+      "category": "vegetables",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/153012500000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:50.624Z"
+    },
+    {
+      "id": "275600702100",
+      "name": "Migros Fresca · Poireau vinaigrette · vinaigrette",
+      "category": "vegetables",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/275600702100",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:50.672Z"
+    },
+    {
+      "id": "113749320210",
+      "name": "Tarte aux épinards 1/2",
+      "category": "vegetables",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/113749320210",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:50.674Z"
+    },
+    {
+      "id": "153031400000",
+      "name": "M-Classic · Haricots verts · fins",
+      "category": "vegetables",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/153031400000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:50.676Z"
+    },
+    {
+      "id": "153921600000",
+      "name": "M-Budget · Grains de maïs",
+      "category": "vegetables",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/153921600000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:50.722Z"
+    },
+    {
+      "id": "153929400000",
+      "name": "M-Classic · Grains de maïs",
+      "category": "vegetables",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/153929400000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:50.726Z"
+    },
+    {
+      "id": "274704102100",
+      "name": "Migros Fresca · Céleri-branche",
+      "category": "vegetables",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/274704102100",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:50.763Z"
+    },
+    {
+      "id": "tomatoes-500g",
+      "name": "Tomates",
+      "category": "vegetables",
+      "brand": "Migros",
+      "url": "https://www.migros.ch/fr/product/300004000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:50.773Z"
+    },
+    {
+      "id": "162557500000",
+      "name": "M-Budget · Cannelloni · avec fromage frais et épinards",
+      "category": "vegetables",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/162557500000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:50.786Z"
+    },
+    {
+      "id": "potatoes-2kg",
+      "name": "Pommes de terre",
+      "category": "vegetables",
+      "brand": "Migros",
+      "url": "https://www.migros.ch/fr/product/300003000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:50.813Z"
+    },
+    {
+      "id": "153196100000",
+      "name": "Alnatura · Maïs",
+      "category": "vegetables",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/153196100000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:50.822Z"
+    },
+    {
+      "id": "153155000000",
+      "name": "M-Classic · Petits pois et carottes · fins",
+      "category": "vegetables",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/153155000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:50.835Z"
+    },
+    {
+      "id": "onions-1kg",
+      "name": "Oignons",
+      "category": "vegetables",
+      "brand": "Migros",
+      "url": "https://www.migros.ch/fr/product/300002000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:50.861Z"
+    },
+    {
+      "id": "carrots-1kg",
+      "name": "Carottes",
+      "category": "vegetables",
+      "brand": "Migros",
+      "url": "https://www.migros.ch/fr/product/300001000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:50.869Z"
+    },
+    {
+      "id": "273704901000",
+      "name": "Courgettes",
+      "category": "vegetables",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/273704901000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:50.889Z"
+    },
+    {
+      "id": "271605502300",
+      "name": "Migros Fresca · Aubergines · fines",
+      "category": "vegetables",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/271605502300",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:50.912Z"
+    },
+    {
+      "id": "153921900000",
+      "name": "M-Budget · Petits Pois",
+      "category": "vegetables",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/153921900000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:50.973Z"
+    },
+    {
+      "id": "broccoli-500g",
+      "name": "Brocolis",
+      "category": "vegetables",
+      "brand": "Migros",
+      "url": "https://www.migros.ch/fr/product/300005000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:51.034Z"
+    },
+    {
+      "id": "275701302200",
+      "name": "Migros Fresca · Chou-fleur et Brocoli · mini",
+      "category": "vegetables",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/275701302200",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:51.074Z"
+    },
+    {
+      "id": "275704602300",
+      "name": "Brocoli",
+      "category": "vegetables",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/275704602300",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:51.122Z"
+    },
+    {
+      "id": "156056300000",
+      "name": "Dittmann Teufli · Poivrons rouges farcis au fromage frais",
+      "category": "vegetables",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/156056300000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:51.170Z"
+    },
+    {
+      "id": "156071200000",
+      "name": "Da Emilio · Poivrons rouges, piments forts et ail",
+      "category": "vegetables",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/156071200000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:51.173Z"
+    },
+    {
+      "id": "236380011300",
+      "name": "Broccoli au vapeur",
+      "category": "vegetables",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/236380011300",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:51.186Z"
+    },
+    {
+      "id": "271703401000",
+      "name": "Poivrons · rouge",
+      "category": "vegetables",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/271703401000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:51.214Z"
+    },
+    {
+      "id": "153400100000",
+      "name": "Bio · Champignons de Paris · Coupés",
+      "category": "vegetables",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/153400100000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:51.221Z"
+    },
+    {
+      "id": "153415100000",
+      "name": "M-Budget · Champignons de Paris · coupés",
+      "category": "vegetables",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/153415100000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:51.224Z"
+    },
+    {
+      "id": "153410000000",
+      "name": "M-Classic · Champignons de Paris · Coupés",
+      "category": "vegetables",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/153410000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:51.236Z"
+    },
+    {
+      "id": "153411000000",
+      "name": "M-Classic · Champignons de Paris · Coupés",
+      "category": "vegetables",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/153411000000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:51.276Z"
+    },
+    {
+      "id": "273704902100",
+      "name": "Courgettes",
+      "category": "vegetables",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/273704902100",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:51.301Z"
+    },
+    {
+      "id": "275704701000",
+      "name": "Migros Fresca · Brocoli",
+      "category": "vegetables",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/275704701000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:51.314Z"
+    },
+    {
+      "id": "264683701000",
+      "name": "Migros Bio gingembre frais",
+      "category": "vegetables",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/264683701000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:51.340Z"
+    },
+    {
+      "id": "277100502300",
+      "name": "Echalotes",
+      "category": "vegetables",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/277100502300",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:51.352Z"
+    },
+    {
+      "id": "277100502400",
+      "name": "Migros Fresca · Echalotes",
+      "category": "vegetables",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/277100502400",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:51.410Z"
+    },
+    {
+      "id": "271680301000",
+      "name": "Migros Bio · Aubergines",
+      "category": "vegetables",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/271680301000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:51.532Z"
+    },
+    {
+      "id": "277119004100",
+      "name": "Oignon, Ail, Echalote · Mix",
+      "category": "vegetables",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/277119004100",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:51.535Z"
+    },
+    {
+      "id": "274502602200",
+      "name": "M-Budget · Carottes",
+      "category": "vegetables",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/274502602200",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:51.583Z"
+    },
+    {
+      "id": "277102702300",
+      "name": "Echalotes",
+      "category": "vegetables",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/277102702300",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:51.608Z"
+    },
+    {
+      "id": "274580303300",
+      "name": "Migros Bio · Carottes",
+      "category": "vegetables",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/274580303300",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:51.633Z"
+    },
+    {
+      "id": "273780302300",
+      "name": "Migros Bio · Courgettes",
+      "category": "vegetables",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/273780302300",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:51.655Z"
+    },
+    {
+      "id": "274502502400",
+      "name": "Migros Fresca · Carottes",
+      "category": "vegetables",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/274502502400",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:51.677Z"
+    },
+    {
+      "id": "274580302300",
+      "name": "Migros Bio · Carottes",
+      "category": "vegetables",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/274580302300",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:51.685Z"
+    },
+    {
+      "id": "131001100000",
+      "name": "Anna's Best · Salade de laitue pommée · rouge",
+      "category": "vegetables",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/131001100000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:51.702Z"
+    },
+    {
+      "id": "271600501000",
+      "name": "Aubergines",
+      "category": "vegetables",
+      "brand": null,
+      "url": "https://www.migros.ch/fr/product/271600501000",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:51.710Z"
+    },
+    {
+      "id": "271180313200",
+      "name": "Migros Bio · Salade Iceberg",
+      "category": "vegetables",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/271180313200",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:51.724Z"
+    },
+    {
+      "id": "274500311200",
+      "name": "Migros Fresca · Carottes · en botte",
+      "category": "vegetables",
+      "brand": "N/A",
+      "url": "https://www.migros.ch/fr/product/274500311200",
+      "status": 200,
+      "checkedAt": "2025-07-08T20:52:51.836Z"
+    }
+  ]
+}

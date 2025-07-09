@@ -13,6 +13,7 @@ export interface EnhancedProductMatch {
   matchReason: string
   confidence: 'high' | 'medium' | 'low'
   source: 'scrapingbee' | 'fallback'
+  searchUrl?: string  // Fallback search URL for unmatched products
 }
 
 export interface IngredientAnalysis {
@@ -32,9 +33,19 @@ const INGREDIENT_DATABASE: Record<string, {
   preferredBrands?: string[]
   unitConversions?: Record<string, number>
 }> = {
-  // Pasta & Rice
+  // Pasta & Rice - Keep specific pasta types
+  'spaghetti': {
+    synonyms: ['spaghettis'],
+    category: 'pasta',
+    preferredBrands: ['Barilla', 'M-Classic', 'M-Budget']
+  },
+  'pennes': {
+    synonyms: ['penne'],
+    category: 'pasta',
+    preferredBrands: ['Barilla', 'M-Classic']
+  },
   'pâtes': {
-    synonyms: ['pasta', 'spaghetti', 'penne', 'fusilli', 'linguine', 'tagliatelle', 'rigatoni', 'macaroni', 'farfalle', 'lasagne', 'cannelloni'],
+    synonyms: ['pasta', 'fusilli', 'linguine', 'tagliatelle', 'rigatoni', 'macaroni', 'farfalle', 'lasagne', 'cannelloni'],
     category: 'pasta',
     preferredBrands: ['Barilla', 'M-Classic']
   },
@@ -95,6 +106,14 @@ const INGREDIENT_DATABASE: Record<string, {
   },
   
   // Fish & Seafood
+  'lieu noir': {
+    synonyms: ['lieu', 'filet de lieu noir', 'filet de lieu'],
+    category: 'fish'
+  },
+  'colin': {
+    synonyms: ['filet de colin', 'merlu'],
+    category: 'fish'
+  },
   'saumon': {
     synonyms: ['salmon', 'filet de saumon', 'pavé de saumon'],
     category: 'fish'
@@ -104,7 +123,7 @@ const INGREDIENT_DATABASE: Record<string, {
     category: 'fish'
   },
   'poisson': {
-    synonyms: ['fish', 'filet de poisson', 'poisson blanc', 'cabillaud', 'colin', 'lieu'],
+    synonyms: ['fish', 'filet de poisson', 'poisson blanc', 'cabillaud'],
     category: 'fish'
   },
   'crevettes': {
@@ -257,6 +276,11 @@ const INGREDIENT_DATABASE: Record<string, {
   },
   
   // Dairy
+  'beurre': {
+    synonyms: ['butter', 'beurre doux', 'beurre salé'],
+    category: 'dairy',
+    preferredBrands: ['M-Classic', 'Valflora']
+  },
   'lait': {
     synonyms: ['milk', 'lait entier', 'lait demi-écrémé', 'lait écrémé'],
     category: 'dairy',
@@ -311,8 +335,12 @@ const INGREDIENT_DATABASE: Record<string, {
     synonyms: ['pepper', 'poivre noir', 'poivre blanc', 'poivre moulu'],
     category: 'pantry'
   },
+  'sel et poivre': {
+    synonyms: ['salt and pepper', 'assaisonnement'],
+    category: 'pantry'
+  },
   'farine': {
-    synonyms: ['flour', 'farine blanche', 'farine complète'],
+    synonyms: ['flour', 'farine blanche', 'farine complète', 'farine tout usage'],
     category: 'pantry',
     preferredBrands: ['M-Classic']
   },
@@ -363,7 +391,11 @@ const INGREDIENT_DATABASE: Record<string, {
   
   // Bakery
   'pain': {
-    synonyms: ['bread', 'baguette', 'pain complet', 'pain de mie'],
+    synonyms: ['bread', 'baguette', 'pain complet', 'pain de mie', 'pain blanc'],
+    category: 'bakery'
+  },
+  'croûtons': {
+    synonyms: ['pain pour croûtons', 'pain rassis'],
     category: 'bakery'
   },
   'pâte feuilletée': {
@@ -444,6 +476,34 @@ const INGREDIENT_DATABASE: Record<string, {
     synonyms: ['tofu ferme', 'tofu soyeux'],
     category: 'autres'
   },
+  'sauce tomate': {
+    synonyms: ['tomato sauce', 'coulis de tomate', 'sauce tomates'],
+    category: 'pantry'
+  },
+  'pâte de tomates': {
+    synonyms: ['tomato paste', 'concentré de tomates'],
+    category: 'pantry'
+  },
+  'crème fraîche': {
+    synonyms: ['sour cream', 'crème acidulée', 'crème fraiche'],
+    category: 'dairy'
+  },
+  'parmesan': {
+    synonyms: ['parmigiano', 'parmigiano reggiano', 'fromage parmesan'],
+    category: 'dairy'
+  },
+  'gruyère râpé': {
+    synonyms: ['gruyère rapé', 'fromage gruyère râpé'],
+    category: 'dairy'
+  },
+  'gruyère': {
+    synonyms: ['gruyere', 'fromage gruyère'],
+    category: 'dairy'
+  },
+  'mozzarella': {
+    synonyms: ['mozarella', 'fromage mozzarella'],
+    category: 'dairy'
+  },
   'feta': {
     synonyms: ['fromage feta'],
     category: 'dairy'
@@ -464,8 +524,16 @@ const INGREDIENT_DATABASE: Record<string, {
     synonyms: ['corn', 'maïs en boîte'],
     category: 'vegetables'
   },
+  'haricots rouges': {
+    synonyms: ['red beans', 'kidney beans'],
+    category: 'vegetables'
+  },
+  'haricots verts': {
+    synonyms: ['green beans', 'haricots vert'],
+    category: 'vegetables'
+  },
   'haricots': {
-    synonyms: ['beans', 'haricots verts', 'haricots blancs', 'haricots rouges'],
+    synonyms: ['beans', 'haricots blancs'],
     category: 'vegetables'
   },
   'lentilles': {
@@ -495,37 +563,104 @@ export function analyzeIngredient(ingredientStr: string): IngredientAnalysis {
   const original = ingredientStr.trim()
   const lower = original.toLowerCase()
   
-  // Extract quantity and unit - expanded pattern
-  const quantityMatch = lower.match(/^(\d+(?:[,\.]\d+)?)\s*(kg|g|mg|l|dl|cl|ml|cc|c\.?\s*à\s*[sc]\.?|cs|cuillères?\s*à\s*soupe|cuillères?\s*à\s*café|tasses?|pièces?|tranches?|gousses?|feuilles?|branches?|paquets?|bouquets?|bottes?|sachets?|boîtes?)?/i)
+  // Handle compound ingredients first (e.g., "sel et poivre", "sel, poivre")
+  if (lower.includes(' et ') || lower.includes(', ')) {
+    // For compound ingredients like "sel et poivre" or "sel, poivre"
+    // We'll process the first ingredient and note it's compound
+    const separator = lower.includes(' et ') ? ' et ' : ', '
+    const parts = lower.split(separator).map(p => p.trim())
+    // Process first part but keep original for matching
+    const firstPart = parts[0]
+    // Continue processing with first part
+    return analyzeIngredient(firstPart)
+  }
+  
+  // First, handle special French units properly
+  const unitPatterns = [
+    // Special French units - must come first
+    { pattern: /^(\d+(?:[,\.]\d+)?)\s*gousses?\s*(d'|de\s*)?/i, unit: 'gousse(s)' },
+    { pattern: /^(\d+(?:[,\.]\d+)?)\s*c\.?\s*à\s*s\.?\s+/i, unit: 'c.à.s' },
+    { pattern: /^(\d+(?:[,\.]\d+)?)\s*c\.?\s*à\s*c\.?/i, unit: 'c.à.c' },
+    { pattern: /^(\d+(?:[,\.]\d+)?)\s*cuillères?\s*à\s*soupe/i, unit: 'c.à.s' },
+    { pattern: /^(\d+(?:[,\.]\d+)?)\s*cuillères?\s*à\s*café/i, unit: 'c.à.c' },
+    
+    // Weight units - must NOT capture partial words
+    { pattern: /^(\d+(?:[,\.]\d+)?)\s*kg\b/i, unit: 'kg' },
+    { pattern: /^(\d+(?:[,\.]\d+)?)\s*g\b/i, unit: 'g' },
+    { pattern: /^(\d+(?:[,\.]\d+)?)\s*mg\b/i, unit: 'mg' },
+    
+    // Volume units
+    { pattern: /^(\d+(?:[,\.]\d+)?)\s*litres?\b/i, unit: 'litre(s)' },
+    { pattern: /^(\d+(?:[,\.]\d+)?)\s*l\b/i, unit: 'litre(s)' },
+    { pattern: /^(\d+(?:[,\.]\d+)?)\s*dl\b/i, unit: 'dl' },
+    { pattern: /^(\d+(?:[,\.]\d+)?)\s*cl\b/i, unit: 'cl' },
+    { pattern: /^(\d+(?:[,\.]\d+)?)\s*ml\b/i, unit: 'ml' },
+    
+    // Count units
+    { pattern: /^(\d+(?:[,\.]\d+)?)\s*pièces?\b/i, unit: 'pièce(s)' },
+    { pattern: /^(\d+(?:[,\.]\d+)?)\s*tranches?\b/i, unit: 'tranche(s)' },
+    { pattern: /^(\d+(?:[,\.]\d+)?)\s*feuilles?\b/i, unit: 'feuille(s)' },
+    { pattern: /^(\d+(?:[,\.]\d+)?)\s*branches?\b/i, unit: 'branche(s)' },
+    { pattern: /^(\d+(?:[,\.]\d+)?)\s*tasses?\b/i, unit: 'tasse(s)' },
+    { pattern: /^(\d+(?:[,\.]\d+)?)\s*paquets?\b/i, unit: 'paquet(s)' },
+    { pattern: /^(\d+(?:[,\.]\d+)?)\s*bouquets?\b/i, unit: 'bouquet(s)' },
+    { pattern: /^(\d+(?:[,\.]\d+)?)\s*bottes?\b/i, unit: 'botte(s)' },
+    { pattern: /^(\d+(?:[,\.]\d+)?)\s*sachets?\b/i, unit: 'sachet(s)' },
+    { pattern: /^(\d+(?:[,\.]\d+)?)\s*boîtes?\b/i, unit: 'boîte(s)' },
+    
+    // Generic number without unit
+    { pattern: /^(\d+(?:[,\.]\d+)?)\s+/i, unit: undefined }
+  ]
+  
   let quantity: number | undefined
   let unit: string | undefined
   let cleanedStr = lower
   
-  if (quantityMatch) {
-    quantity = parseFloat(quantityMatch[1].replace(',', '.'))
-    unit = quantityMatch[2]
-    cleanedStr = lower.replace(quantityMatch[0], '').trim()
+  // Try each pattern in order
+  for (const { pattern, unit: unitValue } of unitPatterns) {
+    const match = lower.match(pattern)
+    if (match) {
+      quantity = parseFloat(match[1].replace(',', '.'))
+      unit = unitValue
+      cleanedStr = lower.replace(match[0], '').trim()
+      break
+    }
   }
   
   // Remove common modifiers and cooking terms
   const modifiers: string[] = []
-  const modifierWords = [
-    'frais', 'fraîche', 'fraîches', 'haché', 'hachée', 'hachées', 
-    'râpé', 'râpée', 'râpées', 'coupé', 'coupée', 'coupées',
-    'émincé', 'émincée', 'émincées', 'pelé', 'pelée', 'pelées',
-    'cuit', 'cuite', 'cuites', 'cru', 'crue', 'crues',
-    'finement', 'grossièrement', 'entier', 'entière', 'entières'
+  const modifierPatterns = [
+    { pattern: /\bfrais\b/gi, modifier: 'frais' },
+    { pattern: /\bfraîches?\b/gi, modifier: 'fraîche' },
+    { pattern: /\bhachée?s?\b/gi, modifier: 'haché' },
+    { pattern: /\brâpée?s?\b/gi, modifier: 'râpé' },
+    { pattern: /\bcoupée?s?\b/gi, modifier: 'coupé' },
+    { pattern: /\bémincée?s?\b/gi, modifier: 'émincé' },
+    { pattern: /\bpelée?s?\b/gi, modifier: 'pelé' },
+    { pattern: /\bcuite?s?\b/gi, modifier: 'cuit' },
+    { pattern: /\bcrue?s?\b/gi, modifier: 'cru' },
+    { pattern: /\bfinement\b/gi, modifier: 'finement' },
+    { pattern: /\bgrossièrement\b/gi, modifier: 'grossièrement' },
+    { pattern: /\bentière?s?\b/gi, modifier: 'entier' },
+    { pattern: /\bentier\b/gi, modifier: 'entier' }
   ]
   
-  modifierWords.forEach(modifier => {
-    if (cleanedStr.includes(modifier)) {
+  modifierPatterns.forEach(({ pattern, modifier }) => {
+    if (pattern.test(cleanedStr)) {
       modifiers.push(modifier)
-      cleanedStr = cleanedStr.replace(new RegExp(`\\b${modifier}\\b`, 'g'), '').trim()
+      cleanedStr = cleanedStr.replace(pattern, '').trim()
     }
   })
   
-  // Remove articles and prepositions
-  cleanedStr = cleanedStr.replace(/\b(le|la|les|un|une|des|de|du|d'|à|au|aux|en)\b/g, ' ').trim()
+  // Remove articles and prepositions - but only when they're separate words
+  // Handle contractions like d'huile, d'olive separately
+  cleanedStr = cleanedStr.replace(/\bd'\s*/g, ' ').trim() // Handle d' contractions
+  cleanedStr = cleanedStr.replace(/\bl'\s*/g, ' ').trim() // Handle l' contractions
+  
+  // Now remove standalone articles
+  const articlesPattern = /\b(le|la|les|un|une|des|de|du|à|au|aux|en)\b/gi
+  cleanedStr = cleanedStr.replace(articlesPattern, ' ').trim()
+  
   // Clean up multiple spaces
   cleanedStr = cleanedStr.replace(/\s+/g, ' ').trim()
   
@@ -534,13 +669,38 @@ export function analyzeIngredient(ingredientStr: string): IngredientAnalysis {
   let category = 'autres'
   let foundMatch = false
   
-  // First try exact matches
-  for (const [key, data] of Object.entries(INGREDIENT_DATABASE)) {
-    if (cleanedStr === key || data.synonyms.includes(cleanedStr)) {
-      mainIngredient = key
-      category = data.category
+  // PRIORITY: Check for compound ingredients first (longer strings first)
+  const compoundPriority = [
+    'viande hachée', 'haricots rouges', 'haricots verts', 'crème fraîche', 
+    'sauce tomate', 'pâte de tomates', 'gruyère râpé', 'fromage râpé',
+    'filet de lieu noir', 'lieu noir', 'pain pour croûtons', 'jambon blanc',
+    'jambon cuit', 'beurre doux', 'farine blanche'
+  ]
+  for (const compound of compoundPriority) {
+    if (cleanedStr.includes(compound) && INGREDIENT_DATABASE[compound]) {
+      mainIngredient = compound
+      category = INGREDIENT_DATABASE[compound].category
       foundMatch = true
       break
+    }
+  }
+  
+  // Then check if it's "pain pour croûtons" specifically
+  if (!foundMatch && (cleanedStr.includes('pain pour croûtons') || cleanedStr.includes('croûtons'))) {
+    mainIngredient = 'pain'
+    category = 'bakery'
+    foundMatch = true
+  }
+  
+  // Then try exact matches
+  if (!foundMatch) {
+    for (const [key, data] of Object.entries(INGREDIENT_DATABASE)) {
+      if (cleanedStr === key || data.synonyms.includes(cleanedStr)) {
+        mainIngredient = key
+        category = data.category
+        foundMatch = true
+        break
+      }
     }
   }
   
@@ -558,7 +718,7 @@ export function analyzeIngredient(ingredientStr: string): IngredientAnalysis {
   
   // Finally try word-by-word matching
   if (!foundMatch) {
-    const words = cleanedStr.split(' ')
+    const words = cleanedStr.split(' ').filter(w => w.length > 2)
     for (const word of words) {
       for (const [key, data] of Object.entries(INGREDIENT_DATABASE)) {
         if (word === key || data.synonyms.includes(word)) {
@@ -675,7 +835,7 @@ export async function findBestProductMatch(
   
   // Sort by score and filter
   let sortedMatches = scoredMatches
-    .filter(match => match.matchScore >= 0.2) // Lower threshold for better coverage
+    .filter(match => match.matchScore >= 0.5) // Increased threshold to avoid poor matches
     .sort((a, b) => b.matchScore - a.matchScore)
     .slice(0, 5)
   
@@ -699,12 +859,13 @@ export async function findBestProductMatch(
     priceChf: match.priceChf || 0,
     unit: match.unit || undefined,
     category: match.category || undefined,
-    url: match.url || undefined,
+    url: undefined, // Don't use database URLs
     imageUrl: match.imageUrl || undefined,
     matchScore: match.matchScore,
     matchReason: match.matchReason,
     confidence: match.confidence,
-    source: match.source as 'scrapingbee' | 'fallback'
+    source: match.source as 'scrapingbee' | 'fallback',
+    searchUrl: generateMigrosSearchUrl(match.name) // Always use search URL
   }))
 }
 
@@ -742,6 +903,15 @@ function calculateEnhancedMatchScore(
         reasons.push(`synonyme: ${synonym}`)
         break
       }
+    }
+  }
+  
+  // Special case for garlic - handle "ail" matching in products
+  if (ingredient.mainIngredient === 'ail' && 
+      (productNameLower.includes('ail') || productNameLower.includes('garlic'))) {
+    if (score < 0.5) {
+      score = 0.5
+      reasons.push('produit ail')
     }
   }
   
@@ -880,11 +1050,23 @@ export async function generateOptimizedShoppingList(
   const unmatchedIngredients: string[] = []
   let totalCost = 0
   
+  // Define non-essential categories to skip
+  const SKIP_CATEGORIES = ['herbs', 'pantry']
+  const ESSENTIAL_PANTRY = ['huile', 'farine', 'sucre', 'riz', 'pâtes'] // Keep these even from pantry
+  
   // Group similar ingredients
   const ingredientGroups = new Map<string, string[]>()
   
   for (const ingredientStr of ingredients) {
     const analysis = analyzeIngredient(ingredientStr)
+    
+    // Skip non-essential ingredients
+    if (SKIP_CATEGORIES.includes(analysis.category) && 
+        !ESSENTIAL_PANTRY.includes(analysis.mainIngredient)) {
+      console.log(`⏩ Skipping non-essential: ${analysis.mainIngredient} (${analysis.category})`)
+      continue
+    }
+    
     const key = analysis.mainIngredient
     
     if (!ingredientGroups.has(key)) {
@@ -894,8 +1076,12 @@ export async function generateOptimizedShoppingList(
   }
   
   // Process each ingredient group
+  console.log('\n🛒 Processing ingredient groups:')
   for (const [mainIngredient, group] of ingredientGroups) {
     const analysis = analyzeIngredient(group[0]) // Use first as representative
+    console.log(`\n📦 Processing: "${mainIngredient}" (${group.length} occurrences)`)
+    console.log(`   Category: ${analysis.category}, Original: "${group[0]}"`)
+    
     const matches = await findBestProductMatch(analysis, {
       preferScrapingBee: options.preferScrapingBee,
       maxPriceChf: options.budget ? options.budget / ingredients.length : undefined
@@ -903,6 +1089,8 @@ export async function generateOptimizedShoppingList(
     
     if (matches.length > 0) {
       const bestMatch = matches[0]
+      console.log(`   ✅ Found match: "${bestMatch.name}" (${bestMatch.confidence}, score: ${Math.round(bestMatch.matchScore * 100)}%)`)
+      
       const { quantity, unit } = calculateSmartQuantity(
         analysis,
         options.peopleCount,
@@ -921,13 +1109,71 @@ export async function generateOptimizedShoppingList(
       
       totalCost += itemTotalPrice
     } else {
+      console.log(`   ❌ No match found, creating fallback`)
+      // Create a fallback entry for unmatched ingredients
+      const { quantity, unit } = calculateSmartQuantity(
+        analysis,
+        options.peopleCount,
+        group.length
+      )
+      
+      const fallbackProduct: EnhancedProductMatch = {
+        id: `unmatched-${Date.now()}-${Math.random()}`,
+        name: analysis.mainIngredient,
+        priceChf: 5.00, // Default estimated price
+        unit: unit,
+        category: analysis.category,
+        matchScore: 0,
+        matchReason: 'non trouvé - recherche manuelle requise',
+        confidence: 'low',
+        source: 'fallback',
+        url: undefined,
+        searchUrl: generateMigrosSearchUrl(analysis.mainIngredient)
+      }
+      
+      items.push({
+        product: fallbackProduct,
+        ingredient: analysis,
+        quantity,
+        unit,
+        totalPrice: 5.00 * quantity
+      })
+      
+      totalCost += 5.00 * quantity
       unmatchedIngredients.push(...group)
     }
   }
   
+  // Consolidate duplicate products
+  const consolidatedItems = new Map<string, any>()
+  
+  items.forEach(item => {
+    const productId = item.product.id
+    
+    if (consolidatedItems.has(productId)) {
+      // Product already exists, merge quantities and ingredients
+      const existing = consolidatedItems.get(productId)
+      existing.quantity += item.quantity
+      existing.totalPrice = Math.round((existing.product.priceChf * existing.quantity) * 100) / 100
+      existing.matchedIngredients = [...existing.matchedIngredients, ...item.ingredient.original ? [item.ingredient.original] : []]
+    } else {
+      // New product
+      consolidatedItems.set(productId, {
+        ...item,
+        matchedIngredients: item.ingredient.original ? [item.ingredient.original] : []
+      })
+    }
+  })
+  
+  // Convert back to array
+  const finalItems = Array.from(consolidatedItems.values())
+  
+  // Recalculate total cost after consolidation
+  totalCost = finalItems.reduce((sum, item) => sum + item.totalPrice, 0)
+  
   // Organize by category
   const categories = new Map<string, any[]>()
-  items.forEach(item => {
+  finalItems.forEach(item => {
     const category = getCategoryName(item.ingredient.category)
     if (!categories.has(category)) {
       categories.set(category, [])
@@ -936,7 +1182,7 @@ export async function generateOptimizedShoppingList(
   })
   
   // Calculate savings (comparing with standard prices)
-  const standardCost = items.reduce((sum, item) => {
+  const standardCost = finalItems.reduce((sum, item) => {
     const standardPrice = item.product.source === 'scrapingbee' 
       ? item.product.priceChf * 1.1 // ScrapingBee prices are current
       : item.product.priceChf * 0.9 // Fallback prices might be outdated
@@ -946,7 +1192,7 @@ export async function generateOptimizedShoppingList(
   const savings = Math.max(0, standardCost - totalCost)
   
   return {
-    items,
+    items: finalItems,
     categories,
     totalCost: Math.round(totalCost * 100) / 100,
     savings: Math.round(savings * 100) / 100,
@@ -972,6 +1218,12 @@ function getCategoryName(category: string): string {
   }
   
   return categoryNames[category] || 'Autres'
+}
+
+// Generate Migros search URL for products
+export function generateMigrosSearchUrl(searchTerm: string): string {
+  const encodedTerm = encodeURIComponent(searchTerm)
+  return `https://www.migros.ch/fr/search?query=${encodedTerm}`
 }
 
 // Levenshtein distance for fuzzy matching

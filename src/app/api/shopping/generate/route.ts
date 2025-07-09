@@ -37,6 +37,12 @@ interface MenuData {
     ingredients_principaux: string[]
     conseils_achat: string
   }
+  ingredients_summary?: Array<{
+    name: string
+    quantity: string
+    category: string
+    recipes: string[]
+  }>
 }
 
 interface ShoppingItem {
@@ -74,9 +80,22 @@ export async function POST(request: NextRequest) {
 
     console.log('🛒 Generating shopping list from menu...')
 
-    // Step 1: Extract all ingredients from the menu
-    const allIngredients = extractIngredientsFromMenu(menuData)
-    console.log(`📋 Extracted ${allIngredients.length} unique ingredients`)
+    // Step 1: Check if we have clean ingredients_summary from AI
+    let allIngredients: string[]
+    
+    if (menuData.ingredients_summary && menuData.ingredients_summary.length > 0) {
+      console.log(`✨ Using AI-generated clean ingredients list: ${menuData.ingredients_summary.length} items`)
+      // Convert clean ingredients to format expected by matching algorithm
+      allIngredients = menuData.ingredients_summary.map(item => 
+        `${item.quantity} de ${item.name}`
+      )
+    } else {
+      console.log('📋 Fallback: Extracting ingredients from recipe details')
+      // Fallback to old method if ingredients_summary not available
+      allIngredients = extractIngredientsFromMenu(menuData)
+    }
+    
+    console.log(`📋 Processing ${allIngredients.length} unique ingredients`)
 
     // Step 2: Use enhanced matching algorithm
     const optimizedList = await generateOptimizedShoppingList(allIngredients, {
@@ -89,28 +108,24 @@ export async function POST(request: NextRequest) {
     console.log(`💰 Total cost: CHF ${optimizedList.totalCost}`)
     console.log(`📈 Savings: CHF ${optimizedList.savings}`)
 
-    // Step 3: Format categories for response
-    const categorizedItems = Array.from(optimizedList.categories.entries()).map(([category, items]) => ({
-      name: category,
-      items: items.map(item => ({
-        id: item.product.id,
-        name: item.product.name,
-        brand: item.product.brand,
-        priceChf: item.product.priceChf,
-        unit: item.unit,
-        category: item.product.category,
-        url: item.product.url,
-        imageUrl: item.product.imageUrl,
-        quantity: item.quantity,
-        totalPrice: item.totalPrice,
-        matchedIngredients: [item.ingredient.original],
-        matchScore: item.product.matchScore,
-        matchReason: item.product.matchReason,
-        confidence: item.product.confidence,
-        source: item.product.source
-      })),
-      totalCost: Math.round(items.reduce((sum, item) => sum + item.totalPrice, 0) * 100) / 100,
-      itemCount: items.length
+    // Step 3: Format items as flat list (no categories)
+    const allItems = optimizedList.items.map(item => ({
+      id: item.product.id,
+      name: item.product.name,
+      brand: item.product.brand,
+      priceChf: item.product.priceChf,
+      unit: item.unit,
+      category: item.product.category,
+      url: item.product.url,
+      imageUrl: item.product.imageUrl,
+      quantity: item.quantity,
+      totalPrice: item.totalPrice,
+      matchedIngredients: item.matchedIngredients || [item.ingredient.original],
+      matchScore: item.product.matchScore,
+      matchReason: item.product.matchReason,
+      confidence: item.product.confidence,
+      source: item.product.source,
+      searchUrl: item.product.searchUrl
     }))
 
     // Step 4: Create enhanced shopping list
@@ -119,7 +134,7 @@ export async function POST(request: NextRequest) {
       menuId: body.menuId || 'generated-menu',
       createdAt: new Date().toISOString(),
       peopleCount,
-      categories: categorizedItems,
+      items: allItems, // Changed from categories to flat list
       summary: {
         totalItems: optimizedList.items.length,
         totalCost: optimizedList.totalCost,
