@@ -11,7 +11,7 @@ export async function GET() {
     
     // Enhanced browser setup with maximum stealth
     browser = await puppeteer.launch({
-      headless: 'new', // Use new headless mode
+      headless: true, // Use headless mode
       args: [
         '--no-sandbox',
         '--disable-setuid-sandbox',
