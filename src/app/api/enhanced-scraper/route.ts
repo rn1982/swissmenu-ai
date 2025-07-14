@@ -64,9 +64,9 @@ export async function GET() {
 
       // Override permissions
       const originalQuery = window.navigator.permissions.query
-      return window.navigator.permissions.query = (parameters) => (
+      return window.navigator.permissions.query = (parameters: any) => (
         parameters.name === 'notifications' ?
-          Promise.resolve({ state: Cypress.denied }) :
+          Promise.resolve({ state: 'denied' } as PermissionStatus) :
           originalQuery(parameters)
       )
     })

@@ -54,9 +54,9 @@ export async function GET() {
       // Override permissions
       const originalQuery = window.navigator.permissions?.query
       if (originalQuery) {
-        window.navigator.permissions.query = (parameters) => (
+        window.navigator.permissions.query = (parameters: any) => (
           parameters.name === 'notifications' ?
-            Promise.resolve({ state: 'denied' }) :
+            Promise.resolve({ state: 'denied' } as PermissionStatus) :
             originalQuery(parameters)
         )
       }
@@ -170,7 +170,7 @@ export async function GET() {
     console.log('📦 Extracting products with enhanced logic...')
     
     const products = await page.evaluate(() => {
-      const results = []
+      const results: any[] = []
       
       // Try multiple selector strategies
       const selectors = [

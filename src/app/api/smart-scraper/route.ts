@@ -84,7 +84,7 @@ export async function GET() {
     console.log('📦 Extracting product data...')
     const products = await page.evaluate(() => {
       const productCards = document.querySelectorAll('.product-card')
-      const results = []
+      const results: any[] = []
 
       productCards.forEach((card, index) => {
         if (index >= 10) return // Limit for testing
@@ -129,7 +129,7 @@ export async function GET() {
         const image = imgEl?.src || ''
 
         // Extract any data attributes
-        const dataAttribs = {}
+        const dataAttribs: Record<string, string> = {}
         for (const attr of card.attributes) {
           if (attr.name.startsWith('data-')) {
             dataAttribs[attr.name] = attr.value

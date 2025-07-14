@@ -464,3 +464,8 @@ curl -X POST http://localhost:3000/api/shopping/generate \
 **Remember**: You're building a Swiss-focused application with French language support. Always consider the local context, currency (CHF), and Migros integration when working with Claude on this project.
 
 Start with the database setup and user preferences, then progressively build the menu generation and shopping list features. Claude is here to help you every step of the way! 
+
+## Next Steps Memories
+
+### Current Development Guidance
+- Memorize these next steps if this is the best approach for continued development of SwissMenu AI

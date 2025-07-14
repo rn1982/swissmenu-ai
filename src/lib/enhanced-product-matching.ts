@@ -290,11 +290,6 @@ const INGREDIENT_DATABASE: Record<string, {
     synonyms: ['cheese', 'gruyère', 'emmental', 'parmesan', 'mozzarella', 'cheddar', 'fromage râpé', 'fromage frais'],
     category: 'dairy'
   },
-  'beurre': {
-    synonyms: ['butter', 'beurre salé', 'beurre doux'],
-    category: 'dairy',
-    preferredBrands: ['M-Classic', 'Floralp']
-  },
   'crème': {
     synonyms: ['cream', 'crème fraîche', 'crème entière', 'crème liquide', 'crème épaisse'],
     category: 'dairy'

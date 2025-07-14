@@ -230,7 +230,7 @@ class PlaywrightMigrosScraper {
         return apiProducts
       }
     } catch (error) {
-      console.warn(`⚠️ API scraping failed: ${error.message}`)
+      console.warn(`⚠️ API scraping failed: ${error instanceof Error ? error.message : String(error)}`)
     }
 
     // Fallback to enhanced database

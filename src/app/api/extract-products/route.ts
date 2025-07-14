@@ -83,7 +83,7 @@ export async function GET() {
       productCards: $('.product-card').length,
       articles: $('article').length,
       dataTestIds: $('[data-testid]').map((_, el) => $(el).attr('data-testid')).get(),
-      classesWithProduct: $('[class*="product"]').map((_, el) => el.className).get().slice(0, 10),
+      classesWithProduct: $('[class*="product"]').map((_, el) => (el as unknown as HTMLElement).className).get().slice(0, 10),
       elementsWithCHF: $('*:contains("CHF")').length,
       elementsWithPrice: $('*:contains(".-")').length
     }
@@ -100,7 +100,7 @@ export async function GET() {
 
     console.log(`Found ${productElements.length} potential product elements`)
 
-    const products = []
+    const products: any[] = []
     
     productElements.each((index, element) => {
       if (index >= 20) return // Limit for testing

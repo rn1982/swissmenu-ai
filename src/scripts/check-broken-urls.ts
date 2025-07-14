@@ -95,7 +95,7 @@ async function checkBrokenUrls(testMode = false, sampleSize?: number) {
     
     const checks = products.map((product, index) => 
       limit(async () => {
-        const result = await checkUrl(product.url);
+        const result = await checkUrl(product.url || '');
         
         // Progress indicator
         if ((index + 1) % 10 === 0) {
@@ -105,9 +105,9 @@ async function checkBrokenUrls(testMode = false, sampleSize?: number) {
         const urlResult: BrokenUrlResult = {
           id: product.id,
           name: product.name,
-          category: product.category,
+          category: product.category || 'Unknown',
           brand: product.brand,
-          url: product.url,
+          url: product.url || '',
           status: result.status,
           error: result.error,
           checkedAt: new Date()
@@ -137,7 +137,7 @@ async function checkBrokenUrls(testMode = false, sampleSize?: number) {
     const brandStats: Record<string, { total: number; broken: number }> = {};
 
     for (const product of products) {
-      const category = product.category;
+      const category = product.category || 'Unknown';
       if (!categoryStats[category]) {
         categoryStats[category] = { total: 0, broken: 0, percentage: 0 };
       }

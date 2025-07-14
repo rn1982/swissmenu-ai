@@ -5,6 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:vercel": "prisma generate && next build",
+    "vercel-build": "npm run build:vercel",
     "start": "next start",
     "lint": "next lint",
     "test:scraper": "tsx src/scripts/test-playwright-scraper.ts",

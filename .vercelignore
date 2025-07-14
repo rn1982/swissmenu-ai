@@ -6,9 +6,27 @@ broken-urls-report-*.json
 scrapingbee-url-check-*.json
 url-diagnosis-*.json
 
+# Ignore debug directories
+debug-scraping/
+debug-scrapingbee/
+logs/
+captured-sessions/
+
+# Ignore log files
+*.log
+dev-server.log
+
 # Ignore documentation
 docs/
+*.md
+!README.md
 
 # Ignore development files
 .env.local
 .env.development
+.env
+
+# Ignore analysis files
+compass_artifact_*.md
+test-analysis.ts
+test-matching.js

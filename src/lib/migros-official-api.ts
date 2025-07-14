@@ -2,10 +2,25 @@
 // Using the migros-api-wrapper for legitimate API access
 
 import { MigrosAPI } from 'migros-api-wrapper'
-import type { 
-  IProductSearchBody,
-  IProductDetailOptions 
-} from 'migros-api-wrapper/dist/api/interfaces/products'
+
+// Define types locally since the module types are not accessible
+interface IProductSearchBody {
+  query?: string
+  regionId?: string
+  limit?: number
+  offset?: number
+  language?: string
+  from?: number
+  size?: number
+  [key: string]: any // Allow additional properties
+}
+
+interface IProductDetailOptions {
+  productId?: string
+  uids?: string
+  region?: string
+  [key: string]: any
+}
 
 interface MigrosProduct {
   id: string
@@ -67,7 +82,7 @@ class MigrosOfficialAPI {
       }
 
       const response = await MigrosAPI.products.productSearch.searchProduct(
-        searchBody,
+        searchBody as any,
         headers
       )
 
@@ -98,8 +113,8 @@ class MigrosOfficialAPI {
         leshopch: this.guestToken!
       }
 
-      const response = await MigrosAPI.products.productDisplay.getProductDetail(
-        options,
+      const response = await MigrosAPI.products.productDisplay.getProductDetails(
+        options as any,
         headers
       )
 
@@ -232,7 +247,8 @@ class MigrosOfficialAPI {
   }
 }
 
-export { MigrosOfficialAPI, MigrosProduct }
+export { MigrosOfficialAPI }
+export type { MigrosProduct }
 
 // Test if run directly
 if (require.main === module) {

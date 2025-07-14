@@ -120,7 +120,6 @@ export async function POST(request: NextRequest) {
       imageUrl: item.product.imageUrl,
       quantity: item.quantity,
       totalPrice: item.totalPrice,
-      matchedIngredients: item.matchedIngredients || [item.ingredient.original],
       matchScore: item.product.matchScore,
       matchReason: item.product.matchReason,
       confidence: item.product.confidence,
@@ -178,7 +177,7 @@ function extractIngredientsFromMenu(menuData: MenuData): string[] {
   Object.values(menuData.weekMenu).forEach(dayMenu => {
     Object.values(dayMenu).forEach(meal => {
       if (meal && meal.ingredients) {
-        meal.ingredients.forEach(ingredient => {
+        meal.ingredients.forEach((ingredient: string) => {
           // Keep the full ingredient string with quantities and details
           const normalized = ingredient.trim()
           if (normalized.length > 2 && !processedIngredients.has(normalized.toLowerCase())) {

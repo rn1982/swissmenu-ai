@@ -2,13 +2,13 @@ import { db } from '../lib/db'
 
 async function checkIngredients() {
   // Get a recent menu
-  const menu = await db.menu.findFirst({
+  const menu = await db.weeklyMenu.findFirst({
     orderBy: { createdAt: 'desc' },
     take: 1
   })
 
   if (menu) {
-    const data = JSON.parse(menu.data)
+    const data = JSON.parse(menu.menuData as string)
     
     console.log('=== Sample Menu Ingredients ===\n')
     

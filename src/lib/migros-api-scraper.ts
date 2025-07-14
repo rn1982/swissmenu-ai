@@ -228,7 +228,8 @@ class MigrosAPIScraper {
 }
 
 // Export for use
-export { MigrosAPIScraper, MigrosProduct }
+export { MigrosAPIScraper }
+export type { MigrosProduct }
 
 // Test if run directly
 if (require.main === module) {

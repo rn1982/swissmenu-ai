@@ -158,7 +158,7 @@ class EnhancedMigrosScraper {
         return scrapedProducts.map(p => ({ ...p, source: 'scraped' as const }))
       }
     } catch (error) {
-      console.warn(`⚠️ Enhanced scraping failed: ${error.message}`)
+      console.warn(`⚠️ Enhanced scraping failed: ${error instanceof Error ? error.message : String(error)}`)
     }
 
     // Fallback to product database
@@ -196,7 +196,7 @@ class EnhancedMigrosScraper {
 
         // Wait for products to load
         console.log('⏳ Waiting for products to load...')
-        await page.waitForTimeout(5000)
+        await new Promise(resolve => setTimeout(resolve, 5000))
 
         // Try to find products with our confirmed selectors
         const products = await page.evaluate(() => {
@@ -365,7 +365,7 @@ export async function testEnhancedScraper(): Promise<{
       productCount: 0,
       source: 'error',
       categories: {},
-      error: error.message
+      error: error instanceof Error ? error.message : String(error)
     }
   }
 }

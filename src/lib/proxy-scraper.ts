@@ -381,7 +381,8 @@ class ProxyScraper {
   }
 }
 
-export { ProxyScraper, ProxyConfig, ScrapedProduct }
+export { ProxyScraper }
+export type { ProxyConfig, ScrapedProduct }
 
 // Test script
 if (require.main === module) {

@@ -178,12 +178,12 @@ async function main() {
   try {
     // Scrape each category
     for (const category of targetCategories) {
-      if (!CATEGORY_URLS[category]) {
+      if (!CATEGORY_URLS[category as keyof typeof CATEGORY_URLS]) {
         console.log(`⚠️  Unknown category: ${category}`)
         continue
       }
       
-      const urls = CATEGORY_URLS[category]
+      const urls = CATEGORY_URLS[category as keyof typeof CATEGORY_URLS]
       const productsPerUrl = Math.ceil(productsPerCategory / urls.length)
       
       for (const url of urls) {
@@ -212,13 +212,15 @@ async function main() {
     })
     
     console.log('\n📦 Database Status:')
-    const categories = {}
+    const categories: any = {}
     dbStats.forEach(stat => {
-      if (!categories[stat.category]) categories[stat.category] = {}
-      categories[stat.category][stat.source] = stat._count
+      if (stat.category && stat.source) {
+        if (!categories[stat.category]) categories[stat.category] = {}
+        categories[stat.category][stat.source] = stat._count
+      }
     })
     
-    Object.entries(categories).forEach(([cat, sources]) => {
+    Object.entries(categories).forEach(([cat, sources]: [string, any]) => {
       const scrapingbee = sources['scrapingbee'] || 0
       const fallback = sources['fallback'] || 0
       console.log(`  ${cat}: ${scrapingbee} real + ${fallback} fallback = ${scrapingbee + fallback} total`)

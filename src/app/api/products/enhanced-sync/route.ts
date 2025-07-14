@@ -51,7 +51,6 @@ export async function POST(request: NextRequest) {
         category: product.category || 'autres',
         url: product.url || null,
         imageUrl: product.imageUrl || null,
-        ariaLabel: product.ariaLabel || null,
         lastUpdated: new Date()
       }))
 

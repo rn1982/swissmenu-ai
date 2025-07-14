@@ -284,4 +284,5 @@ class MigrosDirectAPI {
 }
 
 // Export for use in other modules
-export { MigrosDirectAPI, ProductSearchResponse }
+export { MigrosDirectAPI }
+export type { ProductSearchResponse }

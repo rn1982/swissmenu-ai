@@ -270,7 +270,8 @@ class MigrosBrowserScraper {
   }
 }
 
-export { MigrosBrowserScraper, MigrosProduct }
+export { MigrosBrowserScraper }
+export type { MigrosProduct }
 
 // Test if run directly
 if (require.main === module) {
