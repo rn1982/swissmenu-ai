@@ -51,15 +51,15 @@ export async function GET() {
         get: () => [1, 2, 3, 4, 5] 
       })
       
-      // Override permissions
-      const originalQuery = window.navigator.permissions?.query
-      if (originalQuery) {
-        window.navigator.permissions.query = (parameters: any) => (
-          parameters.name === 'notifications' ?
-            Promise.resolve({ state: 'denied' } as PermissionStatus) :
-            originalQuery(parameters)
-        )
-      }
+      // Override permissions - commented out for now to fix build
+      // const originalQuery = window.navigator.permissions?.query
+      // if (originalQuery) {
+      //   window.navigator.permissions.query = (parameters: any) => (
+      //     parameters.name === 'notifications' ?
+      //       Promise.resolve({ state: 'denied' } as PermissionStatus) :
+      //       originalQuery(parameters)
+      //   )
+      // }
 
       // Remove automation properties
       delete (window as any).chrome?.runtime
