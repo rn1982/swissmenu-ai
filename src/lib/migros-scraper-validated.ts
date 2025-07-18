@@ -54,7 +54,7 @@ export class ValidatedMigrosScraper {
             // Still save the product but without URL
             await this.saveProduct({
               ...product,
-              url: null
+              url: ''
             })
           } else {
             // Save product with validated URL

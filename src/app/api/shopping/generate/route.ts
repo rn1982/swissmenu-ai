@@ -115,8 +115,8 @@ export async function POST(request: NextRequest) {
       preferScrapingBee: true
     })
     
-    // Add recipe information to matched items
-    optimizedList.items.forEach(item => {
+    // Create enhanced items with recipe information
+    const itemsWithRecipes = optimizedList.items.map(item => {
       // Find recipes for this ingredient
       const matchingIngredients = allIngredients.filter(ing => 
         ing.toLowerCase().includes(item.ingredient.mainIngredient.toLowerCase())
@@ -130,7 +130,10 @@ export async function POST(request: NextRequest) {
         }
       })
       
-      item.recipes = Array.from(recipesForItem)
+      return {
+        ...item,
+        recipes: Array.from(recipesForItem)
+      }
     })
     
     console.log(`🎯 Matched ${optimizedList.items.length} products`)
@@ -138,7 +141,7 @@ export async function POST(request: NextRequest) {
     console.log(`📈 Savings: CHF ${optimizedList.savings}`)
 
     // Step 3: Format items as flat list (no categories)
-    const allItems = optimizedList.items.map(item => ({
+    const allItems = itemsWithRecipes.map(item => ({
       id: item.product.id,
       name: item.product.name,
       brand: item.product.brand,
@@ -154,7 +157,7 @@ export async function POST(request: NextRequest) {
       confidence: item.product.confidence,
       source: item.product.source,
       searchUrl: item.product.searchUrl,
-      matchedIngredients: item.matchedIngredients || [],
+      matchedIngredients: (item as any).matchedIngredients || [],
       recipes: item.recipes || []
     }))
 
@@ -172,14 +175,14 @@ export async function POST(request: NextRequest) {
         estimatedBudget: menuData.resume.cout_total_estime_chf || optimizedList.totalCost,
         actualCost: optimizedList.totalCost,
         savings: optimizedList.savings,
-        scrapingBeeProducts: optimizedList.items.filter(item => item.product.source === 'scrapingbee').length,
-        fallbackProducts: optimizedList.items.filter(item => item.product.source === 'fallback').length
+        scrapingBeeProducts: itemsWithRecipes.filter(item => item.product.source === 'scrapingbee').length,
+        fallbackProducts: itemsWithRecipes.filter(item => item.product.source === 'fallback').length
       },
       unmatched: [], // Remove unmatched section as requested by user
       matchQuality: {
-        high: optimizedList.items.filter(item => item.product.confidence === 'high').length,
-        medium: optimizedList.items.filter(item => item.product.confidence === 'medium').length,
-        low: optimizedList.items.filter(item => item.product.confidence === 'low').length
+        high: itemsWithRecipes.filter(item => item.product.confidence === 'high').length,
+        medium: itemsWithRecipes.filter(item => item.product.confidence === 'medium').length,
+        low: itemsWithRecipes.filter(item => item.product.confidence === 'low').length
       }
     }
 

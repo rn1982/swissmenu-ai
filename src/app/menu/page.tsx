@@ -173,11 +173,11 @@ export default function MenuPage() {
           text += `  Difficulté: ${meal.difficulte}\n`
           
           text += `\n  Ingrédients:\n`
-          meal.ingredients.forEach(ing => text += `  - ${ing}\n`)
+          meal.ingredients.forEach((ing: string) => text += `  - ${ing}\n`)
           
           if (meal.instructions && meal.instructions.length > 0) {
             text += `\n  Instructions:\n`
-            meal.instructions.forEach((inst, i) => text += `  ${i + 1}. ${inst}\n`)
+            meal.instructions.forEach((inst: string, i: number) => text += `  ${i + 1}. ${inst}\n`)
           }
           text += '\n'
         }
@@ -260,7 +260,7 @@ export default function MenuPage() {
     })
 
     // Filter ingredients_summary to only include ingredients from selected recipes
-    let filteredIngredientsSummary = []
+    let filteredIngredientsSummary: any[] = []
     if (menu.menuData.ingredients_summary) {
       filteredIngredientsSummary = menu.menuData.ingredients_summary.filter((ingredient: any) => {
         // Check if this ingredient is used in any of the selected recipes

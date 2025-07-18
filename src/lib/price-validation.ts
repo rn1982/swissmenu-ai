@@ -88,7 +88,7 @@ export function extractAllPrices($: cheerio.CheerioAPI): PriceExtractionResult {
 /**
  * Get surrounding text context for a price element
  */
-function getContextText($: cheerio.CheerioAPI, elem: cheerio.Element): string {
+function getContextText($: cheerio.CheerioAPI, elem: any): string {
   const $elem = $(elem);
   
   // Get text from parent and siblings

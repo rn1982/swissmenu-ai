@@ -15,6 +15,7 @@ interface ShoppingItem {
   quantity: number
   totalPrice: number
   matchedIngredients: string[]
+  recipes?: string[]
   checked?: boolean
   matchScore?: number
   matchReason?: string
