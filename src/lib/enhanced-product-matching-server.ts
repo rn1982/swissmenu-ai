@@ -564,7 +564,7 @@ export async function findBestProductMatch(
   })
   
   // Sort by score and filter
-  let sortedMatches = scoredMatches
+  const sortedMatches = scoredMatches
     .filter(match => match.matchScore >= 0.7) // Higher threshold to avoid poor substitutions
     .sort((a, b) => b.matchScore - a.matchScore)
     .slice(0, 5)
