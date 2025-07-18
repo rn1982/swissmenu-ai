@@ -71,7 +71,7 @@ export default function MenuPage() {
       // Always generate a fresh menu when arriving on the page
       generateMenu(savedPreferencesId)
     }
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Function to generate menu with optional parameter
   const generateMenu = async (preferencesId?: string) => {

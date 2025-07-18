@@ -188,7 +188,7 @@ COMMENCE DIRECTEMENT PAR: {`
           if (!validateMealCount(orderedMenuData, preferences)) {
             console.log('❌ Incorrect meal count, regenerating...')
             // Log detailed meal count for debugging
-            const mealTypes = []
+            const mealTypes: string[] = []
             if (preferences.mealsPerDay >= 1) mealTypes.push('petit_dejeuner')
             if (preferences.mealsPerDay >= 2) mealTypes.push('dejeuner')
             if (preferences.mealsPerDay >= 3) mealTypes.push('diner')
@@ -574,7 +574,7 @@ function validateMealCount(menuData: any, preferences: UserPreferences): boolean
   const requiredDays = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche']
   const expectedMealsPerDay = preferences.mealsPerDay
   
-  const mealTypes = []
+  const mealTypes: string[] = []
   if (expectedMealsPerDay === 1) {
     mealTypes.push('diner')
   } else if (expectedMealsPerDay === 2) {
@@ -744,7 +744,7 @@ function createMenuPrompt(
     : ''
   
   // Generate meal types based on mealsPerDay (simplified: 1 = dinner only, 2 = lunch + dinner)
-  const mealTypes = []
+  const mealTypes: string[] = []
   if (preferences.mealsPerDay === 1) {
     mealTypes.push('diner')
   } else if (preferences.mealsPerDay === 2) {
