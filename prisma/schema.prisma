@@ -90,6 +90,9 @@ model MigrosProduct {
   source      String?  @default("fallback")
   lastScraped DateTime?
   lastUpdated DateTime @default(now())
+  priceVariants Json?  // Stores array of {size: string, price: number}
+  priceConfidence String? // 'high' | 'medium' | 'low'
+  needsPriceReview Boolean @default(false)
 
   @@map("migros_products")
 }
@@ -109,6 +112,9 @@ model Product {
   lastScraped DateTime?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  priceVariants Json?  // Stores array of {size: string, price: number}
+  priceConfidence String? // 'high' | 'medium' | 'low'
+  needsPriceReview Boolean @default(false)
 
   @@map("products")
 }

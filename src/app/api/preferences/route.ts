@@ -51,17 +51,37 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Save preferences to database
-    const preferences = await db.userPreferences.create({
-      data: {
-        peopleCount,
-        mealsPerDay,
-        budgetChf,
-        dietaryRestrictions: dietaryRestrictions || [],
-        cuisinePreferences: cuisinePreferences || [],
-        cookingSkillLevel
-      }
-    })
+    // Check if we have a preferences ID from the request
+    const preferencesId = body.id || body.preferencesId
+    
+    let preferences
+    
+    if (preferencesId) {
+      // Update existing preferences
+      preferences = await db.userPreferences.update({
+        where: { id: preferencesId },
+        data: {
+          peopleCount,
+          mealsPerDay,
+          budgetChf,
+          dietaryRestrictions: dietaryRestrictions || [],
+          cuisinePreferences: cuisinePreferences || [],
+          cookingSkillLevel
+        }
+      })
+    } else {
+      // Create new preferences
+      preferences = await db.userPreferences.create({
+        data: {
+          peopleCount,
+          mealsPerDay,
+          budgetChf,
+          dietaryRestrictions: dietaryRestrictions || [],
+          cuisinePreferences: cuisinePreferences || [],
+          cookingSkillLevel
+        }
+      })
+    }
 
     return NextResponse.json({ 
       success: true, 
@@ -79,8 +99,19 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('Error saving preferences:', error)
+    
+    // Handle specific Prisma errors
+    if (error instanceof Error) {
+      if (error.message.includes('Record to update not found')) {
+        return NextResponse.json(
+          { error: 'Preferences not found. Please create new preferences.' },
+          { status: 404 }
+        )
+      }
+    }
+    
     return NextResponse.json(
-      { error: 'Failed to save preferences' },
+      { error: 'Failed to save preferences. Please try again.' },
       { status: 500 }
     )
   }

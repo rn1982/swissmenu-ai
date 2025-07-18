@@ -39,6 +39,12 @@ interface MenuData {
     ingredients_principaux: string[]
     conseils_achat: string
   }
+  ingredients_summary?: Array<{
+    name: string
+    quantity: string
+    category: string
+    recipes: string[]
+  }>
 }
 
 interface WeeklyMenu {
@@ -54,36 +60,24 @@ export default function MenuPage() {
   const [isGenerating, setIsGenerating] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [userPreferencesId, setUserPreferencesId] = useState<string | null>(null)
+  const [selectedRecipes, setSelectedRecipes] = useState<Set<string>>(new Set())
 
   useEffect(() => {
     // Get user preferences ID from localStorage (saved from preferences page)
     const savedPreferencesId = localStorage.getItem('userPreferencesId')
     if (savedPreferencesId) {
       setUserPreferencesId(savedPreferencesId)
-      // Try to load existing menu
-      loadExistingMenu(savedPreferencesId)
+      
+      // Always generate a fresh menu when arriving on the page
+      generateMenu(savedPreferencesId)
     }
   }, [])
 
-  const loadExistingMenu = async (preferencesId: string) => {
-    try {
-      const response = await fetch(`/api/menu/generate?userPreferencesId=${preferencesId}`)
-      if (response.ok) {
-        const data = await response.json()
-        if (data.success) {
-          setMenu(data.menu)
-          // Save menu to localStorage for shopping list generation
-          localStorage.setItem('currentMenu', JSON.stringify(data.menu))
-        }
-      }
-    } catch (error) {
-      console.error('Failed to load existing menu:', error)
-    }
-  }
-
-  const generateMenu = async () => {
-    if (!userPreferencesId) {
-      setError('Aucune préférence trouvée. Veuillez configurer vos préférences d&apos;abord.')
+  // Function to generate menu with optional parameter
+  const generateMenu = async (preferencesId?: string) => {
+    const prefId = preferencesId || userPreferencesId
+    if (!prefId) {
+      setError('Aucune préférence trouvée. Veuillez configurer vos préférences d\'abord.')
       return
     }
 
@@ -97,7 +91,7 @@ export default function MenuPage() {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          userPreferencesId
+          userPreferencesId: prefId
         })
       })
 
@@ -107,6 +101,9 @@ export default function MenuPage() {
         setMenu(data.menu)
         // Save menu to localStorage for shopping list generation
         localStorage.setItem('currentMenu', JSON.stringify(data.menu))
+        // Clear any old shopping list when new menu is generated
+        localStorage.removeItem('currentShoppingList')
+        localStorage.removeItem('shoppingListMenuId')
       } else {
         setError(data.error || 'Erreur lors de la génération du menu')
       }
@@ -117,6 +114,7 @@ export default function MenuPage() {
       setIsGenerating(false)
     }
   }
+
 
   const getDayName = (day: string) => {
     const dayNames = {
@@ -149,6 +147,145 @@ export default function MenuPage() {
     })
   }
 
+  const exportRecipesAsText = () => {
+    if (!menu) return
+
+    let text = `MENU DE LA SEMAINE - ${formatDate(menu.weekStartDate)}\n`
+    text += '═'.repeat(50) + '\n\n'
+
+    const days = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche']
+    
+    days.forEach(day => {
+      const dayMenu = menu.menuData.weekMenu[day as keyof typeof menu.menuData.weekMenu]
+      if (!dayMenu) return
+
+      text += `${getDayName(day).toUpperCase()}\n`
+      text += '─'.repeat(30) + '\n'
+
+      Object.entries(dayMenu).forEach(([mealType, meal]) => {
+        if (meal) {
+          text += `\n${getMealName(mealType)}:\n`
+          text += `• ${meal.nom}\n`
+          text += `  ${meal.description}\n`
+          text += `  Temps: ${meal.temps_preparation}min`
+          if (meal.temps_cuisson) text += ` + ${meal.temps_cuisson}min cuisson`
+          text += `\n  Prix: CHF ${meal.cout_estime_chf.toFixed(2)}\n`
+          text += `  Difficulté: ${meal.difficulte}\n`
+          
+          text += `\n  Ingrédients:\n`
+          meal.ingredients.forEach(ing => text += `  - ${ing}\n`)
+          
+          if (meal.instructions && meal.instructions.length > 0) {
+            text += `\n  Instructions:\n`
+            meal.instructions.forEach((inst, i) => text += `  ${i + 1}. ${inst}\n`)
+          }
+          text += '\n'
+        }
+      })
+      text += '\n'
+    })
+
+    text += '═'.repeat(50) + '\n'
+    text += `RÉSUMÉ:\n`
+    text += `• Budget total: CHF ${menu.menuData.resume.cout_total_estime_chf.toFixed(2)}\n`
+    text += `• Nombre de repas: ${menu.menuData.resume.nombre_repas}\n`
+    text += `• Coût moyen par repas: CHF ${menu.menuData.resume.cout_moyen_par_repas_chf.toFixed(2)}\n`
+
+    // Create and download file
+    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' })
+    const url = window.URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `menu-semaine-${new Date().toISOString().split('T')[0]}.txt`
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    window.URL.revokeObjectURL(url)
+  }
+
+  const toggleRecipeSelection = (recipeId: string) => {
+    const newSelected = new Set(selectedRecipes)
+    if (newSelected.has(recipeId)) {
+      newSelected.delete(recipeId)
+    } else {
+      newSelected.add(recipeId)
+    }
+    setSelectedRecipes(newSelected)
+  }
+
+  const selectAllRecipes = () => {
+    const allRecipeIds = new Set<string>()
+    const days = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche']
+    
+    days.forEach(day => {
+      const dayMenu = menu?.menuData.weekMenu[day as keyof typeof menu.menuData.weekMenu]
+      if (dayMenu) {
+        Object.entries(dayMenu).forEach(([mealType, meal]) => {
+          if (meal) {
+            const recipeId = `${day}-${mealType}`
+            allRecipeIds.add(recipeId)
+          }
+        })
+      }
+    })
+    
+    setSelectedRecipes(allRecipeIds)
+  }
+
+  const deselectAllRecipes = () => {
+    setSelectedRecipes(new Set())
+  }
+
+  const generateShoppingListForSelected = () => {
+    if (!menu || selectedRecipes.size === 0) return
+
+    // Create a filtered menu with only selected recipes
+    const filteredMenu = { ...menu }
+    const filteredWeekMenu: any = {}
+    const selectedRecipeNames: string[] = []
+    
+    const days = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche']
+    days.forEach(day => {
+      const dayMenu = menu.menuData.weekMenu[day as keyof typeof menu.menuData.weekMenu]
+      if (dayMenu) {
+        filteredWeekMenu[day] = {}
+        Object.entries(dayMenu).forEach(([mealType, meal]) => {
+          const recipeId = `${day}-${mealType}`
+          if (meal && selectedRecipes.has(recipeId)) {
+            filteredWeekMenu[day][mealType] = meal
+            selectedRecipeNames.push(meal.nom)
+          }
+        })
+      }
+    })
+
+    // Filter ingredients_summary to only include ingredients from selected recipes
+    let filteredIngredientsSummary = []
+    if (menu.menuData.ingredients_summary) {
+      filteredIngredientsSummary = menu.menuData.ingredients_summary.filter((ingredient: any) => {
+        // Check if this ingredient is used in any of the selected recipes
+        return ingredient.recipes?.some((recipe: string) => 
+          selectedRecipeNames.includes(recipe)
+        )
+      })
+    }
+
+    // Update the stored menu with filtered version
+    const filteredMenuData = {
+      ...menu,
+      menuData: {
+        ...menu.menuData,
+        weekMenu: filteredWeekMenu,
+        ingredients_summary: filteredIngredientsSummary
+      }
+    }
+
+    localStorage.setItem('currentMenu', JSON.stringify(filteredMenuData))
+    
+    // Navigate to shopping list page
+    window.location.href = '/shopping'
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-6xl mx-auto px-4">
@@ -163,7 +300,7 @@ export default function MenuPage() {
                 Générez votre menu personnalisé basé sur vos préférences
               </p>
               <button
-                onClick={generateMenu}
+                onClick={() => generateMenu()}
                 disabled={!userPreferencesId}
                 className={`px-8 py-4 rounded-lg text-white font-semibold text-lg ${
                   userPreferencesId 
@@ -209,14 +346,38 @@ export default function MenuPage() {
                 <p className="text-gray-600">
                   Semaine du {formatDate(menu.weekStartDate)}
                 </p>
-                <div className="flex justify-center gap-4 mt-4">
-                  <button
-                    onClick={generateMenu}
-                    disabled={isGenerating}
-                    className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 disabled:opacity-50"
-                  >
-                    Regénérer le menu
-                  </button>
+              </div>
+
+              {/* Recipe Selection Controls */}
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+                <div className="flex items-center justify-between flex-wrap gap-4">
+                  <div>
+                    <h3 className="font-medium text-green-900">
+                      Sélection des recettes
+                    </h3>
+                    <p className="text-sm text-green-700">
+                      {selectedRecipes.size} sur {menu.menuData.resume.nombre_repas} recettes sélectionnées
+                    </p>
+                    {selectedRecipes.size === 0 && (
+                      <p className="text-sm text-orange-600 font-medium mt-1">
+                        ⚠️ Veuillez sélectionner au moins une recette
+                      </p>
+                    )}
+                  </div>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={selectAllRecipes}
+                      className="text-sm bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700"
+                    >
+                      Tout sélectionner
+                    </button>
+                    <button
+                      onClick={deselectAllRecipes}
+                      className="text-sm bg-gray-600 text-white px-3 py-1 rounded hover:bg-gray-700"
+                    >
+                      Tout désélectionner
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -254,16 +415,30 @@ export default function MenuPage() {
                       </div>
                       
                       <div className="space-y-3">
-                        {Object.entries(dayMenu).map(([mealType, meal]) => (
-                          <div key={mealType} className="bg-white rounded-lg p-3 shadow-sm">
-                            <div className="flex items-center justify-between mb-1">
-                              <h3 className="font-semibold text-sm text-blue-800">
-                                {getMealName(mealType)}
-                              </h3>
-                              <span className="text-xs text-gray-500">
-                                {meal.temps_preparation} min
-                              </span>
-                            </div>
+                        {Object.entries(dayMenu).map(([mealType, meal]) => {
+                          const recipeId = `${day}-${mealType}`
+                          const isSelected = selectedRecipes.has(recipeId)
+                          
+                          return (
+                            <div key={mealType} className={`bg-white rounded-lg p-3 shadow-sm border-2 transition-all ${
+                              isSelected ? 'border-green-500 bg-green-50' : 'border-transparent'
+                            }`}>
+                              <div className="flex items-start gap-2">
+                                <input
+                                  type="checkbox"
+                                  checked={isSelected}
+                                  onChange={() => toggleRecipeSelection(recipeId)}
+                                  className="mt-1 w-5 h-5 text-green-600 rounded focus:ring-green-500"
+                                />
+                                <div className="flex-1">
+                                  <div className="flex items-center justify-between mb-1">
+                                    <h3 className="font-semibold text-sm text-blue-800">
+                                      {getMealName(mealType)}
+                                    </h3>
+                                    <span className="text-xs text-gray-500">
+                                      {meal.temps_preparation} min
+                                    </span>
+                                  </div>
                             
                             <h4 className="font-medium text-gray-900 text-sm mb-1">
                               {meal.nom}
@@ -318,8 +493,11 @@ export default function MenuPage() {
                                 </div>
                               </details>
                             )}
-                          </div>
-                        ))}
+                                </div>
+                              </div>
+                            </div>
+                          )
+                        })}
                       </div>
                     </div>
                   )
@@ -364,19 +542,36 @@ export default function MenuPage() {
               </div>
 
               {/* Action Buttons */}
-              <div className="flex justify-center gap-4 mt-8">
-                <Link 
-                  href="/shopping"
-                  className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors"
-                >
-                  Générer la liste de courses
-                </Link>
-                <Link 
-                  href="/preferences"
-                  className="bg-gray-600 text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition-colors"
-                >
-                  Modifier les préférences
-                </Link>
+              <div className="flex flex-col items-center gap-4 mt-8">
+                <div className="flex gap-4">
+                  <button
+                    onClick={generateShoppingListForSelected}
+                    disabled={selectedRecipes.size === 0}
+                    className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Créer liste de courses
+                  </button>
+                  <button
+                    onClick={exportRecipesAsText}
+                    className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700"
+                  >
+                    📥 Télécharger les recettes
+                  </button>
+                </div>
+                <div className="flex gap-4">
+                  <button
+                    onClick={() => generateMenu()}
+                    className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 text-sm"
+                  >
+                    Générer un nouveau menu
+                  </button>
+                  <Link 
+                    href="/preferences"
+                    className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 text-sm"
+                  >
+                    Modifier les préférences
+                  </Link>
+                </div>
               </div>
             </div>
           )}

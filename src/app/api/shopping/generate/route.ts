@@ -1,4 +1,3 @@
-import { db } from '@/lib/db'
 import { NextRequest, NextResponse } from 'next/server'
 import { 
   analyzeIngredient, 
@@ -6,7 +5,7 @@ import {
   calculateSmartQuantity, 
   generateOptimizedShoppingList,
   type EnhancedProductMatch 
-} from '@/lib/enhanced-product-matching'
+} from '@/lib/enhanced-product-matching-server'
 
 interface Meal {
   nom: string
@@ -57,11 +56,15 @@ interface ShoppingItem {
   quantity: number
   totalPrice: number
   matchedIngredients: string[]
+  recipes?: string[]
   matchScore?: number
   matchReason?: string
   confidence?: 'high' | 'medium' | 'low'
   source?: string
 }
+
+// Mark this as a server-only route
+export const runtime = 'nodejs'
 
 export async function POST(request: NextRequest) {
   try {
@@ -82,17 +85,25 @@ export async function POST(request: NextRequest) {
 
     // Step 1: Check if we have clean ingredients_summary from AI
     let allIngredients: string[]
+    let recipeMap = new Map<string, string[]>() // Track which recipes use which ingredients
     
     if (menuData.ingredients_summary && menuData.ingredients_summary.length > 0) {
       console.log(`✨ Using AI-generated clean ingredients list: ${menuData.ingredients_summary.length} items`)
       // Convert clean ingredients to format expected by matching algorithm
-      allIngredients = menuData.ingredients_summary.map(item => 
-        `${item.quantity} de ${item.name}`
-      )
+      allIngredients = menuData.ingredients_summary.map(item => {
+        const ingredientStr = `${item.quantity} de ${item.name}`
+        // Track which recipes use this ingredient
+        if (item.recipes && item.recipes.length > 0) {
+          recipeMap.set(ingredientStr, item.recipes)
+        }
+        return ingredientStr
+      })
     } else {
       console.log('📋 Fallback: Extracting ingredients from recipe details')
       // Fallback to old method if ingredients_summary not available
-      allIngredients = extractIngredientsFromMenu(menuData)
+      const extractionResult = extractIngredientsWithRecipes(menuData)
+      allIngredients = extractionResult.ingredients
+      recipeMap = extractionResult.recipeMap
     }
     
     console.log(`📋 Processing ${allIngredients.length} unique ingredients`)
@@ -102,6 +113,24 @@ export async function POST(request: NextRequest) {
       peopleCount,
       budget: menuData.resume.cout_total_estime_chf,
       preferScrapingBee: true
+    })
+    
+    // Add recipe information to matched items
+    optimizedList.items.forEach(item => {
+      // Find recipes for this ingredient
+      const matchingIngredients = allIngredients.filter(ing => 
+        ing.toLowerCase().includes(item.ingredient.mainIngredient.toLowerCase())
+      )
+      
+      const recipesForItem = new Set<string>()
+      matchingIngredients.forEach(ing => {
+        const recipes = recipeMap.get(ing)
+        if (recipes) {
+          recipes.forEach(r => recipesForItem.add(r))
+        }
+      })
+      
+      item.recipes = Array.from(recipesForItem)
     })
     
     console.log(`🎯 Matched ${optimizedList.items.length} products`)
@@ -124,7 +153,9 @@ export async function POST(request: NextRequest) {
       matchReason: item.product.matchReason,
       confidence: item.product.confidence,
       source: item.product.source,
-      searchUrl: item.product.searchUrl
+      searchUrl: item.product.searchUrl,
+      matchedIngredients: item.matchedIngredients || [],
+      recipes: item.recipes || []
     }))
 
     // Step 4: Create enhanced shopping list
@@ -144,7 +175,7 @@ export async function POST(request: NextRequest) {
         scrapingBeeProducts: optimizedList.items.filter(item => item.product.source === 'scrapingbee').length,
         fallbackProducts: optimizedList.items.filter(item => item.product.source === 'fallback').length
       },
-      unmatched: optimizedList.unmatchedIngredients,
+      unmatched: [], // Remove unmatched section as requested by user
       matchQuality: {
         high: optimizedList.items.filter(item => item.product.confidence === 'high').length,
         medium: optimizedList.items.filter(item => item.product.confidence === 'medium').length,
@@ -169,14 +200,20 @@ export async function POST(request: NextRequest) {
   }
 }
 
-function extractIngredientsFromMenu(menuData: MenuData): string[] {
+function extractIngredientsWithRecipes(menuData: MenuData): { 
+  ingredients: string[], 
+  recipeMap: Map<string, string[]> 
+} {
   const ingredients: string[] = []
   const processedIngredients = new Set<string>()
+  const recipeMap = new Map<string, string[]>()
 
   // Extract from each day's meals
   Object.values(menuData.weekMenu).forEach(dayMenu => {
     Object.values(dayMenu).forEach(meal => {
       if (meal && meal.ingredients) {
+        const recipeName = meal.nom
+        
         meal.ingredients.forEach((ingredient: string) => {
           // Keep the full ingredient string with quantities and details
           const normalized = ingredient.trim()
@@ -184,19 +221,22 @@ function extractIngredientsFromMenu(menuData: MenuData): string[] {
             ingredients.push(normalized) // Keep original case and full text
             processedIngredients.add(normalized.toLowerCase())
             
+            // Track which recipe uses this ingredient
+            if (!recipeMap.has(normalized)) {
+              recipeMap.set(normalized, [])
+            }
+            recipeMap.get(normalized)!.push(recipeName)
+            
             // Log for debugging
-            console.log(`📝 Extracted ingredient: "${normalized}"`)
+            console.log(`📝 Extracted ingredient: "${normalized}" for recipe: ${recipeName}`)
           }
         })
       }
     })
   })
 
-  // Don't duplicate main ingredients from resume as they're already in meals
-  // The resume ingredients are just summaries
-
   console.log(`📋 Total unique ingredients extracted: ${ingredients.length}`)
-  return ingredients
+  return { ingredients, recipeMap }
 }
 
 async function matchIngredientsToProducts(ingredients: string[], peopleCount: number): Promise<ShoppingItem[]> {

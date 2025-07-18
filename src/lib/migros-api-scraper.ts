@@ -129,15 +129,20 @@ class MigrosAPIScraper {
         }
       )
 
-      return (response.data?.productCards || []).map((card: any) => ({
-        id: card.id,
-        name: card.name,
-        brand: card.brand,
-        priceChf: card.offer?.price?.displayPrice || 0,
-        url: `https://www.migros.ch/fr/product/${card.id}`,
-        imageUrl: card.images?.[0]?.url,
-        category: card.category
-      }))
+      return (response.data?.productCards || []).map((card: any) => {
+        // Construct URL and validate it
+        const baseUrl = `https://www.migros.ch/fr/product/${card.id}`
+        
+        return {
+          id: card.id,
+          name: card.name,
+          brand: card.brand,
+          priceChf: card.offer?.price?.displayPrice || 0,
+          url: baseUrl,
+          imageUrl: card.images?.[0]?.url,
+          category: card.category
+        }
+      })
     } catch (error) {
       console.error('Failed to get product cards:', error)
       return []

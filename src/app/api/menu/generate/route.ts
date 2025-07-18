@@ -74,7 +74,7 @@ async function generateMenuWithClaude(preferences: UserPreferences) {
   // Get recent menus to avoid repetition
   const recentMenus = await db.weeklyMenu.findMany({
     orderBy: { createdAt: 'desc' },
-    take: 5 // Increased from 3 to 5 for better variety tracking
+    take: 10 // Increased to 10 for better variety tracking
   })
   
   // Get available product categories for better recipe generation
@@ -126,14 +126,28 @@ async function generateMenuWithClaude(preferences: UserPreferences) {
       console.log(`👥 People: ${preferences.peopleCount}, 🍽️ Meals/day: ${preferences.mealsPerDay}`)
       console.log(`💰 Budget: CHF ${preferences.budgetChf}, 🚫 Restrictions: ${preferences.dietaryRestrictions?.join(', ') || 'None'}`)
       
+      // Enhance prompt for retries if previous attempt returned partial data
+      let finalPrompt = prompt
+      if (attempt > 1 && lastError?.message?.includes('incomplete')) {
+        finalPrompt = prompt.replace(
+          'COMMENCE DIRECTEMENT PAR: {',
+          `⚠️ ATTENTION: Génère le MENU COMPLET, pas un exemple partiel!
+TOUS les 7 jours (lundi à dimanche) avec TOUS les repas.
+PAS de note explicative. UNIQUEMENT le JSON.
+
+COMMENCE DIRECTEMENT PAR: {`
+        )
+      }
+      
       const response = await anthropic.messages.create({
         model: 'claude-3-5-sonnet-20241022',
-        max_tokens: 4000, // Reduced to avoid server overload
+        max_tokens: 8000, // Increased to ensure complete response
         temperature: 0.7, // Slightly reduced temperature
+        system: 'You are a menu planning assistant. Always respond with valid JSON only. Never include explanatory text or partial examples.',
         messages: [
           {
             role: 'user',
-            content: prompt
+            content: finalPrompt
           }
         ]
       })
@@ -147,6 +161,19 @@ async function generateMenuWithClaude(preferences: UserPreferences) {
         try {
           const menuData = JSON.parse(content.text)
           
+          // Quick validation: check if weekMenu exists and has content
+          if (!menuData.weekMenu || Object.keys(menuData.weekMenu).length === 0) {
+            console.log('❌ No weekMenu found in response')
+            lastError = new Error('Invalid menu structure - no weekMenu')
+            continue
+          }
+          
+          // Log raw response structure for debugging
+          const dayCount = Object.keys(menuData.weekMenu).length
+          const firstDay = Object.keys(menuData.weekMenu)[0]
+          const firstDayMealCount = firstDay ? Object.keys(menuData.weekMenu[firstDay]).length : 0
+          console.log(`📦 Raw response: ${dayCount} days, first day has ${firstDayMealCount} meals`)
+          
           // Ensure correct day ordering
           const orderedMenuData = ensureCorrectDayOrder(menuData)
           
@@ -154,6 +181,24 @@ async function generateMenuWithClaude(preferences: UserPreferences) {
           if (!validateAllDaysPresent(orderedMenuData)) {
             console.log('❌ Not all days generated, regenerating...')
             lastError = new Error('Incomplete menu - missing days')
+            continue
+          }
+          
+          // Validate correct number of meals per day
+          if (!validateMealCount(orderedMenuData, preferences)) {
+            console.log('❌ Incorrect meal count, regenerating...')
+            // Log detailed meal count for debugging
+            const mealTypes = []
+            if (preferences.mealsPerDay >= 1) mealTypes.push('petit_dejeuner')
+            if (preferences.mealsPerDay >= 2) mealTypes.push('dejeuner')
+            if (preferences.mealsPerDay >= 3) mealTypes.push('diner')
+            
+            Object.entries(orderedMenuData.weekMenu || {}).forEach(([day, dayMenu]: [string, any]) => {
+              const actualMeals = mealTypes.filter(mealType => dayMenu[mealType]).length
+              console.log(`   ${day}: ${actualMeals}/${mealTypes.length} meals (missing: ${mealTypes.filter(mt => !dayMenu[mt]).join(', ')})`)
+            })
+            
+            lastError = new Error('Incorrect number of meals per day')
             continue
           }
           
@@ -171,7 +216,16 @@ async function generateMenuWithClaude(preferences: UserPreferences) {
           console.log('✅ Menu generation successful')
           return orderedMenuData
         } catch (parseError) {
-          console.error('Failed to parse Claude response:', content.text)
+          console.error('Failed to parse Claude response. Parse error:', parseError)
+          console.error('Response preview:', content.text.substring(0, 500) + '...')
+          
+          // Check if response contains a note about partial data
+          if (content.text.includes('exemple partiel') || content.text.includes('JSON complet inclurait')) {
+            console.error('AI returned partial response instead of complete menu')
+            lastError = new Error('AI returned incomplete menu - retrying with clearer prompt')
+            continue
+          }
+          
           throw new Error('Invalid menu format returned from AI')
         }
       } else {
@@ -431,9 +485,11 @@ function validateAllDaysPresent(menuData: any): boolean {
 function fillMissingDays(menuData: any, preferences: UserPreferences): any {
   const requiredDays = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche']
   const mealTypes: string[] = []
-  if (preferences.mealsPerDay >= 1) mealTypes.push('petit_dejeuner')
-  if (preferences.mealsPerDay >= 2) mealTypes.push('dejeuner')
-  if (preferences.mealsPerDay >= 3) mealTypes.push('diner')
+  if (preferences.mealsPerDay === 1) {
+    mealTypes.push('diner')
+  } else if (preferences.mealsPerDay === 2) {
+    mealTypes.push('dejeuner', 'diner')
+  }
   
   // Ensure weekMenu exists
   if (!menuData.weekMenu) {
@@ -442,17 +498,6 @@ function fillMissingDays(menuData: any, preferences: UserPreferences): any {
   
   // Simple fallback meals
   const fallbackMeals = {
-    petit_dejeuner: {
-      nom: "Bircher Muesli",
-      description: "Muesli suisse traditionnel aux fruits",
-      ingredients: ["200g flocons d'avoine", "250ml lait", "1 pomme", "50g noix", "1 c.à.s miel"],
-      instructions: ["Mélanger les flocons avec le lait", "Laisser reposer 10 min", "Ajouter pomme râpée, noix et miel"],
-      temps_preparation: 10,
-      temps_cuisson: 0,
-      difficulte: "facile",
-      cout_estime_chf: 5.50,
-      portions: preferences.peopleCount
-    },
     dejeuner: {
       nom: "Salade composée",
       description: "Salade fraîche avec légumes de saison",
@@ -477,18 +522,27 @@ function fillMissingDays(menuData: any, preferences: UserPreferences): any {
     }
   }
   
-  // Fill in missing days
+  // Fill in missing days AND missing meals
   requiredDays.forEach((day, index) => {
-    if (!menuData.weekMenu[day] || Object.keys(menuData.weekMenu[day]).length === 0) {
-      console.log(`🔧 Filling missing day: ${day}`)
+    if (!menuData.weekMenu[day]) {
+      console.log(`🔧 Creating missing day: ${day}`)
       menuData.weekMenu[day] = {}
+    }
+    
+    // Check if this day has all required meals
+    const dayMenu = menuData.weekMenu[day]
+    const existingMeals = Object.keys(dayMenu)
+    const missingMeals = mealTypes.filter(mealType => !dayMenu[mealType])
+    
+    if (missingMeals.length > 0) {
+      console.log(`🔧 Day ${day} is missing meals: ${missingMeals.join(', ')}`)
       
-      // Add meals based on preferences
-      mealTypes.forEach(mealType => {
-        // Vary the fallback meals slightly
+      // Add missing meals
+      missingMeals.forEach(mealType => {
         const baseMeal = { ...fallbackMeals[mealType as keyof typeof fallbackMeals] }
         baseMeal.cout_estime_chf += (index % 3) // Slight price variation
         menuData.weekMenu[day][mealType] = baseMeal
+        console.log(`   ✅ Added ${mealType} to ${day}`)
       })
     }
   })
@@ -513,6 +567,45 @@ function fillMissingDays(menuData: any, preferences: UserPreferences): any {
   }
   
   return menuData
+}
+
+// Validate correct number of meals per day
+function validateMealCount(menuData: any, preferences: UserPreferences): boolean {
+  const requiredDays = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche']
+  const expectedMealsPerDay = preferences.mealsPerDay
+  
+  const mealTypes = []
+  if (expectedMealsPerDay === 1) {
+    mealTypes.push('diner')
+  } else if (expectedMealsPerDay === 2) {
+    mealTypes.push('dejeuner', 'diner')
+  }
+  
+  let totalExpectedMeals = 0
+  let totalActualMeals = 0
+  
+  for (const day of requiredDays) {
+    const dayMenu = menuData.weekMenu[day]
+    if (!dayMenu) continue
+    
+    // Count expected meals for this day
+    totalExpectedMeals += mealTypes.length
+    
+    // Count actual meals for this day
+    const actualMealsInDay = mealTypes.filter(mealType => dayMenu[mealType]).length
+    totalActualMeals += actualMealsInDay
+    
+    if (actualMealsInDay !== mealTypes.length) {
+      console.log(`❌ Day ${day} has ${actualMealsInDay} meals instead of ${mealTypes.length}`)
+      const missingMeals = mealTypes.filter(mealType => !dayMenu[mealType])
+      console.log(`   Missing meals: ${missingMeals.join(', ')}`)
+    }
+  }
+  
+  console.log(`📊 Total meals: ${totalActualMeals}/${totalExpectedMeals} (${expectedMealsPerDay} meals/day × 7 days)`)
+  
+  // Return true only if we have the exact expected number of meals
+  return totalActualMeals === totalExpectedMeals
 }
 
 // Validate dietary restrictions are respected
@@ -650,35 +743,54 @@ function createMenuPrompt(
       }\n\nUTILISE PRIORITAIREMENT ces ingrédients pour garantir la correspondance avec notre base de produits.\n`
     : ''
   
+  // Generate meal types based on mealsPerDay (simplified: 1 = dinner only, 2 = lunch + dinner)
+  const mealTypes = []
+  if (preferences.mealsPerDay === 1) {
+    mealTypes.push('diner')
+  } else if (preferences.mealsPerDay === 2) {
+    mealTypes.push('dejeuner', 'diner')
+  }
+  
+  const requiredMealsStr = mealTypes.join(', ')
+  
   return `Génère un menu hebdomadaire complet (7 jours) en français pour ${preferences.peopleCount} personnes.
+
+⚠️ TRÈS IMPORTANT: Tu DOIS générer ${preferences.mealsPerDay} repas par jour (${requiredMealsStr}) pour CHAQUE jour de la semaine.
 
 CONTRAINTES:
 - Budget: ${preferences.budgetChf ? preferences.budgetChf + ' CHF' : 'Flexible'}
-- Repas/jour: ${preferences.mealsPerDay}
+- Repas/jour: ${preferences.mealsPerDay} (${requiredMealsStr})
 - Restrictions: ${dietaryRestrictions}
 - Niveau: ${preferences.cookingSkillLevel}
 ${recentDishesSection}${availableIngredientsSection}
-RÈGLES:
+RÈGLES STRICTES:
 1. TOUS les 7 jours OBLIGATOIRES (lundi à dimanche)
-2. Ingrédients disponibles chez Migros uniquement
-3. Respecter STRICTEMENT les restrictions alimentaires
-4. Varier protéines et cuisines chaque jour
-5. Instructions de cuisson détaillées pour chaque plat
+2. CHAQUE jour doit avoir EXACTEMENT ${preferences.mealsPerDay} repas: ${requiredMealsStr}
+3. Total OBLIGATOIRE: ${preferences.mealsPerDay * 7} repas pour la semaine
+4. Ingrédients disponibles chez Migros uniquement
+5. Respecter STRICTEMENT les restrictions alimentaires
+6. VARIÉTÉ OBLIGATOIRE:
+   - Aucun plat ne doit se répéter dans la semaine
+   - Alterner les protéines (poulet, bœuf, porc, poisson, végétarien)
+   - Varier les cuisines (suisse, italienne, asiatique, française, méditerranéenne)
+   - Varier les méthodes de cuisson (grillé, mijoté, rôti, sauté, vapeur)
+   - Maximum 2 plats de pâtes par semaine
+7. Instructions de cuisson détaillées pour chaque plat
+
+⚠️ NE PAS OUBLIER: Chaque jour DOIT avoir ${requiredMealsStr}. Si tu oublies un repas, la réponse sera rejetée
 
 STRUCTURE JSON REQUISE:
 {
   "weekMenu": {
     "lundi": {
-      ${preferences.mealsPerDay >= 1 ? '"petit_dejeuner": { "nom": "...", "description": "...", "ingredients": [...], "instructions": [...], "temps_preparation": 10, "cout_estime_chf": 5.00, "difficulte": "facile", "portions": ' + preferences.peopleCount + ' },' : ''}
-      ${preferences.mealsPerDay >= 2 ? '"dejeuner": { "nom": "...", "description": "...", "ingredients": [...], "instructions": [...], "temps_preparation": 20, "cout_estime_chf": 8.00, "difficulte": "moyen", "portions": ' + preferences.peopleCount + ' },' : ''}
-      ${preferences.mealsPerDay >= 3 ? '"diner": { "nom": "...", "description": "...", "ingredients": [...], "instructions": [...], "temps_preparation": 30, "cout_estime_chf": 12.00, "difficulte": "moyen", "portions": ' + preferences.peopleCount + ' }' : ''}
+      ${preferences.mealsPerDay === 2 ? '"dejeuner": { "nom": "...", "description": "...", "ingredients": [...], "instructions": [...], "temps_preparation": 20, "cout_estime_chf": 8.00, "difficulte": "moyen", "portions": ' + preferences.peopleCount + ' },\n      ' : ''}"diner": { "nom": "...", "description": "...", "ingredients": [...], "instructions": [...], "temps_preparation": 30, "cout_estime_chf": 12.00, "difficulte": "moyen", "portions": ' + preferences.peopleCount + ' }
     },
-    "mardi": { /* structure identique */ },
-    "mercredi": { /* structure identique */ },
-    "jeudi": { /* structure identique */ },
-    "vendredi": { /* structure identique */ },
-    "samedi": { /* structure identique */ },
-    "dimanche": { /* structure identique */ }
+    "mardi": { ${requiredMealsStr} /* TOUS les repas requis */ },
+    "mercredi": { ${requiredMealsStr} /* TOUS les repas requis */ },
+    "jeudi": { ${requiredMealsStr} /* TOUS les repas requis */ },
+    "vendredi": { ${requiredMealsStr} /* TOUS les repas requis */ },
+    "samedi": { ${requiredMealsStr} /* TOUS les repas requis */ },
+    "dimanche": { ${requiredMealsStr} /* TOUS les repas requis */ }
   },
   "resume": {
     "cout_total_estime_chf": 0,
@@ -709,14 +821,15 @@ STRUCTURE JSON REQUISE:
   ]
 }
 
-IMPORTANT: 
-1. Retourne UNIQUEMENT le JSON avec TOUS les 7 jours complets.
-2. Le champ "ingredients_summary" doit contenir TOUS les ingrédients principaux (viandes, légumes, pâtes, produits laitiers, etc.) avec:
-   - "name": nom simple et clair de l'ingrédient (ex: "poulet", "spaghetti", "gruyère râpé")
-   - "quantity": quantité totale nécessaire pour la semaine
-   - "category": catégorie (meat, vegetables, pasta, dairy, pantry, etc.)
-   - "recipes": liste des recettes qui utilisent cet ingrédient
-3. N'inclus PAS les épices, herbes, sel, poivre dans ingredients_summary.`
+RÈGLES CRITIQUES POUR LA RÉPONSE:
+1. ⚠️ GÉNÈRE LE MENU COMPLET pour TOUS les 7 jours (lundi à dimanche)
+2. ⚠️ NE PAS donner d'exemple partiel ou de note explicative
+3. ⚠️ RÉPONSE = UNIQUEMENT le JSON complet, AUCUN texte avant ou après
+4. ⚠️ CHAQUE jour DOIT avoir ${requiredMealsStr}
+5. ⚠️ Le champ "ingredients_summary" DOIT contenir TOUS les ingrédients principaux
+
+COMMENCE DIRECTEMENT PAR: {
+  "weekMenu": {`
 }
 
 // Get existing menu for a user

@@ -47,24 +47,39 @@ export default function ShoppingPage() {
   const [checkedItems, setCheckedItems] = useState<Set<string>>(new Set())
 
   useEffect(() => {
-    // Try to load existing shopping list from localStorage
+    // Check if we should load cached shopping list
     const savedList = localStorage.getItem('currentShoppingList')
-    if (savedList) {
+    const savedMenu = localStorage.getItem('currentMenu')
+    const savedListMenuId = localStorage.getItem('shoppingListMenuId')
+    
+    if (savedList && savedMenu) {
       try {
-        const parsed = JSON.parse(savedList)
+        const menuData = JSON.parse(savedMenu)
+        const currentMenuId = menuData.id || 'generated-menu'
         
-        // Convert old format (categories) to new format (items)
-        if (parsed.categories && !parsed.items) {
-          const allItems: ShoppingItem[] = []
-          parsed.categories.forEach((category: any) => {
-            allItems.push(...category.items)
-          })
-          parsed.items = allItems
+        // Only load cached list if it matches the current menu
+        if (savedListMenuId === currentMenuId) {
+          const parsed = JSON.parse(savedList)
+          
+          // Convert old format (categories) to new format (items)
+          if (parsed.categories && !parsed.items) {
+            const allItems: ShoppingItem[] = []
+            parsed.categories.forEach((category: any) => {
+              allItems.push(...category.items)
+            })
+            parsed.items = allItems
+          }
+          
+          setShoppingList(parsed)
+        } else {
+          // Clear outdated shopping list
+          localStorage.removeItem('currentShoppingList')
+          localStorage.removeItem('shoppingListMenuId')
         }
-        
-        setShoppingList(parsed)
       } catch (e) {
-        console.error('Failed to parse saved shopping list:', e)
+        console.error('Failed to parse saved data:', e)
+        localStorage.removeItem('currentShoppingList')
+        localStorage.removeItem('shoppingListMenuId')
       }
     }
   }, [])
@@ -83,9 +98,20 @@ export default function ShoppingPage() {
 
     try {
       const menuData = JSON.parse(savedMenu)
-      const preferences = savedPreferencesId ? 
-        await fetch(`/api/preferences`).then(r => r.json()) : 
-        { peopleCount: 4 }
+      let peopleCount = 4 // Default
+      
+      // Get people count from preferences if available
+      if (savedPreferencesId) {
+        try {
+          const prefsResponse = await fetch(`/api/preferences`)
+          if (prefsResponse.ok) {
+            const preferences = await prefsResponse.json()
+            peopleCount = preferences.peopleCount || 4
+          }
+        } catch (prefError) {
+          console.warn('Could not fetch preferences, using default people count:', prefError)
+        }
+      }
 
       const response = await fetch('/api/shopping/generate', {
         method: 'POST',
@@ -94,20 +120,28 @@ export default function ShoppingPage() {
         },
         body: JSON.stringify({
           menuData: menuData.menuData,
-          peopleCount: preferences.peopleCount || 4
+          peopleCount: peopleCount
         })
       })
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
 
       const data = await response.json()
 
       if (data.success) {
         setShoppingList(data.shoppingList)
         localStorage.setItem('currentShoppingList', JSON.stringify(data.shoppingList))
+        // Save the menu ID this shopping list is for
+        const menuId = menuData.id || 'generated-menu'
+        localStorage.setItem('shoppingListMenuId', menuId)
       } else {
         setError(data.error || 'Erreur lors de la génération de la liste de courses')
+        console.error('API error details:', data.details)
       }
     } catch (error) {
-      setError('Erreur de connexion lors de la génération de la liste')
+      setError('Erreur de connexion lors de la génération de la liste. Veuillez réessayer.')
       console.error('Shopping list generation error:', error)
     } finally {
       setIsGenerating(false)
@@ -140,6 +174,63 @@ export default function ShoppingPage() {
       hour: '2-digit',
       minute: '2-digit'
     })
+  }
+
+  const exportAsText = () => {
+    if (!shoppingList) return
+
+    let text = `LISTE DE COURSES - ${formatDate(shoppingList.createdAt)}\n`
+    text += `Pour ${shoppingList.peopleCount} personne${shoppingList.peopleCount > 1 ? 's' : ''}\n\n`
+    text += `ARTICLES (${shoppingList.summary.totalItems}):\n`
+    text += '─'.repeat(50) + '\n\n'
+
+    shoppingList.items.forEach((item, index) => {
+      text += `${index + 1}. ${item.name}\n`
+      if (item.brand) text += `   Marque: ${item.brand}\n`
+      text += `   Quantité: ${item.quantity}x ${item.unit}\n`
+      text += `   Prix: CHF ${item.totalPrice.toFixed(2)}\n`
+      if (item.matchedIngredients && item.matchedIngredients.length > 0) {
+        text += `   Pour: ${item.matchedIngredients.join(', ')}\n`
+      }
+      text += '\n'
+    })
+
+    text += '─'.repeat(50) + '\n'
+    text += `TOTAL: CHF ${shoppingList.summary.totalCost.toFixed(2)}\n`
+
+    if (shoppingList.unmatched && shoppingList.unmatched.length > 0) {
+      text += `\nINGRÉDIENTS À CHERCHER MANUELLEMENT:\n`
+      shoppingList.unmatched.forEach(ing => text += `- ${ing}\n`)
+    }
+
+    // Create and download file
+    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' })
+    const url = window.URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `liste-courses-${new Date().toISOString().split('T')[0]}.txt`
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    window.URL.revokeObjectURL(url)
+  }
+
+  const copyToClipboard = async () => {
+    if (!shoppingList) return
+
+    let text = `LISTE DE COURSES\n`
+    text += `${shoppingList.summary.totalItems} articles - CHF ${shoppingList.summary.totalCost.toFixed(2)}\n\n`
+
+    shoppingList.items.forEach(item => {
+      text += `□ ${item.name} (${item.quantity}x) - CHF ${item.totalPrice.toFixed(2)}\n`
+    })
+
+    try {
+      await navigator.clipboard.writeText(text)
+      alert('Liste copiée dans le presse-papiers!')
+    } catch (err) {
+      console.error('Erreur lors de la copie:', err)
+    }
   }
 
   return (
@@ -238,12 +329,7 @@ export default function ShoppingPage() {
                     <div className="text-sm text-green-700">
                       <span className="font-medium">Base de données:</span> {shoppingList.summary.totalItems} produits trouvés sur Migros.ch
                     </div>
-                    {shoppingList.unmatched && shoppingList.unmatched.length > 0 && (
-                      <div className="text-sm text-yellow-700">
-                        <span className="font-medium">À vérifier:</span> {shoppingList.unmatched.length} ingrédients non trouvés
-                      </div>
-                    )}
-                    <div className="flex justify-center gap-4 mt-4">
+                    <div className="flex justify-center gap-4 mt-4 flex-wrap">
                       <button
                         onClick={generateShoppingList}
                         disabled={isGenerating}
@@ -292,9 +378,9 @@ export default function ShoppingPage() {
                                 <p className="text-sm text-gray-500">
                                   {item.quantity}x {item.unit}
                                 </p>
-                                {item.matchedIngredients.length > 0 && (
+                                {item.recipes && item.recipes.length > 0 && (
                                   <p className="text-xs text-blue-600 mt-1">
-                                    Pour: {item.matchedIngredients.join(', ')}
+                                    Pour: {item.recipes.join(', ')}
                                   </p>
                                 )}
                                 {item.matchReason && (
@@ -343,39 +429,21 @@ export default function ShoppingPage() {
                 </div>
               </div>
 
-              {/* Unmatched Ingredients */}
-              {shoppingList.unmatched.length > 0 && (
-                <div className="mt-8 bg-yellow-50 border border-yellow-200 rounded-lg p-6">
-                  <h3 className="text-lg font-semibold text-yellow-900 mb-4">
-                    Ingrédients non trouvés
-                  </h3>
-                  <p className="text-yellow-800 mb-3">
-                    Ces ingrédients n&apos;ont pas pu être associés à des produits Migros:
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {shoppingList.unmatched.map((ingredient, index) => (
-                      <span 
-                        key={index}
-                        className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-sm"
-                      >
-                        {ingredient}
-                      </span>
-                    ))}
-                  </div>
-                  <p className="text-yellow-700 text-sm mt-3">
-                    Vous devrez les chercher manuellement chez Migros.
-                  </p>
-                </div>
-              )}
 
               {/* Action Buttons */}
-              <div className="flex justify-center gap-4 mt-8">
+              <div className="flex justify-center gap-4 mt-8 flex-wrap">
                 <Link 
                   href="/menu"
                   className="bg-gray-600 text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition-colors"
                 >
                   Retour au menu
                 </Link>
+                <button
+                  onClick={exportAsText}
+                  className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700"
+                >
+                  📥 Télécharger la liste
+                </button>
                 <Link 
                   href="/preferences"
                   className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"

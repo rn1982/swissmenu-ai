@@ -6,6 +6,7 @@ import * as cheerio from 'cheerio'
 import { promises as fs } from 'fs'
 import * as path from 'path'
 import { validateUrl, isMigrosProductUrl } from './url-validator'
+import { extractAllPrices, validatePriceExtraction, type PriceExtractionResult } from './price-validation'
 
 interface ProxyConfig {
   service: 'scrapingbee' | 'brightdata' | 'smartproxy'
@@ -24,6 +25,9 @@ interface ScrapedProduct {
   imageUrl?: string
   category?: string
   source: 'proxy-scraper'
+  priceConfidence?: 'high' | 'medium' | 'low'
+  allPrices?: number[]
+  priceVariants?: { size: string; price: number }[]
 }
 
 class ProxyScraper {
@@ -169,14 +173,27 @@ class ProxyScraper {
         return null
       }
 
-      // Extract price
-      const priceText = $('[data-testid="product-price"]').text() ||
-                       $('.price-value').text() ||
-                       $('.product-price').text() ||
-                       $('.price').first().text()
+      // Use enhanced price extraction
+      const priceResult = extractAllPrices($)
+      
+      // Validate the price extraction
+      const isValid = validatePriceExtraction(priceResult, name)
+      
+      if (!isValid && priceResult.mainPrice === 0) {
+        console.warn(`Failed to extract valid price for product: ${name}`)
+      }
 
-      const priceMatch = priceText.match(/(\d+[.,]\d{2})/)
-      const priceChf = priceMatch ? parseFloat(priceMatch[1].replace(',', '.')) : 0
+      // Log price extraction details for debugging
+      if (priceResult.allPrices.length > 1) {
+        console.log(`Product: ${name}`)
+        console.log(`  - Main price: CHF ${priceResult.mainPrice}`)
+        console.log(`  - All prices: ${priceResult.allPrices.map(p => `CHF ${p}`).join(', ')}`)
+        console.log(`  - Confidence: ${priceResult.confidence}`)
+        console.log(`  - Reason: ${priceResult.selectedReason}`)
+        if (priceResult.priceVariants) {
+          console.log(`  - Variants: ${priceResult.priceVariants.map(v => `${v.size}: CHF ${v.price}`).join(', ')}`)
+        }
+      }
 
       // Extract brand
       const brand = $('[data-testid="product-brand"]').text().trim() ||
@@ -196,10 +213,13 @@ class ProxyScraper {
         id,
         name,
         brand: brand || undefined,
-        priceChf,
+        priceChf: priceResult.mainPrice,
         url,
         imageUrl: imageUrl || undefined,
-        source: 'proxy-scraper'
+        source: 'proxy-scraper',
+        priceConfidence: priceResult.confidence,
+        allPrices: priceResult.allPrices.length > 1 ? priceResult.allPrices : undefined,
+        priceVariants: priceResult.priceVariants
       }
     } catch (error) {
       console.error('Error parsing product:', error)
@@ -236,6 +256,12 @@ class ProxyScraper {
       
       if (product) {
         console.log(`✅ Scraped: ${product.name} - CHF ${product.priceChf}`)
+        if (product.priceConfidence) {
+          console.log(`   Price confidence: ${product.priceConfidence}`)
+        }
+        if (product.allPrices && product.allPrices.length > 1) {
+          console.log(`   Multiple prices found: ${product.allPrices.map(p => `CHF ${p}`).join(', ')}`)
+        }
         
         // Save HTML for debugging
         const debugDir = path.join(process.cwd(), 'debug-scraping')
